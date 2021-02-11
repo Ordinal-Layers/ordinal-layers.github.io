@@ -82,7 +82,7 @@ var game = {
             }
           } else {
             if (Math.floor(ordinal / 10 ** power) == 1) {
-              notation = notation + "+&omega;<sup>" + power = "</sup>";
+              notation = notation + "+&omega;<sup>" + power + "</sup>";
             }
             notation = notation + "+&omega;<sup>" + power + "</sup>" + Math.floor(ordinal / 10 ** power);
           }
