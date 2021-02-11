@@ -13,7 +13,7 @@ var game = {
   maximize: function() {
     if (game.ord % 10 == 9 && game.over >= 1) {
       game.ord -= 9;
-      game.over = 9;
+      game.over += 9;
       
       while (game.over + 10 >= 20 && game.ord % 100 != 0) {
         game.over -= Math.ceil((game.over + 10) / 2 - 0.1);
