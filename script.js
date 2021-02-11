@@ -23,7 +23,7 @@ var game = {
       }
     }
   },
-  increment:function() {
+  increment: function() {
     if (game.ord % 10 == 9) {
       game.over++;
     } else {
