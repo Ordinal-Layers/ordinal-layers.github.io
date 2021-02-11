@@ -16,7 +16,7 @@ var game = {
       game.over += 9;
       
       do {
-        game.over -= Math.ceil((game.over + 10) / 2 - 0.1);
+        game.over -= Math.ceil((game.over + 10) / 2);
         game.ord += 10;
       } while (game.over + 10 >= 20 && game.ord % 100 != 0);
       
