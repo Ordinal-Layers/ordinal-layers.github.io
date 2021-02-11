@@ -13,12 +13,12 @@ var game = {
         }
         var power = 10 ** (i - 1);
         
-        return hardy(arg, ord - power + Math.min(power - 1, arg), Math.max(0, arg - power + 1));
+        return game.hardy(arg, ord - power + Math.min(power - 1, arg), Math.max(0, arg - power + 1));
       } else {
         if (over == 0) {
-          return hardy(arg + 1, ord - 1);
+          return game.hardy(arg + 1, ord - 1);
         } else {
-          return hardy(arg + 1, ord, over - 1);
+          return game.hardy(arg + 1, ord, over - 1);
         }
       }
     }
@@ -31,10 +31,10 @@ var game = {
     }
   },
   maximize: function() {
-    var h = hardy(10, game.ord, game.over);
+    var h = game.hardy(10, game.ord, game.over);
     var i = game.ord + game.over;
     
-    while (hardy(10, i) > h) {
+    while (game.hardy(10, i) > h) {
       i--;
     }
     
