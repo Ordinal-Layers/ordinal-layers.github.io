@@ -56,13 +56,36 @@ var game = {
         if (power == 0) {
           notation = ordinal + game.over;
         } else {
-          notation = "&omega;<sup>" + power + "</sup>" + Math.floor(ordinal / 10 ** power);
+          if (power == 1) {
+            if (Math.floor(ordinal / 10) == 1) {
+              notation = "&omega;";
+            } else {
+              notation = "&omega;" + Math.floor(ordinal / 10);
+            }
+          } else {
+            if (Math.floor(ordinal / 10 ** power) == 1) {
+              notation = "&omega;<sup>" + power + "</sup>";
+            } else {
+              notation = "&omega;<sup>" + power + "</sup>" + Math.floor(ordinal / 10 ** power);
+            }
+          }
         }
       } else {
         if (power == 0) {
           notation = notation + "+" + (ordinal + game.over);
         } else {
-          notation = notation + "+&omega;<sup>" + power + "</sup>" + Math.floor(ordinal / 10 ** power);
+          if (power == 1) {
+            if (Math.floor(ordinal / 10) == 1) {
+              notation = notation + "+&omega;";
+            } else {
+              notation = notation + "+&omega;" + Math.floor(ordinal / 10);
+            }
+          } else {
+            if (Math.floor(ordinal / 10 ** power) == 1) {
+              notation = notation + "+&omega;<sup>" + power = "</sup>";
+            }
+            notation = notation + "+&omega;<sup>" + power + "</sup>" + Math.floor(ordinal / 10 ** power);
+          }
         }
       }
       
