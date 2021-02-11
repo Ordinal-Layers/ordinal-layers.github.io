@@ -29,17 +29,15 @@ var game = {
     } else {
       game.ord++;
     }
+    
+    game.writeOrd();
   },
   maximize: function() {
-    var h = game.hardy(10, game.ord, game.over);
-    var i = game.ord + game.over;
     
-    while (game.hardy(10, i) > h) {
-      i--;
-    }
-    
-    game.ord = i;
+    game.ord += game.over;
     game.over = 0;
+    
+    game.writeOrd();
   },
   header: document.getElementById("hardy"),
   writeOrd: function() {
