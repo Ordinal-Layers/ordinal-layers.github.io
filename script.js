@@ -45,12 +45,10 @@ var game = {
     var ordinal = game.ord;
     
     while (ordinal > 0) {
-      var i = 0;
-      
-      while (ordinal / 10 ** i % 1 == 0) {
-        i++;
+      function log10(arg) {
+        return Math.log(arg) / Math.LN10;
       }
-      var power = i - 1;
+      var power = Math.floor(log10(ordinal));
       
       if (notation == "") {
         if (power == 0) {
