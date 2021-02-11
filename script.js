@@ -69,7 +69,7 @@ var game = {
       ordinal -= 10 ** power * Math.floor(ordinal / 10 ** power);
     }
     
-    if (game.hardy(10, game.ord, game.over) = Infinity) {
+    if (game.hardy(10, game.ord, game.over) == Infinity) {
       game.header.innerHTML = "H<sub>" + notation + "</sub>(10)";
     } else {
       game.header.innerHTML = "H<sub>" + notation + "</sub>(10)=" + game.hardy(10, game.ord, game.over);
