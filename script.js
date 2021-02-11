@@ -11,9 +11,21 @@ var game = {
     game.writeOrd();
   },
   maximize: function() {
-    
-    game.ord += game.over;
-    game.over = 0;
+    if (game.ord % 10 == 9 && game.over >= 1) {
+      game.ord -= 9;
+      game.over = 9;
+      
+      while (game.over + 10 >= 20 && game.ord % 100 != 0) {
+        game.over -= Math.ceil((game.over + 10) / 2);
+        game.ord += 10;
+      }
+      
+      if (game.ord % 100 != 0) {
+        game.ord += game.over;
+      }
+      
+      game.over = 0;
+    }
     
     game.writeOrd();
   },
@@ -26,6 +38,7 @@ var game = {
       function log10(arg) {
         return Math.log(arg) / Math.LN10;
       }
+      
       var power = Math.floor(log10(ordinal));
       
       if (notation == "") {
@@ -60,6 +73,7 @@ var game = {
             if (Math.floor(ordinal / 10 ** power) == 1) {
               notation = notation + "+&omega;<sup>" + power + "</sup>";
             }
+            
             notation = notation + "+&omega;<sup>" + power + "</sup>" + Math.floor(ordinal / 10 ** power);
           }
         }
