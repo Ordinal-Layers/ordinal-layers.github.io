@@ -86,6 +86,6 @@ var game = {
       }
     }
     
-    game.header.innerHTML = "H<sub>" + notation + "</sub>(10)"
+    game.header.innerHTML = "H<sub>" + notation + "</sub>(10)";
   }
 };
