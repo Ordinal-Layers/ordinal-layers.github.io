@@ -15,10 +15,10 @@ var game = {
       game.ord -= 9;
       game.over += 9;
       
-      while (game.over + 10 >= 20 && game.ord % 100 != 0) {
+      do {
         game.over -= Math.ceil((game.over + 10) / 2 - 0.1);
         game.ord += 10;
-      }
+      } while (game.over + 10 >= 20 && game.ord % 100 != 0);
       
       if (game.ord % 100 != 0) {
         game.ord += game.over;
