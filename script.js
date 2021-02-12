@@ -154,7 +154,7 @@ var game = {
     
     if (header) {
       if (game.data.colors) {
-        var color == Math.log(ord + over) / (Math.LN10 * 10);
+        var color = Math.log(ord + over) / (Math.LN10 * 10);
         
         if (game.hardy(ord, over) == Infinity) {
           game.header.innerHTML = `<span style="color:hsl(${color * 360}, 100%, 50%)">H<sub>${result}</sub>(10)</span>`;
