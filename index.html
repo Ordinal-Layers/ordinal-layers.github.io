@@ -7,7 +7,7 @@
     <script src="script.js" defer></script>
   </head>
   <body>
-    <h1 id="header">H<sub>0</sub>(10)</h1>
+    <h1 id="header">H<sub>0</sub>(10)=10</h1>
     <div id="tabMenu">
       <button onclick="game.tab(0)" class="tabButton" id="optionsTabButton"><h2 style="display:inline">Options</h2></button>
       <button onclick="game.tab(1)" class="tabButton" id="ordinalsTabButton"><h2 style="display:inline">Ordinals</h2></button>
@@ -18,6 +18,8 @@
       <p><input type="file" id="importButton" class="normalButton" oninput="game.import()">  Import your game save via file (will overwrite save)</p>
       <button onclick="game.export()" class="normalButton">Export your game save via file</button>
       <button onclick="game.resetConf()" id="resetButton">RESET YOUR GAME</button>
+      <br />
+      <button onclick="game.toggleColor()" class="normalButton">Colors: OFF</button>
       <br />
       <p><a href="howtoplay.html">How to play</a> | <a href="changelog.html">Changelog</a></p>
       <br />
