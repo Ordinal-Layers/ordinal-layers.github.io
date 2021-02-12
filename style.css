@@ -23,8 +23,6 @@ body {
 #resetButton:hover {
   color: white;
   background-color: red;
-  font-weight: bold;
-  border: solid red;
 }
 
 .markupButton {
