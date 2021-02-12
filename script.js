@@ -64,65 +64,110 @@ var game = {
     
     game.save();
   },
-  writeOrd: function() {
-    if (game.data.ord == 0) {
-      game.header.innerHTML = "H<sub>0</sub>(10)";
+  hardy: function(ord = game.data.ord, over = game.data.over) {
+    if (game.ord >= 1000) {
+      return Infinity;
     } else {
-      var notation = "";
-      var ordinal = game.data.ord;
-
-      while (ordinal > 0) {
-        function log10(arg) {
-          return Math.log(arg) / Math.LN10;
+      if (ord >= 100) {
+        return game.hardy(ord - 100, over) * 2 ** game.hardy(ord - 100, over);
+      } else {
+        if (ord >= 10) {
+            return game.hardy(ord - 10, over) * 2;
+        } else {
+          if (ord >= 1) {
+            if (over == 0) {
+              return game.hardy(ord - 1, 0) + 1;
+            } else {
+              return game.hardy(ord, over - 1) + 1;
+            }
+          } else {
+            return 10;
+          }
         }
+      }
+    }
+  },
+  writeOrd: function(ord = game.data.ord, over = game.data.over, header = true) {
+    if (ord == 0) {
+      if (header) {
+        game.header.innerHTML = "H<sub>0</sub>(10)";
+      }
+      
+      return "0";
+    } else {
+      var result = "";
+      var remainOrd = ord;
 
-        var power = Math.floor(log10(ordinal));
+      while (remainOrd > 0) {
+        var power = Math.floor(Math.log(remainOrd) / Math.LN10);
 
-        if (notation == "") {
+        if (result == "") {
           if (power == 0) {
-            notation = ordinal + game.data.over;
+            result = remainOrd + over;
           } else {
             if (power == 1) {
-              if (Math.floor(ordinal / 10) == 1) {
-                notation = "&omega;";
+              if (Math.floor(remainOrd / 10) == 1) {
+                result = "&omega;";
               } else {
-                notation = "&omega;" + Math.floor(ordinal / 10);
+                result = "&omega;" + Math.floor(remainOrd / 10);
               }
             } else {
-              if (Math.floor(ordinal / 10 ** power) == 1) {
-                notation = "&omega;<sup>" + power + "</sup>";
+              if (Math.floor(remainOrd / 10 ** power) == 1) {
+                result = "&omega;<sup>" + power + "</sup>";
               } else {
-                notation = "&omega;<sup>" + power + "</sup>" + Math.floor(ordinal / 10 ** power);
+                result = "&omega;<sup>" + power + "</sup>" + Math.floor(remainOrd / 10 ** power);
               }
             }
           }
         } else {
           if (power == 0) {
-            notation = notation + "+" + (ordinal + game.data.over);
+            result = result + "+" + (remainOrd + over);
           } else {
             if (power == 1) {
-              if (Math.floor(ordinal / 10) == 1) {
-                notation = notation + "+&omega;";
+              if (Math.floor(remainOrd / 10) == 1) {
+                result = result + "+&omega;";
               } else {
-                notation = notation + "+&omega;" + Math.floor(ordinal / 10);
+                result = result + "+&omega;" + Math.floor(remainOrd / 10);
               }
             } else {
-              if (Math.floor(ordinal / 10 ** power) == 1) {
-                notation = notation + "+&omega;<sup>" + power + "</sup>";
+              if (Math.floor(remainOrd / 10 ** power) == 1) {
+                result = result + "+&omega;<sup>" + power + "</sup>";
               } else {
-                notation = notation + "+&omega;<sup>" + power + "</sup>" + Math.floor(ordinal / 10 ** power);
+                result = result + "+&omega;<sup>" + power + "</sup>" + Math.floor(remainOrd / 10 ** power);
               }
             }
           }
         }
 
-        ordinal -= 10 ** power * Math.floor(ordinal / 10 ** power);
+        remainOrd -= 10 ** power * Math.floor(remainOrd / 10 ** power);
       }
     }
     
-    game.header.innerHTML = "H<sub>" + notation + "</sub>(10)";
+    if (header) {
+      if (game.data.colors) {
+        var color;
+        
+        if (ord == 0) {
+          color == 0;
+        } else {
+          color == Math.log(ord + over) / Math.LN10;
+        }
+        
+        if (game.hardy(ord, over) == Infinity) {
+          game.header.innerHTML = `<span style="color:hsl(${color * 360}, 100%, 50%)">H<sub>${result}</sub>(10)</span>`;
+        } else {
+          game.header.innerHTML = `<span style="color:hsl(${color * 360}, 100%, 50%)">H<sub>${result}</sub>(10)=${game.hardy(ord, over)}`;
+        }
+      } else {
+        if (game.hardy(ord, over) == Infinity) {
+          game.header.innerHTML = "H<sub>" + result + "</sub>(10)";
+        } else {
+          game.header.innerHTML = "H<sub>" + result + "</sub>(10)=" + game.hardy(ord, over);
+        }
+      }
+    }
     
-    return notation;
+    return result;
   },
   save: function() {
     localStorage.setItem("save", game.data);
