@@ -182,7 +182,7 @@ var game = {
   save: function() {
     localStorage.setItem("save", game.data);
     
-    notation = game.writeOrd();
+    game.writeOrd();
     
     if (game.data.colors) {
       game.colorButton.innerHTML = "Colors: ON";
@@ -205,7 +205,7 @@ var game = {
   load: function() {
     game.data = localStorage.getItem("save");
     
-    notation = game.writeOrd();
+    game.writeOrd();
     
     if (game.data.colors) {
       game.colorButton.innerHTML = "Colors: ON";
