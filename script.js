@@ -19,10 +19,10 @@ var game = {
   numTabs: game.tabs.length,
   tab: function(x) {
     for (var i = 0; i < game.numTabs; i++) {
-      tab[i].style.display = "none";
+      game.tabs[i].style.display = "none";
     }
     
-    tab[x].style.display = "block";
+    game.tabs[x].style.display = "block";
   },
   increment: function() {
     if (game.data.ord % 10 == 9) {
