@@ -16,7 +16,7 @@ var game = {
     document.getElementById("tab1"),
     document.getElementById("tab2")
   ],
-  numTabs: tabs.length,
+  numTabs: game.tabs.length,
   tab: function(x) {
     for (var i = 0; i < game.numTabs; i++) {
       tab[i].style.display = "none";
