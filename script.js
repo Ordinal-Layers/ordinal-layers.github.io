@@ -12,6 +12,7 @@ var game = {
   markupTab: document.getElementById("markupTabButton"),
   markupButton: document.getElementById("markupButton"),
   markupButton2: document.getElementById("markupButton2"),
+  colorButton: document.getElementById("colorButton"),
   tabs: [
     document.getElementById("tab0"),
     document.getElementById("tab1"),
@@ -169,12 +170,27 @@ var game = {
     
     return result;
   },
+  toggleColor: function() {
+    if (game.data.colors) {
+      game.data.colors = false;
+    } else {
+      game.data.colors = true;
+    }
+    
+    game.save();
+  },
   save: function() {
     localStorage.setItem("save", game.data);
     
     notation = game.writeOrd();
     
-    if (game.ord >= 100) {
+    if (game.data.colors) {
+      game.colorButton.innerHTML = "Colors: ON";
+    } else {
+      game.colorButton.innerHTML = "Colors: OFF";
+    }
+    
+    if (game.data.ord >= 100) {
       game.markupButton.innerHTML = "Markup to gain " + game.data.ord + " Ordinal Points";
       game.markupButton2.innerHTML = "+" + game.data.ord;
     } else {
@@ -191,7 +207,13 @@ var game = {
     
     notation = game.writeOrd();
     
-    if (game.ord >= 100) {
+    if (game.data.colors) {
+      game.colorButton.innerHTML = "Colors: ON";
+    } else {
+      game.colorButton.innerHTML = "Colors: OFF";
+    }
+    
+    if (game.data.ord >= 100) {
       game.markupButton.innerHTML = "Markup to gain " + game.data.ord + " Ordinal Points";
       game.markupButton2.innerHTML = "+" + game.data.ord;
     } else {
