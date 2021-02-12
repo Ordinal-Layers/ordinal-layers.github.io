@@ -191,8 +191,8 @@ var game = {
     }
     
     if (game.data.ord >= 100) {
-      game.markupButton.innerHTML = "Markup to gain " + game.data.ord + " Ordinal Points";
-      game.markupButton2.innerHTML = "+" + game.data.ord;
+      game.markupButton.innerHTML = "Markup to gain " + (game.data.ord + game.data.over) + " Ordinal Points";
+      game.markupButton2.innerHTML = "+" + (game.data.ord + game.data.over);
     } else {
       game.markupButton.innerHTML = "Reach &omega;<sup>2</sup> to Markup";
       game.markupButton2.innerHTML = "Reach &omega;<sup>2</sup> to Markup";
