@@ -60,10 +60,6 @@ var game = {
       
       game.data.ord = 0;
       game.data.over = 0;
-      
-      if (game.data.markupUnlocked == false) {
-        game.data.markupUnlocked = true;
-      }
     }
     
     game.save();
