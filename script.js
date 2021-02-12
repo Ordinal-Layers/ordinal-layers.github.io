@@ -95,7 +95,11 @@ var game = {
   writeOrd: function(ord = game.data.ord, over = game.data.over, header = true) {
     if (ord == 0) {
       if (header) {
-        game.header.innerHTML = "H<sub>0</sub>(10)";
+        if (game.data.colors) {
+          game.header.innerHTML = '<span style="color:hsl(0, 100%, 50%)">H<sub>0</sub>(10)=10</span>";
+        } else {
+          game.header.innerHTML = "H<sub>0</sub>(10)=10";
+        }
       }
       
       return "0";
@@ -150,13 +154,7 @@ var game = {
     
     if (header) {
       if (game.data.colors) {
-        var color;
-        
-        if (ord == 0) {
-          color == 0;
-        } else {
-          color == Math.log(ord + over) / (Math.LN10 * 10);
-        }
+        var color == Math.log(ord + over) / (Math.LN10 * 10);
         
         if (game.hardy(ord, over) == Infinity) {
           game.header.innerHTML = `<span style="color:hsl(${color * 360}, 100%, 50%)">H<sub>${result}</sub>(10)</span>`;
