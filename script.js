@@ -96,7 +96,7 @@ var game = {
     if (ord == 0) {
       if (header) {
         if (game.data.colors) {
-          game.header.innerHTML = '<span style="color:hsl(0, 100%, 50%)">H<sub>0</sub>(10)=10</span>";
+          game.header.innerHTML = '<span style="color:hsl(0, 100%, 50%)">H<sub>0</sub>(10)=10</span>';
         } else {
           game.header.innerHTML = "H<sub>0</sub>(10)=10";
         }
