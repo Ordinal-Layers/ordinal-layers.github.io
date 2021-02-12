@@ -198,7 +198,7 @@ var game = {
     $.notify("File Export Successful!","success");
   },
   resetConf: function() {
-    let code = prompt(
+    var code = prompt(
       'Are you sure you want to delete all of your progress? Type in "reset game" to reset all of your progress.'
     );
     if (code.toLowerCase() == "reset game") {
