@@ -6,7 +6,7 @@ body {
 
 .normalButton {
   background-color: white;
-  border: solid black;
+  border: 2px solid black;
 }
 
 .normalButton:hover {
@@ -28,7 +28,7 @@ body {
 .markupButton {
   color: white;
   background-color: black;
-  border: solid #B67F33;
+  border: 2px solid #B67F33;
 }
 
 .markupButton:hover {
