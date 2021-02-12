@@ -4,6 +4,62 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.normalButton {
+  background-color: white;
+  border: solid black;
+}
+
+.normalButton:hover {
+  background-color: #EFEFEF;
+}
+
+#resetButton {
+  color: red;
+  background-color: white;
+  font-weight: bold;
+  border: solid red;
+}
+
+#resetButton:hover {
+  color: white;
+  background-color: red,
+  font-weight: bold;
+  border: solid red;
+}
+
+.markupButton {
+  color: white;
+  background-color: black;
+  border: solid #B67F33;
+}
+
+.markupButton:hover {
+  color: black;
+  background-color: #B67F33;
+}
+
+.tabButton {
+  background-color: white;
+  border: 5px solid black;
+  border-radius: 5px;
+}
+
+.tabButton:hover {
+  background-color: #EFEFEF;
+}
+
+#markupTabButton {
+  color: white;
+  background-color: black;
+  border: 5px solid #B67F33;
+  border-radius: 5px;
+}
+
+#markupTabButton:hover {
+  color: black;
+  background-color: #B67F33;
+}
+
 #header {
   font-size: 40px;
 }
