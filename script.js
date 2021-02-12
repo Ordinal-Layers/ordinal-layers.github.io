@@ -235,6 +235,8 @@ var game = {
       incrementAuto: 0,
       maximizeAuto: 0,
     };
+    
+    game.save();
   },
   import: function() {
     var loadgame = "";
