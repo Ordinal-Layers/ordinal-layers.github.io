@@ -177,7 +177,6 @@ var game = {
       loadgame=JSON.parse(atob(reader.result));
       if (loadgame != "") {
       game.data = loadgame
-      $.notify("Import Successful!","success");
       }
         window.setTimeout(() => {
         game.save()
@@ -193,7 +192,6 @@ var game = {
     importButton.href = window.URL.createObjectURL(file);
     importButton.download = "Ordinal Markup Save.txt";
     importButton.click();
-    $.notify("File Export Successful!","success");
   },
   resetConf: function() {
     var code = prompt(
@@ -201,7 +199,6 @@ var game = {
     );
     if (code.toLowerCase() == "reset game") {
       game.reset();
-      $.notify("Hard Reset Performed","error");
     }
   }
 };
