@@ -8,7 +8,30 @@
   </head>
   <body>
     <h1 id="header">H<sub>0</sub>(10)</h1>
-    <button onclick="game.increment()" id="incrementButton">Increase ordinal by 1</button>
-    <button onclick="game.maximize()" id="maximizeButton">Maximize ordinal</button>
+    <div id="tabMenu">
+      <button onclick="game.tab(0)" class="tabButton" id="optionsTabButton"><h2 style="display:inline">Options</h2></button>
+      <button onclick="game.tab(1)" class="tabButton" id="ordinalsTabButton"><h2 style="display:inline">Ordinals</h2></button>
+      <button onclick="game.tab(2)" class="tabButton" id="markupTabButton" style="display:none"><h2 style="display:inline">Markup</h2></button>
+    </div>
+    <div id="tab0">
+      <p><input type="file" id="importButton" class="normalButton" oninput="game.import()">  Import your game save via file (will overwrite save)</p>
+      <button onclick="game.export()" class="normalButton">Export your game save via file</button>
+      <button onclick="game.resetConf()" id="resetButton">RESET YOUR GAME</button>
+      <br />
+      <p><a href="howtoplay.html">How to play</a> | <a href="changelog.html">Changelog</a></p>
+      <br />
+      <p>v0.1</p>
+      <p>Inspired by <a href="https://patcailmemer.github.io/Ordinal-Markup">Ordinal Markup</a> by Patcail</p>
+      <p>Click the Ordinals tab to start the game</p>
+    </div>
+    <div id="tab1" style="display:none">
+      <button onclick="game.increment()" class="normalButton" id="incrementButton">Increase ordinal by 1</button>
+      <button onclick="game.maximize()" class="normalButton" id="maximizeButton">Maximize ordinal, but number does not increase</button>
+      <br />
+      <button onclick="game.markup()" class="markupButton" id="markupButton">Reach &omega;<sup>2</sup> to Markup</button>
+    </div>
+    <div id="tab2" style="display:none">
+      <p>You have 100 Ordinal Points</p>
+      <button onclick="game.markup()" class="markupButton" id="markupButton2">Reach &omega;<sup>2</sup> to Markup</button>
   </body>
 </html>
