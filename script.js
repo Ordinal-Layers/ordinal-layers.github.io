@@ -129,7 +129,7 @@ var game = {
     return notation;
   },
   save: function() {
-    localstorage.setItem("save", game.data);
+    localStorage.setItem("save", game.data);
     
     notation = game.writeOrd();
     
@@ -146,7 +146,7 @@ var game = {
     }
   },
   load: function() {
-    game.data = localstorage.getItem(game.data);
+    game.data = localStorage.getItem(game.data);
     
     notation = game.writeOrd();
     
