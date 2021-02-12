@@ -203,7 +203,7 @@ var game = {
     }
   },
   load: function() {
-    game.data = localStorage.getItem(game.data);
+    game.data = localStorage.getItem("save");
     
     notation = game.writeOrd();
     
