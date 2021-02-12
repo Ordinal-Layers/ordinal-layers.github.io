@@ -63,10 +63,14 @@ var game = {
       game.data.over = 0;
     }
     
+    if (game.data.markupUnlocked == false) {
+      game.data.markupUnlocked = true;
+    }
+    
     game.save();
   },
   hardy: function(ord = game.data.ord, over = game.data.over) {
-    if (game.ord >= 1000) {
+    if (ord >= 1000) {
       return Infinity;
     } else {
       if (ord >= 100) {
@@ -151,7 +155,7 @@ var game = {
         if (ord == 0) {
           color == 0;
         } else {
-          color == Math.log(ord + over) / Math.LN10;
+          color == Math.log(ord + over) / (Math.LN10 * 10);
         }
         
         if (game.hardy(ord, over) == Infinity) {
@@ -179,9 +183,7 @@ var game = {
     
     game.save();
   },
-  save: function() {
-    localStorage.setItem("save", game.data);
-    
+  render: function() {
     game.writeOrd();
     
     if (game.data.colors) {
@@ -200,30 +202,21 @@ var game = {
     
     if (game.data.markupUnlocked) {
       game.markupTab.style.display = "inline";
+    } else {
+      game.markupTab.style.display = "none";
     }
+  },
+  save: function() {
+    localStorage.clear();
+    
+    localStorage.setItem("save", game.data);
+    
+    game.render();
   },
   load: function() {
     game.data = localStorage.getItem("save");
     
-    game.writeOrd();
-    
-    if (game.data.colors) {
-      game.colorButton.innerHTML = "Colors: ON";
-    } else {
-      game.colorButton.innerHTML = "Colors: OFF";
-    }
-    
-    if (game.data.ord >= 100) {
-      game.markupButton.innerHTML = "Markup to gain " + game.data.ord + " Ordinal Points";
-      game.markupButton2.innerHTML = "+" + game.data.ord;
-    } else {
-      game.markupButton.innerHTML = "Reach &omega;<sup>2</sup> to Markup";
-      game.markupButton2.innerHTML = "Reach &omega;<sup>2</sup> to Markup";
-    }
-    
-    if (game.data.markupUnlocked) {
-      game.markupTab.style.display = "inline";
-    }
+    game.render();
   },
   reset: function() {
     game.data = {
