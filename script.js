@@ -11,6 +11,7 @@ var game = {
   header: document.getElementById("header"),
   markupTab: document.getElementById("markupTabButton"),
   markupButton: document.getElementById("markupButton"),
+  markupButton2: document.getElementById("markupButton2"),
   tabs: [
     document.getElementById("tab0"),
     document.getElementById("tab1"),
