@@ -274,6 +274,7 @@ var game = {
 
 game.load();
 
-while (true) {
+/* while (true) {
   setTimeout(game.loop, 50);
 }
+*/
