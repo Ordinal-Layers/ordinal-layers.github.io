@@ -8,11 +8,13 @@ var game = {
     incrementAuto: 0,
     maximizeAuto: 0,
   },
+  ticks: 0,
   header: document.getElementById("header"),
+  colorButton: document.getElementById("colorButton"),
   markupTab: document.getElementById("markupTabButton"),
   markupButton: document.getElementById("markupButton"),
   markupButton2: document.getElementById("markupButton2"),
-  colorButton: document.getElementById("colorButton"),
+  opText: document.getElementById("opText"),
   tabs: [
     document.getElementById("tab0"),
     document.getElementById("tab1"),
@@ -68,6 +70,8 @@ var game = {
     }
     
     game.save();
+    
+    
   },
   hardy: function(ord = game.data.ord, over = game.data.over) {
     if (ord >= 1000) {
@@ -181,6 +185,9 @@ var game = {
     
     game.save();
   },
+  loop: function() {
+    game.ticks++;
+  },
   render: function() {
     game.writeOrd();
     
@@ -203,6 +210,8 @@ var game = {
     } else {
       game.markupTab.style.display = "none";
     }
+    
+    game.opText.innerHTML = "You have " + game.data.op + " Ordinal Points";
   },
   save: function() {
     localStorage.clear();
@@ -264,3 +273,7 @@ var game = {
 };
 
 game.load();
+
+while (true) {
+  setTimeout(game.loop, 50);
+}
