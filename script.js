@@ -267,25 +267,25 @@ var game = {
     game.render();
   },
   load: function() {
-    game.data.ms = Number(localStorage.getItem(0));
-    game.data.lastTick = Number(localStorage.getItem(1));
-    game.data.markupUnlocked = localStorage.getItem(2);
+    game.data.ms = Number(localStorage.getItem("0"));
+    game.data.lastTick = Number(localStorage.getItem("1"));
+    game.data.markupUnlocked = localStorage.getItem("2");
     if (game.data.markupUnlocked === "false") {
       game.data.markupUnlocked = false;
     } else {
       game.data.markupUnlocked = true;
     }
-    game.data.colors = localStorage.getItem(3);
+    game.data.colors = localStorage.getItem("3");
     if (game.data.colors === "false") {
       game.data.colors = false;
     } else {
       game.data.colors = true;
     }
-    game.data.ord = Number(localStorage.getItem(4));
-    game.data.over = Number(localStorage.getItem(5));
-    game.data.op = Number(localStorage.getItem(6));
-    game.data.incrementAuto = Number(localStorage.getItem(7));
-    game.data.maximizeAuto = Number(localStorage.getItem(8));
+    game.data.ord = Number(localStorage.getItem("4"));
+    game.data.over = Number(localStorage.getItem("5"));
+    game.data.op = Number(localStorage.getItem("6"));
+    game.data.incrementAuto = Number(localStorage.getItem("7"));
+    game.data.maximizeAuto = Number(localStorage.getItem("8"));
     
     game.render();
   },
