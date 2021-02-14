@@ -264,7 +264,7 @@ var game = {
     localStorage.setItem("over", game.data.over);
     localStorage.setItem("op", game.data.op);
     localStorage.setItem("incrementAuto", game.data.incrementAuto);
-    localStorage.setitem("maximizeAuto", game.data.maximizeAuto);
+    localStorage.setItem("maximizeAuto", game.data.maximizeAuto);
     
     game.render();
   },
