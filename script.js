@@ -269,7 +269,7 @@ var game = {
   load: function() {
     game.data.ms = Number(localStorage.getItem(0));
     game.data.lastTick = Number(localStorage.getItem(1));
-    game.data.markupUnlocked = localStorage.getItem(2);\
+    game.data.markupUnlocked = localStorage.getItem(2);
     if (game.data.markupUnlocked === "false") {
       game.data.markupUnlocked = false;
     } else {
