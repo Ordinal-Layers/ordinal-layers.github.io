@@ -324,7 +324,7 @@ var game = {
     var code = prompt(
       'Are you sure you want to delete all of your progress? Type in "reset game" to reset all of your progress.'
     );
-    if (code != '') {
+    if (code != null) {
       if (code.toLowerCase() == 'reset game') {
         game.reset();
       }
