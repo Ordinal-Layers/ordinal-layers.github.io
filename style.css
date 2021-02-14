@@ -10,7 +10,7 @@ body {
 }
 
 .normalButton:hover {
-  background-color: #EFEFEF;
+  background-color: #DFDFDF;
 }
 
 #resetButton {
@@ -38,19 +38,17 @@ body {
 
 .tabButton {
   background-color: white;
-  border: 5px solid black;
-  border-radius: 5px;
+  border: 2px solid black;
 }
 
 .tabButton:hover {
-  background-color: #EFEFEF;
+  background-color: #DFDFDF;
 }
 
 #markupTabButton {
   color: white;
   background-color: black;
-  border: 5px solid #B67F33;
-  border-radius: 5px;
+  border: 2px solid #B67F33;
 }
 
 #markupTabButton:hover {
