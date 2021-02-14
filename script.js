@@ -259,7 +259,7 @@ var game = {
     var i = 0;
     
     for (x in game.data) {
-      localStorage.setItem(i, x);
+      localStorage.setItem(i.toString(), x.toString());
       
       i++;
     }
