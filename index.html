@@ -34,7 +34,13 @@
       <button onclick="game.markup()" class="markupButton" id="markupButton">Reach &omega;<sup>2</sup> to Markup</button>
     </div>
     <div id="tab2" style="display:none">
-      <p id="opText">You have 100 Ordinal Points</p>
-      <button onclick="game.markup()" class="markupButton" id="markupButton2">Reach &omega;<sup>2</sup> to Markup</button>
+      <p><span id="opText">You have 0 Ordinal Points</span>
+      <button onclick="game.markup()" class="markupButton" id="markupButton2">Reach &omega;<sup>2</sup> to Markup</button></p>
+      <b>Tier 1 Automation</b>
+      <p id="incrementSpeed">You have 0 increment autoclickers, clicking the increment button 0 times per second</p>
+      <p id="maximizeSpeed">You have 0 maximize autoclickers, clicking the maximize button 0 times per second</p>
+      <button onclick="game.buyIncrementAuto()" class="markupButton" id="buyIncrementButton">Buy Increment Autoclicker for 100 OP</button>
+      <button onclick="game.buyMaximizeAuto()" class="markupButton" id="buyMaximizeButton">Buy Maximize Autoclicker fo 100 OP</button>
+      <button onclick="game.maxAll()" class="markupButton" id="maxAllButton">Max All</button>
   </body>
 </html>
