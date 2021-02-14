@@ -78,29 +78,26 @@ var game = {
     
     
   },
-  autoclickerCost: function(autoclickers) {
-    return 100 * 2 ** autoclickers;
-  },
   incrementAutoCost: game.autoclickerCost(game.data.incrementAuto),
   maximizeAutoCost: game.autoclickerCost(game.data.maximizeAuto),
   buyIncrementAuto: function() {
-    if (game.data.op >= game.incrementAutoCost) {
-      game.data.op -= game.incrementAutoCost;
+    if (game.data.op >= 100 * 2 ** game.data.incrementAuto) {
+      game.data.op -= 100 * 2 ** game.data.incrementAuto;
       game.data.incrementAuto++;
     }
     
     game.render();
   },
   buyMaximizeAuto: function() {
-    if (game.data.op >= game.autoclickerCost(game.data.maximizeAuto)) {
-      game.data.op -= game.maximizeAutoCost;
+    if (game.data.op >= 100 * 2 ** game.data.maximizeAuto) {
+      game.data.op -= 100 * 2 ** game.data.maximizeAuto;
       game.data.maximizeAuto++;
     }
     
     game.render();
   },
   maxAll: function() {
-    while (game.data.op >= game.incrementAutoCost || game.data.op >= game.maximizeAutoCost) {
+    while (game.data.op >= 100 * 2 ** game.data.incrementAuto || game.data.op >= 100 * 2 ** game.data.maximizeAuto) {
       game.buyIncrementAuto();
       game.buyMaximizeAuto();
     }
@@ -258,8 +255,8 @@ var game = {
     game.incrementAutoCost = game.autoclickerCost(game.data.incrementAuto);
     game.maximizeAutoCost = game.autoclickerCost(game.data.maximizeAuto);
     
-    game.buyIncrementButton.innerHTML = "Buy Increment Autoclicker for " + game.incrementAutoCost + " OP";
-    game.buyMaximizeButton.innerHTML = "Buy Maximize Autoclicker for " + game.maximizeAutoCost + " OP";
+    game.buyIncrementButton.innerHTML = "Buy Increment Autoclicker for " + 100 * 2 ** game.data.incrementAuto + " OP";
+    game.buyMaximizeButton.innerHTML = "Buy Maximize Autoclicker for " + 100 * 2 ** game.data.maximizeAuto + " OP";
     
     game.data.lastTick = game.data.ms;
   },
