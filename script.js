@@ -246,7 +246,7 @@ var game = {
     game.opText.innerHTML = "You have " + game.data.op + " Ordinal Points";
     
     game.incrementSpeed.innerHTML = "You have " + game.data.incrementAuto + " increment autoclickers, clicking the increment button " + game.data.incrementAuto + " times per second";
-    game.maximizeSpeed.innerHTML = "You have " + game.data.maximizeSpeed + " maximize autoclickers, clicking the maximize button " + game.data.incrementAuto + " times per second";
+    game.maximizeSpeed.innerHTML = "You have " + game.data.maximizeAuto + " maximize autoclickers, clicking the maximize button " + game.data.incrementAuto + " times per second";
     
     game.buyIncrementButton.innerHTML = "Buy Increment Autoclicker for " + 100 * 2 ** game.data.incrementAuto + " OP";
     game.buyMaximizeButton.innerHTML = "Buy Maximize Autoclicker for " + 100 * 2 ** game.data.maximizeAuto + " OP";
@@ -256,28 +256,36 @@ var game = {
   save: function() {
     localStorage.clear();
     
-    localStorage.setItem("ms", game.data.ms);
-    localStorage.setItem("lastTick", game.data.lastTick);
-    localStorage.setItem("markupUnlocked", game.data.markupUnlocked);
-    localStorage.setItem("colors", game.data.colors);
-    localStorage.setItem("ord", game.data.ord);
-    localStorage.setItem("over", game.data.over);
-    localStorage.setItem("op", game.data.op);
-    localStorage.setItem("incrementAuto", game.data.incrementAuto);
-    localStorage.setItem("maximizeAuto", game.data.maximizeAuto);
+    var i = 0;
+    
+    for (x in game.data) {
+      localStorage.setItem(i, x);
+      
+      i++;
+    }
     
     game.render();
   },
   load: function() {
-    game.data.ms = localStorage.getItem("ms");
-    game.data.lastTick = localStorage.getItem("lastTick");
-    game.data.markupUnlocked = localStorage.getItem("markupUnlocked");
-    game.data.colors = localStorage.getItem("colors");
-    game.data.ord = localStorage.getItem("ord");
-    game.data.over = localStorage.getItem("over");
-    game.data.op = localStorage.getItem("op");
-    game.data.incrementAuto = localStorage.getItem("incrementAuto");
-    game.data.maximizeAuto = localStorage.getItem("maximizeAuto");
+    game.data.ms = Number(localStorage.getItem(0));
+    game.data.lastTick = Number(localStorage.getItem(1));
+    game.data.markupUnlocked = localStorage.getItem(2);\
+    if (game.data.markupUnlocked === "false") {
+      game.data.markupUnlocked = false;
+    } else {
+      game.data.markupUnlocked = true;
+    }
+    game.data.colors = localStorage.getItem(3);
+    if (game.data.colors === "false") {
+      game.data.colors = false;
+    } else {
+      game.data.colors = true;
+    }
+    game.data.ord = Number(localStorage.getItem(4));
+    game.data.over = Number(localStorage.getItem(5));
+    game.data.op = Number(localStorage.getItem(6));
+    game.data.incrementAuto = Number(localStorage.getItem(7));
+    game.data.maximizeAuto = Number(localStorage.getItem(8));
     
     game.render();
   },
