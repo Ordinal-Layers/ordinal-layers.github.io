@@ -75,8 +75,6 @@ var game = {
     }
     
     game.save();
-    
-    
   },
   buyIncrementAuto: function() {
     if (game.data.op >= 100 * 2 ** game.data.incrementAuto) {
