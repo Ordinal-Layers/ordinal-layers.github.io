@@ -248,9 +248,6 @@ var game = {
     game.incrementSpeed.innerHTML = "You have " + game.data.incrementAuto + " increment autoclickers, clicking the increment button " + game.data.incrementAuto + " times per second";
     game.maximizeSpeed.innerHTML = "You have " + game.data.maximizeSpeed + " maximize autoclickers, clicking the maximize button " + game.data.incrementAuto + " times per second";
     
-    game.incrementAutoCost = game.autoclickerCost(game.data.incrementAuto);
-    game.maximizeAutoCost = game.autoclickerCost(game.data.maximizeAuto);
-    
     game.buyIncrementButton.innerHTML = "Buy Increment Autoclicker for " + 100 * 2 ** game.data.incrementAuto + " OP";
     game.buyMaximizeButton.innerHTML = "Buy Maximize Autoclicker for " + 100 * 2 ** game.data.maximizeAuto + " OP";
     
