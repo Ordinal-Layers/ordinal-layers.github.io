@@ -78,8 +78,6 @@ var game = {
     
     
   },
-  incrementAutoCost: game.autoclickerCost(game.data.incrementAuto),
-  maximizeAutoCost: game.autoclickerCost(game.data.maximizeAuto),
   buyIncrementAuto: function() {
     if (game.data.op >= 100 * 2 ** game.data.incrementAuto) {
       game.data.op -= 100 * 2 ** game.data.incrementAuto;
