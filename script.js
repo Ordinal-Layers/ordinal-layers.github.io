@@ -211,14 +211,14 @@ var game = {
     game.save();
   },
   loop: function() {
+    game.data.ms++;
+    
     if (game.data.ms % Math.floor(1000 / game.data.incrementAuto) == 0) {
       game.increment();
     }
     if (game.data.ms % Math.floor(1000 / game.data.maximizeAuto) == 0) {
       game.maximize();
     }
-    
-    game.data.ms++;
   },
   render: function() {
     game.writeOrd();
