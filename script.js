@@ -313,7 +313,7 @@ var game = {
   },
   export: function() {
     game.save();
-    var file = new Blob([btoa(JSON.stringify(data))], {type: "text/plain"})
+    var file = new Blob([btoa(JSON.stringify(game.data))], {type: "text/plain"})
     window.URL = window.URL || window.webkitURL;
     var importButton = document.createElement("importButton");
     importButton.href = window.URL.createObjectURL(file);
