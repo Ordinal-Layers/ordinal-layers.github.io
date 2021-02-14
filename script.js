@@ -334,6 +334,7 @@ var game = {
 
 game.load();
 
-while (true) {
+/* while (true) {
   game.loop();
 }
+*/
