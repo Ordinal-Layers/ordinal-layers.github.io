@@ -222,6 +222,8 @@ var game = {
     }
   },
   render: function() {
+    game.data.lastTick = Date.now();
+    
     game.writeOrd();
     
     if (game.data.colors) {
@@ -251,8 +253,6 @@ var game = {
     
     game.buyIncrementButton.innerHTML = "Buy Increment Autoclicker for " + 100 * 2 ** game.data.incrementAuto + " OP";
     game.buyMaximizeButton.innerHTML = "Buy Maximize Autoclicker for " + 100 * 2 ** game.data.maximizeAuto + " OP";
-    
-    game.data.lastTick = Date.now();
   },
   save: function() {
     localStorage.clear();
@@ -328,6 +328,4 @@ var game = {
 
 game.load(JSON.parse(localStorage.getItem("save")));
 
-while (true) {
-  // game.loop();
-}
+setInterval(game.loop(), 1);
