@@ -343,4 +343,4 @@ var game = {
 
 game.load(JSON.parse(localStorage.getItem("save")));
 
-setInterval(game.loop(), 50);
+setInterval(game.loop, 50);
