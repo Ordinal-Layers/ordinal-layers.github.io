@@ -267,8 +267,8 @@ var game = {
     game.render();
   },
   load: function() {
-    game.data.ms = Number(localStorage.getItem("0"));
-    game.data.lastTick = Number(localStorage.getItem("1"));
+    game.data.ms = localStorage.getItem("0").toNumber();
+    game.data.lastTick = localStorage.getItem("1").toNumber();
     game.data.markupUnlocked = localStorage.getItem("2");
     if (game.data.markupUnlocked === "false") {
       game.data.markupUnlocked = false;
@@ -281,11 +281,11 @@ var game = {
     } else {
       game.data.colors = true;
     }
-    game.data.ord = Number(localStorage.getItem("4"));
-    game.data.over = Number(localStorage.getItem("5"));
-    game.data.op = Number(localStorage.getItem("6"));
-    game.data.incrementAuto = Number(localStorage.getItem("7"));
-    game.data.maximizeAuto = Number(localStorage.getItem("8"));
+    game.data.ord = localStorage.getItem("4").toNumber();
+    game.data.over = localStorage.getItem("5").toNumber();
+    game.data.op = localStorage.getItem("6").toNumber();
+    game.data.incrementAuto = localStorage.getItem("7").toNumber();
+    game.data.maximizeAuto = localStorage.getItem("8").toNumber;
     
     game.render();
   },
