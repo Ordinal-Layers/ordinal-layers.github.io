@@ -212,12 +212,12 @@ var game = {
     game.save();
   },
   loop: function() {
-    game.data.ms++;
+    game.data.diff = Date.now() - game.data.lastTick;
     
-    if (game.data.ms % Math.floor(1000 / game.data.incrementAuto) == 0) {
+    if (game.data.diff % Math.floor(1000 / game.data.incrementAuto) == 0) {
       game.increment();
     }
-    if (game.data.ms % Math.floor(1000 / game.data.maximizeAuto) == 0) {
+    if (game.data.diff % Math.floor(1000 / game.data.maximizeAuto) == 0) {
       game.maximize();
     }
   },
@@ -272,8 +272,7 @@ var game = {
   },
   reset: function() {
     game.data = {
-      ms: 0,
-      lastTick: 0,
+      lastTick: Date.now(),
       diff: 0,
       markupUnlocked: false,
       colors: false,
@@ -329,7 +328,6 @@ var game = {
 
 game.load(JSON.parse(localStorage.getItem("save")));
 
-/* while (true) {
+while (true) {
   game.loop();
 }
-*/
