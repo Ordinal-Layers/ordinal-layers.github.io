@@ -62,9 +62,9 @@ var game = {
       }
       
       game.data.over = 0;
+      
+      game.save("maximize", manmade);
     }
-    
-    game.save("maximize", manmade);
   },
   markup: function() {
     if (game.data.ord >= 100) {
@@ -72,13 +72,13 @@ var game = {
       
       game.data.ord = 0;
       game.data.over = 0;
+      
+      if (game.data.markupUnlocked == false) {
+        game.data.markupUnlocked = true;
+      }
+      
+      game.save("markup");
     }
-    
-    if (game.data.markupUnlocked == false) {
-      game.data.markupUnlocked = true;
-    }
-    
-    game.save("markup");
   },
   buyIncrementAuto: function() {
     if (game.data.op >= 100 * 2 ** game.data.incrementAuto) {
