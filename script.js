@@ -2,6 +2,7 @@ var game = {
   data: {
     ms: 0,
     lastTick: 0,
+    diff: 0,
     markupUnlocked: false,
     colors: false,
     ord: 0,
@@ -186,9 +187,9 @@ var game = {
         var color = Math.log(ord + over) / (Math.LN10 * 10);
         
         if (game.hardy(ord, over) == Infinity) {
-          game.header.innerHTML = `<span style="color:hsl(${color * 360}, 100%, 50%)">H<sub>${result}</sub>(10)</span>`;
+          game.header.innerHTML = '<span style="color:hsl(' + color * 360 + ', 100%, 50%)">H<sub>' + result + '</sub>(10)</span>';
         } else {
-          game.header.innerHTML = `<span style="color:hsl(${color * 360}, 100%, 50%)">H<sub>${result}</sub>(10)=${game.hardy(ord, over)}`;
+          game.header.innerHTML = '<span style="color:hsl(' + color * 360 + ', 100%, 50%)">H<sub>' + result + '</sub>(10)=' + game.hardy(ord, over);
         }
       } else {
         if (game.hardy(ord, over) == Infinity) {
@@ -251,41 +252,19 @@ var game = {
     game.buyIncrementButton.innerHTML = "Buy Increment Autoclicker for " + 100 * 2 ** game.data.incrementAuto + " OP";
     game.buyMaximizeButton.innerHTML = "Buy Maximize Autoclicker for " + 100 * 2 ** game.data.maximizeAuto + " OP";
     
-    game.data.lastTick = game.data.ms;
+    game.data.lastTick = Date.now();
   },
   save: function() {
     localStorage.clear();
     
-    var i = 0;
-    
-    for (x in game.data) {
-      localStorage.setItem(i.toString(), x.toString());
-      
-      i++;
-    }
-    
-    game.render();
+    localStorage.setItem("save", JSON.stringify(game.data));
   },
-  load: function() {
-    game.data.ms = localStorage.getItem("0").toNumber();
-    game.data.lastTick = localStorage.getItem("1").toNumber();
-    game.data.markupUnlocked = localStorage.getItem("2");
-    if (game.data.markupUnlocked === "false") {
-      game.data.markupUnlocked = false;
-    } else {
-      game.data.markupUnlocked = true;
-    }
-    game.data.colors = localStorage.getItem("3");
-    if (game.data.colors === "false") {
-      game.data.colors = false;
-    } else {
-      game.data.colors = true;
-    }
-    game.data.ord = localStorage.getItem("4").toNumber();
-    game.data.over = localStorage.getItem("5").toNumber();
-    game.data.op = localStorage.getItem("6").toNumber();
-    game.data.incrementAuto = localStorage.getItem("7").toNumber();
-    game.data.maximizeAuto = localStorage.getItem("8").toNumber;
+  load: function(loadgame) {
+    game.reset();
+    
+    game.data = loadgame;
+
+    game.data.diff = Date.now() - game.data.lastTick;
     
     game.render();
   },
@@ -293,6 +272,7 @@ var game = {
     game.data = {
       ms: 0,
       lastTick: 0,
+      diff: 0,
       markupUnlocked: false,
       colors: false,
       ord: 0,
@@ -306,24 +286,28 @@ var game = {
   },
   import: function() {
     var loadgame = "";
+    
     reader.readAsText(document.getElementById("importButton").files[0]);
-    window.setTimeout(function() {
-      console.log(52)
-      loadgame=JSON.parse(atob(reader.result));
-      if (loadgame != "") {
-      game.data = loadgame
-      }
-        window.setTimeout(() => {
-        game.save()
-       window.location.reload()
-        }, 200)
-      }, 100)
+
+    loadgame=JSON.parse(atob(reader.result));
+    
+    if (loadgame != "") {
+      game.load(loadgame);
+    }
+    
+    game.save();
+    
+    window.location.reload();
   },
   export: function() {
     game.save();
-    var file = new Blob([btoa(JSON.stringify(game.data))], {type: "text/plain"})
+    
+    var file = new Blob([btoa(JSON.stringify(game.data))], {type: "text/plain"});
+    
     window.URL = window.URL || window.webkitURL;
+    
     var importButton = document.createElement("importButton");
+    
     importButton.href = window.URL.createObjectURL(file);
     importButton.download = "Ordinal Markup Save.txt";
     importButton.click();
@@ -332,6 +316,7 @@ var game = {
     var code = prompt(
       'Are you sure you want to delete all of your progress? Type in "reset game" to reset all of your progress.'
     );
+    
     if (code != null) {
       if (code.toLowerCase() == 'reset game') {
         game.reset();
@@ -340,7 +325,7 @@ var game = {
   }
 };
 
-game.load();
+game.load(JSON.parse(localStorage.getItem("save")));
 
 /* while (true) {
   game.loop();
