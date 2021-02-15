@@ -1,8 +1,11 @@
 var game = {
   data: {
-    ms: 0,
     lastTick: 0,
     diff: 0,
+    lastIncrement: 0,
+    incrementDiff: 0,
+    lastMaximize: 0,
+    maximizeDiff: 0,
     markupUnlocked: false,
     colors: false,
     ord: 0,
@@ -35,16 +38,16 @@ var game = {
     
     game.tabs[x].style.display = "block";
   },
-  increment: function() {
+  increment: function(manmade = 1) {
     if (game.data.ord % 10 == 9) {
       game.data.over++;
     } else {
       game.data.ord++;
     }
     
-    game.save();
+    game.save("increment", manmade);
   },
-  maximize: function() {
+  maximize: function(manmade = 1) {
     if (game.data.ord % 10 == 9 && game.data.over >= 1) {
       game.data.ord -= 9;
       game.data.over += 9;
@@ -61,7 +64,7 @@ var game = {
       game.data.over = 0;
     }
     
-    game.save();
+    game.save("maximize", manmade);
   },
   markup: function() {
     if (game.data.ord >= 100) {
@@ -75,7 +78,7 @@ var game = {
       game.data.markupUnlocked = true;
     }
     
-    game.save();
+    game.save("markup");
   },
   buyIncrementAuto: function() {
     if (game.data.op >= 100 * 2 ** game.data.incrementAuto) {
@@ -83,7 +86,7 @@ var game = {
       game.data.incrementAuto++;
     }
     
-    game.render();
+    game.save("buyIncrementAuto");
   },
   buyMaximizeAuto: function() {
     if (game.data.op >= 100 * 2 ** game.data.maximizeAuto) {
@@ -91,7 +94,7 @@ var game = {
       game.data.maximizeAuto++;
     }
     
-    game.render();
+    game.save("buyMaximizeAuto");
   },
   maxAll: function() {
     while (game.data.op >= 100 * 2 ** game.data.incrementAuto || game.data.op >= 100 * 2 ** game.data.maximizeAuto) {
@@ -214,15 +217,25 @@ var game = {
   loop: function() {
     game.data.diff = Date.now() - game.data.lastTick;
     
-    if (game.data.diff % Math.floor(1000 / game.data.incrementAuto) == 0) {
-      game.increment();
+    game.data.incrementDiff = Date.now() - game.data.lastIncrement;
+    game.data.maximizeDiff = Date.now() - game.data.lastMaximize;
+    
+    if (game.data.incrementAuto > 0 && game.data.incrementDiff % Math.floor(1000 / game.data.incrementAuto) == 0) {
+      game.increment(0);
     }
-    if (game.data.diff % Math.floor(1000 / game.data.maximizeAuto) == 0) {
-      game.maximize();
+    if (game.data.incrementAuto > 0 && game.data.maximizeDiff % Math.floor(1000 / game.data.maximizeAuto) == 0) {
+      game.maximize(0);
     }
   },
-  render: function() {
+  render: function(action, manmade = 1) {
     game.data.lastTick = Date.now();
+    
+    if (action == "increment" && manmade == 0) {
+      game.data.lastIncrement = Date.now();
+    }
+    if (action == "maximize" && manmade == 0) {
+      game.data.lastMaximize = Date.now();
+    }
     
     game.writeOrd();
     
@@ -254,19 +267,17 @@ var game = {
     game.buyIncrementButton.innerHTML = "Buy Increment Autoclicker for " + 100 * 2 ** game.data.incrementAuto + " OP";
     game.buyMaximizeButton.innerHTML = "Buy Maximize Autoclicker for " + 100 * 2 ** game.data.maximizeAuto + " OP";
   },
-  save: function() {
+  save: function(action, manmade = 1) {
     localStorage.clear();
     
     localStorage.setItem("save", JSON.stringify(game.data));
     
-    game.render();
+    game.render(action, manmade);
   },
   load: function(loadgame) {
     game.reset();
     
     game.data = loadgame;
-
-    game.data.diff = Date.now() - game.data.lastTick;
     
     game.render();
   },
@@ -274,6 +285,10 @@ var game = {
     game.data = {
       lastTick: Date.now(),
       diff: 0,
+      lastIncrement: Date.now(),
+      incrementDiff: 0,
+      lastMaximize: Date.now(),
+      maximizeDiff: 0,
       markupUnlocked: false,
       colors: false,
       ord: 0,
