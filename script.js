@@ -258,6 +258,8 @@ var game = {
     localStorage.clear();
     
     localStorage.setItem("save", JSON.stringify(game.data));
+    
+    game.render();
   },
   load: function(loadgame) {
     game.reset();
