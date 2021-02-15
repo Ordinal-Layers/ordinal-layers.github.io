@@ -329,5 +329,5 @@ var game = {
 game.load(JSON.parse(localStorage.getItem("save")));
 
 while (true) {
-  game.loop();
+  // game.loop();
 }
