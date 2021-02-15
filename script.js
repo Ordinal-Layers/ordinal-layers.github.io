@@ -220,10 +220,10 @@ var game = {
     game.data.incrementDiff = Date.now() - game.data.lastIncrement;
     game.data.maximizeDiff = Date.now() - game.data.lastMaximize;
     
-    if (game.data.incrementAuto > 0 && game.data.incrementDiff % Math.floor(1000 / game.data.incrementAuto) == 0) {
+    if (game.data.incrementDiff >= 1000 / game.data.incrementAuto) {
       game.increment(0);
     }
-    if (game.data.incrementAuto > 0 && game.data.maximizeDiff % Math.floor(1000 / game.data.maximizeAuto) == 0) {
+    if ((game.data.ord % 10 == 9 && game.data.over >= 1) && game.data.maximizeDiff >= 1000 / game.data.maximizeAuto) {
       game.maximize(0);
     }
   },
@@ -262,7 +262,7 @@ var game = {
     game.opText.innerHTML = "You have " + game.data.op + " Ordinal Points";
     
     game.incrementSpeed.innerHTML = "You have " + game.data.incrementAuto + " increment autoclickers, clicking the increment button " + game.data.incrementAuto + " times per second";
-    game.maximizeSpeed.innerHTML = "You have " + game.data.maximizeAuto + " maximize autoclickers, clicking the maximize button " + game.data.incrementAuto + " times per second";
+    game.maximizeSpeed.innerHTML = "You have " + game.data.maximizeAuto + " maximize autoclickers, clicking the maximize button " + game.data.maximizeAuto + " times per second";
     
     game.buyIncrementButton.innerHTML = "Buy Increment Autoclicker for " + 100 * 2 ** game.data.incrementAuto + " OP";
     game.buyMaximizeButton.innerHTML = "Buy Maximize Autoclicker for " + 100 * 2 ** game.data.maximizeAuto + " OP";
@@ -343,4 +343,4 @@ var game = {
 
 game.load(JSON.parse(localStorage.getItem("save")));
 
-setInterval(game.loop(), 1);
+setInterval(game.loop(), 50);
