@@ -239,6 +239,12 @@ var game = {
     game.data.incrementDiff = Date.now() - game.data.lastIncrement;
     game.data.maximizeDiff = Date.now() - game.data.lastMaximize;
     
+    if (game.data.music) {
+      game.music.play();
+    } else {
+      game.music.pause();
+    }
+    
     if (game.data.incrementDiff >= 1000 / game.data.incrementAuto) {
       for (var i = 0; i < Math.floor(game.data.incrementDiff * game.data.incrementAuto / 1000); i++) {
         game.increment(0);
@@ -270,12 +276,8 @@ var game = {
     
     if (game.data.music) {
       game.musicButton.innerHTML = "Music: ON";
-      
-      game.music.play();
     } else {
       game.musicButton.innerHTML = "Music: OFF";
-      
-      game.music.pause();
     }
     
     if (game.data.ord >= 100) {
