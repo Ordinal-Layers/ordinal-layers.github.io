@@ -48,14 +48,14 @@ var game = {
     game.save("increment", manmade);
   },
   maximize: function(manmade = 1) {
-    if (game.data.ord % 10 === 9 && game.data.over >== 1) {
+    if (game.data.ord % 10 === 9 && game.data.over >= 1) {
       game.data.ord -= 9;
       game.data.over += 9;
       
       do {
         game.data.over -= Math.ceil((game.data.over + 10) / 2);
         game.data.ord += 10;
-      } while (game.data.over + 10 >== 20 && game.data.ord % 100 !== 0);
+      } while (game.data.over + 10 >= 20 && game.data.ord % 100 !== 0);
       
       if (game.data.ord % 100 !== 0) {
         game.data.ord += game.data.over;
@@ -67,7 +67,7 @@ var game = {
     }
   },
   markup: function() {
-    if (game.data.ord >== 100) {
+    if (game.data.ord >= 100) {
       game.data.op += game.data.ord + game.data.over;
       
       game.data.ord = 0;
@@ -81,7 +81,7 @@ var game = {
     }
   },
   buyIncrementAuto: function() {
-    if (game.data.op >== 100 * 2 ** game.data.incrementAuto) {
+    if (game.data.op >= 100 * 2 ** game.data.incrementAuto) {
       game.data.op -= 100 * 2 ** game.data.incrementAuto;
       game.data.incrementAuto++;
     }
@@ -89,7 +89,7 @@ var game = {
     game.save("buyIncrementAuto");
   },
   buyMaximizeAuto: function() {
-    if (game.data.op >== 100 * 2 ** game.data.maximizeAuto) {
+    if (game.data.op >= 100 * 2 ** game.data.maximizeAuto) {
       game.data.op -= 100 * 2 ** game.data.maximizeAuto;
       game.data.maximizeAuto++;
     }
@@ -97,22 +97,22 @@ var game = {
     game.save("buyMaximizeAuto");
   },
   maxAll: function() {
-    while (game.data.op >== 100 * 2 ** game.data.incrementAuto || game.data.op >== 100 * 2 ** game.data.maximizeAuto) {
+    while (game.data.op >= 100 * 2 ** game.data.incrementAuto || game.data.op >= 100 * 2 ** game.data.maximizeAuto) {
       game.buyIncrementAuto();
       game.buyMaximizeAuto();
     }
   },
   hardy: function(ord = game.data.ord, over = game.data.over) {
-    if (ord >== 1000) {
+    if (ord >= 1000) {
       return Infinity;
     } else {
-      if (ord >== 100) {
+      if (ord >= 100) {
         return game.hardy(ord - 100, over) * 2 ** game.hardy(ord - 100, over);
       } else {
-        if (ord >== 10) {
+        if (ord >= 10) {
             return game.hardy(ord - 10, over) * 2;
         } else {
-          if (ord >== 1) {
+          if (ord >= 1) {
             if (over === 0) {
               return game.hardy(ord - 1, 0) + 1;
             } else {
@@ -220,10 +220,10 @@ var game = {
     game.data.incrementDiff = Date.now() - game.data.lastIncrement;
     game.data.maximizeDiff = Date.now() - game.data.lastMaximize;
     
-    if (game.data.incrementDiff >== 1000 / game.data.incrementAuto) {
+    if (game.data.incrementDiff >= 1000 / game.data.incrementAuto) {
       game.increment(0);
     }
-    if ((game.data.ord % 10 == 9 && game.data.over >== 1) && game.data.maximizeDiff >== 1000 / game.data.maximizeAuto) {
+    if ((game.data.ord % 10 == 9 && game.data.over >= 1) && game.data.maximizeDiff >= 1000 / game.data.maximizeAuto) {
       game.maximize(0);
     }
   },
@@ -245,7 +245,7 @@ var game = {
       game.colorButton.innerHTML = "Colors: OFF";
     }
     
-    if (game.data.ord >== 100) {
+    if (game.data.ord >= 100) {
       game.markupButton.innerHTML = "Markup to gain " + (game.data.ord + game.data.over) + " Ordinal Points";
       game.markupButton2.innerHTML = "+" + (game.data.ord + game.data.over);
     } else {
