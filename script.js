@@ -144,7 +144,7 @@ var game = {
         var power = Math.floor(Math.log(remainOrd) / Math.LN10);
 
         if (result === "") {
-          if (power == 0) {
+          if (power === 0) {
             result = remainOrd + over;
           } else {
             if (power === 1) {
@@ -223,7 +223,7 @@ var game = {
     if (game.data.incrementDiff >= 1000 / game.data.incrementAuto) {
       game.increment(0);
     }
-    if ((game.data.ord % 10 == 9 && game.data.over >= 1) && game.data.maximizeDiff >= 1000 / game.data.maximizeAuto) {
+    if ((game.data.ord % 10 === 9 && game.data.over >= 1) && game.data.maximizeDiff >= 1000 / game.data.maximizeAuto) {
       game.maximize(0);
     }
   },
