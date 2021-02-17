@@ -271,11 +271,11 @@ var game = {
     if (game.data.music) {
       game.musicButton.innerHTML = "Music: ON";
       
-      game.music.muted = false;
+      game.music.play();
     } else {
       game.musicButton.innerHTML = "Music: OFF";
       
-      game.music.muted = true;
+      game.music.pause();
     }
     
     if (game.data.ord >= 100) {
