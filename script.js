@@ -66,12 +66,15 @@ var game = {
       game.save("maximize", manmade);
     }
   },
+  resetOrd: function() {
+    game.data.ord = 0;
+    game.data.over = 0;
+  },
   markup: function() {
     if (game.data.ord >= 100) {
       game.data.op += game.data.ord + game.data.over;
       
-      game.data.ord = 0;
-      game.data.over = 0;
+      game.resetOrd();
       
       if (game.data.markupUnlocked === false) {
         game.data.markupUnlocked = true;
@@ -84,17 +87,21 @@ var game = {
     if (game.data.op >= 100 * 2 ** game.data.incrementAuto) {
       game.data.op -= 100 * 2 ** game.data.incrementAuto;
       game.data.incrementAuto++;
-    }
-    
-    game.save("buyIncrementAuto");
+      
+      game.resetOrd();
+      
+      game.save("buyIncrementAuto");
+    }  
   },
   buyMaximizeAuto: function() {
     if (game.data.op >= 100 * 2 ** game.data.maximizeAuto) {
       game.data.op -= 100 * 2 ** game.data.maximizeAuto;
       game.data.maximizeAuto++;
+      
+      game.resetOrd();
+      
+      game.save("buyMaximizeAuto");
     }
-    
-    game.save("buyMaximizeAuto");
   },
   maxAll: function() {
     while (game.data.op >= 100 * 2 ** game.data.incrementAuto || game.data.op >= 100 * 2 ** game.data.maximizeAuto) {
@@ -221,19 +228,23 @@ var game = {
     game.data.maximizeDiff = Date.now() - game.data.lastMaximize;
     
     if (game.data.incrementDiff >= 1000 / game.data.incrementAuto) {
-      game.increment(0);
+      for (var i = 0; i < Math.floor(game.data.incrementDiff * game.data.incrementAuto / 1000); i++) {
+        game.increment(0);
+      }
     }
     if ((game.data.ord % 10 === 9 && game.data.over >= 1) && game.data.maximizeDiff >= 1000 / game.data.maximizeAuto) {
-      game.maximize(0);
+      for (var i = 0; i < Math.floor(game.data.maximizeDiff * game.data.maximizeAuto / 1000); i++) {
+        game.maximize(0);
+      }
     }
   },
   render: function(action, manmade = 1) {
     game.data.lastTick = Date.now();
     
-    if (action == "increment" && manmade === 0) {
+    if (action === "increment" && manmade === 0) {
       game.data.lastIncrement = Date.now();
     }
-    if (action == "maximize" && manmade === 0) {
+    if (action === "maximize" && manmade === 0) {
       game.data.lastMaximize = Date.now();
     }
     
@@ -305,7 +316,7 @@ var game = {
     
     reader.readAsText(document.getElementById("importButton").files[0]);
 
-    loadgame=JSON.parse(atob(reader.result));
+    loadgame = JSON.parse(atob(reader.result));
     
     if (loadgame !== "") {
       game.load(loadgame);
@@ -334,7 +345,7 @@ var game = {
     );
     
     if (code !== null) {
-      if (code.toLowerCase() === 'reset game') {
+      if (code.toLowerCase() === "reset game") {
         game.reset();
       }
     }
@@ -343,4 +354,4 @@ var game = {
 
 game.load(JSON.parse(localStorage.getItem("save")));
 
-setInterval(game.loop, 50);
+setInterval(game.loop, 1);
