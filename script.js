@@ -7,15 +7,18 @@ var game = {
     lastMaximize: 0,
     maximizeDiff: 0,
     markupUnlocked: false,
-    colors: false,
+    colors: true,
+    music: true,
     ord: 0,
     over: 0,
     op: 0,
     incrementAuto: 0,
     maximizeAuto: 0,
   },
+  music: document.getElementById("music"),
   header: document.getElementById("header"),
   colorButton: document.getElementById("colorButton"),
+  musicButton: document.getElementById("musicButton"),
   markupTab: document.getElementById("markupTabButton"),
   markupButton: document.getElementById("markupButton"),
   markupButton2: document.getElementById("markupButton2"),
@@ -221,6 +224,15 @@ var game = {
     
     game.save();
   },
+  toggleMusic: function() {
+    if (game.data.music) {
+      game.data.music = false;
+    } else {
+      game.data.music = true;
+    }
+    
+    game.save();
+  },
   loop: function() {
     game.data.diff = Date.now() - game.data.lastTick;
     
@@ -254,6 +266,16 @@ var game = {
       game.colorButton.innerHTML = "Colors: ON";
     } else {
       game.colorButton.innerHTML = "Colors: OFF";
+    }
+    
+    if (game.data.music) {
+      game.musicButton.innerHTML = "Music: ON";
+      
+      game.music.muted = false;
+    } else {
+      game.musicButton.innerHTML = "Music: OFF";
+      
+      game.music.muted = true;
     }
     
     if (game.data.ord >= 100) {
@@ -290,6 +312,9 @@ var game = {
     
     game.data = loadgame;
     
+    game.music.loop = true;
+    game.music.muted = false;
+    
     game.render();
   },
   reset: function() {
@@ -301,7 +326,8 @@ var game = {
       lastMaximize: Date.now(),
       maximizeDiff: 0,
       markupUnlocked: false,
-      colors: false,
+      colors: true,
+      music: true,
       ord: 0,
       over: 0,
       op: 0,
