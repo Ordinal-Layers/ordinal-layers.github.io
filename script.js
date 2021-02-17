@@ -313,6 +313,7 @@ var game = {
     game.data = loadgame;
     
     game.music.loop = true;
+    game.music.volume = 0.5;
     
     game.render();
   },
