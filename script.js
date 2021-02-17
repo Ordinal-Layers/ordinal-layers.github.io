@@ -246,14 +246,10 @@ var game = {
     }
     
     if (game.data.incrementDiff >= 1000 / game.data.incrementAuto) {
-      for (var i = 0; i < Math.floor(game.data.incrementDiff * game.data.incrementAuto / 1000); i++) {
-        game.increment(0);
-      }
+      game.increment(0);
     }
     if ((game.data.ord % 10 === 9 && game.data.over >= 1) && game.data.maximizeDiff >= 1000 / game.data.maximizeAuto) {
-      for (var i = 0; i < Math.floor(game.data.maximizeDiff * game.data.maximizeAuto / 1000); i++) {
-        game.maximize(0);
-      }
+      game.maximize(0);
     }
   },
   render: function(action, manmade = 1) {
