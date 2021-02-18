@@ -54,13 +54,13 @@
         <div id="factorList" style="display:none">
           Factors: <button onclick="game.maxFactors()" class="markupButton" id="maxFactorButton">Max all</button>
           <ul id="factorListMain">
-            <li>Factor 1: x1 <button onclick="game.buyFactor(1)" class="markupButton" id="factor1Button">Increase Factor 1 for 10 OP</button></li>
-            <li style="display:none">Factor 2: x1 <button onclick="game.buyFactor(2)" class="markupButton" id="factor2Button">Increase Factor 2 for 100 OP</button></li>
-            <li style="display:none">Factor 3: x1 <button onclick="game.buyFactor(3)" class="markupButton" id="factor3Button">Increase Factor 3 for 1000 OP</button></li>
-            <li style="display:none">Factor 4: x1 <button onclick="game.buyFactor(4)" class="markupButton" id="factor4Button">Increase Factor 4 for 10000 OP</button></li>
-            <li style="display:none">Factor 5: x1 <button onclick="game.buyFactor(5)" class="markupButton" id="factor5Button">Increase Factor 5 for 100000 OP</button></li>
-            <li style="display:none">Factor 6: x1 <button onclick="game.buyFactor(6)" class="markupButton" id="factor6Button">Increase Factor 6 for 1000000 OP</button></li>
-            <li style="display:none">Factor 7: x1 <button onclick="game.buyFactor(7)" class="markupButton" id="factor7Button">Increase Factor 7 for 10000000 OP</button></li>
+            <li id="factor1">Factor 1: <span id="factor1Mult">x1</span> <button onclick="game.buyFactor(1)" class="markupButton" id="factor1Button">Increase Factor 1 for 10 OP</button></li>
+            <li id="factor2" style="display:none">Factor 2: <span id="factor2Mult">x1</span> <button onclick="game.buyFactor(2)" class="markupButton" id="factor2Button">Increase Factor 2 for 100 OP</button></li>
+            <li id="factor3" style="display:none">Factor 3: <span id="factor3Mult">x1</span> <button onclick="game.buyFactor(3)" class="markupButton" id="factor3Button">Increase Factor 3 for 1000 OP</button></li>
+            <li id="factor4" style="display:none">Factor 4: <span id="factor4Mult">x1</span> <button onclick="game.buyFactor(4)" class="markupButton" id="factor4Button">Increase Factor 4 for 10000 OP</button></li>
+            <li id="factor5" style="display:none">Factor 5: <span id="factor5Mult">x1</span> <button onclick="game.buyFactor(5)" class="markupButton" id="factor5Button">Increase Factor 5 for 100000 OP</button></li>
+            <li id="factor6" style="display:none">Factor 6: <span id="factor6Mult">x1</span> <button onclick="game.buyFactor(6)" class="markupButton" id="factor6Button">Increase Factor 6 for 1000000 OP</button></li>
+            <li id="factor7" style="display:none">Factor 7: <span id="factor7Mult">x1</span> <button onclick="game.buyFactor(7)" class="markupButton" id="factor7Button">Increase Factor 7 for 10000000 OP</button></li>
           </ul>
           <span id="factorMult">Your factors are multiplying your autoclicker speed by 1</span>
         </div>
