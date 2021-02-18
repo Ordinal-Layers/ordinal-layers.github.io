@@ -36,13 +36,36 @@
       <button onclick="game.markup()" class="markupButton" id="markupButton">Reach &omega;<sup>2</sup> to Markup</button>
     </div>
     <div id="tab2" style="display:none">
-      <p><span id="opText">You have 0 Ordinal Points</span>
-      <button onclick="game.markup()" class="markupButton" id="markupButton2">Reach &omega;<sup>2</sup> to Markup</button></p>
-      <b>Tier 1 Automation</b>
-      <p id="incrementSpeed">You have 0 increment autoclickers, clicking the increment button 0 times per second</p>
-      <p id="maximizeSpeed">You have 0 maximize autoclickers, clicking the maximize button 0 times per second</p>
-      <button onclick="game.buyIncrementAuto()" class="markupButton" id="buyIncrementButton">Buy Increment Autoclicker for 100 OP</button>
-      <button onclick="game.buyMaximizeAuto()" class="markupButton" id="buyMaximizeButton">Buy Maximize Autoclicker fo 100 OP</button>
-      <button onclick="game.maxAll()" class="markupButton" id="maxAllButton">Max All</button>
+      <span id="opText">You have 0 Ordinal Points</span> <button onclick="game.markup()" class="markupButton" id="markupButton2">Reach &omega;<sup>2</sup> to Markup</button>
+      <div id="subtab2Menu">
+        <button onclick="game.subtab(2, 0)" class="markupButton" id="autoclickerSubtabButton">Autoclickers</button>
+        <button onclick="game.subtab(2, 1)" class="markupButton" id="factorSubtabButton">Factors</button>
+      </div>
+      <div id="subtab20">
+        <b>Tier 1 Automation</b>
+        <p id="incrementSpeed">You have 0 increment autoclickers, clicking the increment button 0 times per second</p>
+        <p id="maximizeSpeed">You have 0 maximize autoclickers, clicking the maximize button 0 times per second</p>
+        <button onclick="game.buyIncrementAuto()" class="markupButton" id="buyIncrementButton">Buy Increment Autoclicker for 100 OP</button>
+        <button onclick="game.buyMaximizeAuto()" class="markupButton" id="buyMaximizeButton">Buy Maximize Autoclicker fo 100 OP</button>
+        <button onclick="game.maxAll()" class="markupButton" id="maxAllButton">Max All</button>
+      </div>
+      <div id="subtab21" style="display:none">
+        <p id="noFactors">You have no factors. Perform a Factor Shift to get one!</p>
+        <div id="factorList" style="display:none">
+          Factors: <button onclick="game.maxFactors()" class="markupButton" id="maxFactorButton">Max all</button>
+          <ul id="factorListMain">
+            <li>Factor 1: x1 <button onclick="game.buyFactor(1)" class="markupButton" id="factor1Button">Increase Factor 1 for 10 OP</button></li>
+            <li style="display:none">Factor 2: x1 <button onclick="game.buyFactor(2)" class="markupButton" id="factor2Button">Increase Factor 2 for 100 OP</button></li>
+            <li style="display:none">Factor 3: x1 <button onclick="game.buyFactor(3)" class="markupButton" id="factor3Button">Increase Factor 3 for 1000 OP</button></li>
+            <li style="display:none">Factor 4: x1 <button onclick="game.buyFactor(4)" class="markupButton" id="factor4Button">Increase Factor 4 for 10000 OP</button></li>
+            <li style="display:none">Factor 5: x1 <button onclick="game.buyFactor(5)" class="markupButton" id="factor5Button">Increase Factor 5 for 100000 OP</button></li>
+            <li style="display:none">Factor 6: x1 <button onclick="game.buyFactor(6)" class="markupButton" id="factor6Button">Increase Factor 6 for 1000000 OP</button></li>
+            <li style="display:none">Factor 7: x1 <button onclick="game.buyFactor(7)" class="markupButton" id="factor7Button">Increase Factor 7 for 10000000 OP</button></li>
+          </ul>
+          <span id="factorMult">Your factors are multiplying your autoclicker speed by 1</span>
+        </div>
+        <span id="factorShift">Factor Shift: Requires 1000 OP</span> <button onclick="game.factorShift()" class="markupButton" id="factorShiftButton">Do a Factor Shift</button>
+        <p>When you Factor Shift, you gain a new factor and the base decreases by 1</p>
+      </div>
   </body>
 </html>
