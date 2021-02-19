@@ -507,7 +507,7 @@ var game = {
 
     loadgame = JSON.parse(atob(reader.result));
     
-    if (loadgame !== "") {
+    if (loadgame !== null) {
       game.load(loadgame);
     }
     
