@@ -469,14 +469,12 @@ try {
       game.render(action, manmade);
     },
     load: function(loadgame) {
-      game.reset();
-
       game.data = loadgame;
 
       game.music.loop = true;
       game.music.volume = 0.5;
 
-      game.render("load");
+      game.save("load");
     },
     reset: function() {
       game.data = {
@@ -496,7 +494,7 @@ try {
         factors: []
       };
 
-      game.save();
+      game.save("reset");
     },
     import: function() {
       var loadgame = "";
@@ -504,17 +502,13 @@ try {
       reader.readAsText(document.getElementById("importButton").files[0]);
 
       loadgame = JSON.parse(atob(reader.result));
-
-      if (loadgame !== null) {
-        game.load(loadgame);
-      }
-
-      game.save();
+      
+      game.load(loadgame);
 
       window.location.reload();
     },
     export: function() {
-      game.save();
+      game.save("export");
 
       var file = new Blob([btoa(JSON.stringify(game.data))], {type: "text/plain"});
 
