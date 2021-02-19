@@ -278,53 +278,53 @@ var game = {
     if (ord === 0) {
       if (header) {
         if (game.data.colors) {
-          game.header.innerHTML = '<span style="color:hsl(0, 100%, 50%)">H<sub>0</sub>(' + base + ')=' + base + '</span>';
+          game.header.innerHTML = `<span style="color:hsl(0, 100%, 50%)">H<sub>0</sub>(${base})=${base}</span>`;
         } else {
-          game.header.innerHTML = "H<sub>0</sub>(" + base + ")=" + base;
+          game.header.innerHTML = `H<sub>0</sub>(${base})=${base}`;
         }
       }
       
-      return "0";
+      return `0`;
     } else {
-      var result = "";
+      var result = ``;
       var remainOrd = ord;
 
       while (remainOrd > 0) {
-        var power = Math.floor(Math.log(remainOrd) / Math.Log(base));
+        var power = Math.floor(Math.log(remainOrd) / Math.log(base));
 
-        if (result === "") {
+        if (result === ``) {
           if (power === 0) {
             result = remainOrd + over;
           } else {
             if (power === 1) {
               if (Math.floor(remainOrd / base) === 1) {
-                result = "&omega;";
+                result = `&omega;`;
               } else {
-                result = "&omega;" + Math.floor(remainOrd / base);
+                result = `&omega;` + Math.floor(remainOrd / base);
               }
             } else {
               if (Math.floor(remainOrd / base ** power) === 1) {
-                result = "&omega;<sup>" + game.writeOrd(power, 0) + "</sup>";
+                result = `&omega;<sup>${game.writeOrd(power, 0)}</sup>`;
               } else {
-                result = "&omega;<sup>" + game.writeOrd(power, 0) + "</sup>" + Math.floor(remainOrd / base ** power);
+                result = `&omega;<sup>${game.writeOrd(power, 0)}</sup>${Math.floor(remainOrd / base ** power)}`;
               }
             }
           }
         } else {
           if (power === 0) {
-            result = result + "+" + (remainOrd + over);
+            result = `${result}+${remainOrd + over}`;
           } else {
             if (power === 1) {
               if (Math.floor(remainOrd / base) === 1) {
-                result = result + "+&omega;";
+                result = `${result}+&omega;`;
               } else {
-                result = result + "+&omega;" + Math.floor(remainOrd / base);
+                result = `${result}+&omega;+${Math.floor(remainOrd / base}`;
               }
             } else {
               if (Math.floor(remainOrd / base ** power) === 1) {
-                result = result + "+&omega;<sup>" + game.writeOrd(power, 0) + "</sup>";
+                result = `${result}+&omega;<sup>${game.writeOrd(power, 0)}</sup>`;
               } else {
-                result = result + "+&omega;<sup>" + game.writeOrd(power, 0) + "</sup>" + Math.floor(remainOrd / base ** power);
+                result = `${result}+&omega;<sup>${game.writeOrd(power, 0)}</sup>${Math.floor(remainOrd / base ** power)}`;
               }
             }
           }
@@ -339,15 +339,15 @@ var game = {
         var color = Math.log(ord + over) / (Math.log(3) * 27);
         
         if (game.hardy(ord, over) === Infinity) {
-          game.header.innerHTML = '<span style="color:hsl(' + color * 360 + ', 100%, 50%)">H<sub>' + result + '</sub>(' + base + ')</span>';
+          game.header.innerHTML = `<span style="color:hsl(${color * 360}, 100%, 50%)">H<sub>${result}</sub>(${base})</span>`;
         } else {
-          game.header.innerHTML = '<span style="color:hsl(' + color * 360 + ', 100%, 50%)">H<sub>' + result + '</sub>(' + base + ')=' + game.hardy(ord, over, base).toPrecision(10);
+          game.header.innerHTML = `<span style="color:hsl(${color * 360}, 100%, 50%)">H<sub>${result}</sub>(${base})=${game.hardy(ord, over, base).toPrecision(10)}`;
         }
       } else {
         if (game.hardy(ord, over) === Infinity) {
-          game.header.innerHTML = "H<sub>" + result + "</sub>(" + base + ")";
+          game.header.innerHTML = `H<sub>${result}</sub>(${base})`;
         } else {
-          game.header.innerHTML = "H<sub>" + result + "</sub>(" + base + ")=" + game.hardy(ord, over, base).toPrecision(10);
+          game.header.innerHTML = `H<sub>${result}</sub>(${base})=${game.hardy(ord, over, base).toPrecision(10)}`;
         }
       }
     }
@@ -404,23 +404,23 @@ var game = {
     game.writeOrd();
     
     if (game.data.colors) {
-      game.colorButton.innerHTML = "Colors: ON";
+      game.colorButton.innerHTML = `Colors: ON`;
     } else {
-      game.colorButton.innerHTML = "Colors: OFF";
+      game.colorButton.innerHTML = `Colors: OFF`;
     }
     
     if (game.data.music) {
-      game.musicButton.innerHTML = "Music: ON";
+      game.musicButton.innerHTML = `Music: ON`;
     } else {
-      game.musicButton.innerHTML = "Music: OFF";
+      game.musicButton.innerHTML = `Music: OFF`;
     }
     
     if (game.data.ord >= 100) {
-      game.markupButton.innerHTML = "Markup to gain " + game.opGain().toPrecision(10) + " Ordinal Points";
-      game.markupButton2.innerHTML = "+" + game.opGain().toPrecision(10);
+      game.markupButton.innerHTML = `Markup to gain ${game.opGain().toPrecision(10)} Ordinal Points`;
+      game.markupButton2.innerHTML = `+${game.opGain().toPrecision(10)}`;
     } else {
-      game.markupButton.innerHTML = "Reach &omega;<sup>2</sup> to Markup";
-      game.markupButton2.innerHTML = "Reach &omega;<sup>2</sup> to Markup";
+      game.markupButton.innerHTML = `Reach &omega;<sup>2</sup> to Markup`;
+      game.markupButton2.innerHTML = `Reach &omega;<sup>2</sup> to Markup`;
     }
     
     if (game.data.markupUnlocked) {
@@ -429,13 +429,13 @@ var game = {
       game.markupTab.style.display = "none";
     }
     
-    game.opText.innerHTML = "You have " + game.data.op.toPrecision(10) + " Ordinal Points";
+    game.opText.innerHTML = `You have ${game.data.op.toPrecision(10)} Ordinal Points`;
     
-    game.incrementSpeed.innerHTML = "You have " + game.data.incrementAuto.toPrecision(10) + " increment autoclickers, clicking the increment button " + game.incrementSpeed().toPrecision(10) + " times per second";
-    game.maximizeSpeed.innerHTML = "You have " + game.data.maximizeAuto.toPrecision(10) + " maximize autoclickers, clicking the maximize button " + game.maximizeSpeed().toPrecision(10) + " times per second";
+    game.incrementSpeed.innerHTML = `You have ${game.data.incrementAuto.toPrecision(10)} increment autoclickers, clicking the increment button ${game.incrementSpeed().toPrecision(10)} times per second`;
+    game.maximizeSpeed.innerHTML = `You have ${game.data.maximizeAuto.toPrecision(10)} maximize autoclickers, clicking the maximize button ${game.maximizeSpeed().toPrecision(10)} times per second`;
     
-    game.buyIncrementButton.innerHTML = "Buy Increment Autoclicker for " + (100 * 2 ** game.data.incrementAuto).toPrecision(10) + " OP";
-    game.buyMaximizeButton.innerHTML = "Buy Maximize Autoclicker for " + (100 * 2 ** game.data.maximizeAuto).toPrecision(10) + " OP";
+    game.buyIncrementButton.innerHTML = `Buy Increment Autoclicker for ${(100 * 2 ** game.data.incrementAuto).toPrecision(10)} OP`;
+    game.buyMaximizeButton.innerHTML = `Buy Maximize Autoclicker for ${(100 * 2 ** game.data.maximizeAuto).toPrecision(10)} OP`;
     
     if (game.data.factorShifts === 0) {
       game.noFactors.style.display = "block";
@@ -447,9 +447,9 @@ var game = {
       game.factorMultiplier.style.display = "inline";
     }
     
-    game.factorMultiplier.innerHTML = "Your factors are multiplying your autoclicker speed by" + game.factorMult().toPrecision(10);
+    game.factorMultiplier.innerHTML = `Your factors are multiplying your autoclicker speed by ${game.factorMult().toPrecision(10)}`;
     
-    game.factorShift.innerHTML = "Factor Shift: Requires " + game.factorShiftCosts[game.data.factorShifts].toPrecision(10) + " OP";
+    game.factorShift.innerHTML = `Factor Shift: Requires ${game.factorShiftCosts[game.data.factorShifts].toPrecision(10)} OP`;
     
     for (var i = 0; i < 7; i++) {
       if (game.data.factorShifts >= i) {
@@ -458,9 +458,9 @@ var game = {
         game.factors[i].style.display = "list-item";
       }
       
-      game.factorMults[i].innerHTML = "x" + game.data.factors[i];
+      game.factorMults[i].innerHTML = `x${game.data.factors[i]}`;
       
-      game.factorButtons[i].innerHTML = "Increase Factor " + (i + 1) + " for " + (10 ** ((i + 1) * game.data.factors[i])).toPrecision(10) + " OP";
+      game.factorButtons[i].innerHTML = `Increase Factor ${(i + 1)} for ${(10 ** ((i + 1) * game.data.factors[i])).toPrecision(10)} OP`;
     }
   },
   save: function(action, manmade = 1) {
