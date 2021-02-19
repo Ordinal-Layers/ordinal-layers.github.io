@@ -7,67 +7,69 @@
     <script src="script.js" defer></script>
   </head>
   <body>
-    <audio src="https://cdn.glitch.com/03a4b67b-6f18-4f6d-8d37-50a18fb615c8%2FHypnothis.mp3?v=1584285594822" id="music"></audio>
-    <h1 id="header"><span style="color:hsl(0, 100%, 50%)">H<sub>0</sub>(10)=10</span></h1>
-    <div id="tabMenu">
-      <button onclick="game.tab(0)" class="tabButton" id="optionsTabButton"><h2 style="display:inline">Options</h2></button>
-      <button onclick="game.tab(1)" class="tabButton" id="ordinalsTabButton"><h2 style="display:inline">Ordinals</h2></button>
-      <button onclick="game.tab(2)" class="tabButton" id="markupTabButton" style="display:none"><h2 style="display:inline">Markup</h2></button>
-    </div>
-    <br />
-    <div id="tab0">
-      <p><input type="file" id="importButton" class="normalButton" oninput="game.import()">  Import your game save via file (will overwrite save)</p>
-      <button onclick="game.export()" class="normalButton">Export your game save via file</button>
-      <button onclick="game.resetConf()" id="resetButton">RESET YOUR GAME</button>
-      <br />
-      <button onclick="game.toggleColor()" class="normalButton" id="colorButton">Colors: ON</button>
-      <button onclick="game.toggleMusic()" class="normalButton" id="musicButton">Music: ON</button>
-      <br />
-      <p><a href="howtoplay.html">How to play</a> | <a href="changelog.html">Changelog</a></p>
-      <p><i>This work is licensed under the <a href="https://opensource.org/licenses/MIT">MIT License</a></i></p>
-      <br />
-      <p>If you want a greater understanding of how the ordinals work, you might want to read this <a href="https://en.wikipedia.org/wiki/Ordinal_number">Wikipedia page</a>.</p>
-      <p>This game was inspired by Patcail's <a href="https://patcailmemer.github.io/Ordinal-Markup">Ordinal Markup</a>.</p>
-      <p>v0.1.1</p>
-      <p>Click the Ordinals tab to start the game</p>
-    </div>
-    <div id="tab1" style="display:none">
-      <button onclick="game.increment()" class="normalButton" id="incrementButton">Increase ordinal by 1</button>
-      <button onclick="game.maximize()" class="normalButton" id="maximizeButton">Maximize ordinal, but number does not increase</button>
-      <br /><br />
-      <button onclick="game.markup()" class="markupButton" id="markupButton">Reach &omega;<sup>2</sup> to Markup</button>
-    </div>
-    <div id="tab2" style="display:none">
-      <span id="opText">You have 0 Ordinal Points</span> <button onclick="game.markup()" class="markupButton" id="markupButton2">Reach &omega;<sup>2</sup> to Markup</button>
-      <div id="subtab2Menu">
-        <button onclick="game.subtab(2, 0)" class="markupButton" id="autoclickerSubtabButton">Autoclickers</button>
-        <button onclick="game.subtab(2, 1)" class="markupButton" id="factorSubtabButton">Factors</button>
+    <div id="game">
+      <audio src="https://cdn.glitch.com/03a4b67b-6f18-4f6d-8d37-50a18fb615c8%2FHypnothis.mp3?v=1584285594822" id="music"></audio>
+      <h1 id="header"><span style="color:hsl(0, 100%, 50%)">H<sub>0</sub>(10)=10</span></h1>
+      <div id="tabMenu">
+        <button onclick="game.tab(0)" class="tabButton" id="optionsTabButton"><h2 style="display:inline">Options</h2></button>
+        <button onclick="game.tab(1)" class="tabButton" id="ordinalsTabButton"><h2 style="display:inline">Ordinals</h2></button>
+        <button onclick="game.tab(2)" class="tabButton" id="markupTabButton" style="display:none"><h2 style="display:inline">Markup</h2></button>
       </div>
-      <div id="subtab20">
-        <b>Tier 1 Automation</b>
-        <p id="incrementSpeed">You have 0 increment autoclickers, clicking the increment button 0 times per second</p>
-        <p id="maximizeSpeed">You have 0 maximize autoclickers, clicking the maximize button 0 times per second</p>
-        <button onclick="game.buyIncrementAuto()" class="markupButton" id="buyIncrementButton">Buy Increment Autoclicker for 100 OP</button>
-        <button onclick="game.buyMaximizeAuto()" class="markupButton" id="buyMaximizeButton">Buy Maximize Autoclicker fo 100 OP</button>
-        <button onclick="game.maxAll()" class="markupButton" id="maxAllButton">Max All</button>
+      <br />
+      <div id="tab0">
+        <p><input type="file" id="importButton" class="normalButton" oninput="game.import()">  Import your game save via file (will overwrite save)</p>
+        <button onclick="game.export()" class="normalButton">Export your game save via file</button>
+        <button onclick="game.resetConf()" id="resetButton">RESET YOUR GAME</button>
+        <br />
+        <button onclick="game.toggleColor()" class="normalButton" id="colorButton">Colors: ON</button>
+        <button onclick="game.toggleMusic()" class="normalButton" id="musicButton">Music: ON</button>
+        <br />
+        <p><a href="howtoplay.html">How to play</a> | <a href="changelog.html">Changelog</a></p>
+        <p><i>This work is licensed under the <a href="https://opensource.org/licenses/MIT">MIT License</a></i></p>
+        <br />
+        <p>If you want a greater understanding of how the ordinals work, you might want to read this <a href="https://en.wikipedia.org/wiki/Ordinal_number">Wikipedia page</a>.</p>
+        <p>This game was inspired by Patcail's <a href="https://patcailmemer.github.io/Ordinal-Markup">Ordinal Markup</a>.</p>
+        <p>v0.1.1</p>
+        <p>Click the Ordinals tab to start the game</p>
       </div>
-      <div id="subtab21" style="display:none">
-        <p id="noFactors">You have no factors. Perform a Factor Shift to get one!</p>
-        <div id="factorList" style="display:none">
-          Factors: <button onclick="game.maxFactors()" class="markupButton" id="maxFactorButton">Max all</button>
-          <ul id="factorListMain">
-            <li id="factor1">Factor 1: <span id="factor1Mult">x1</span> <button onclick="game.buyFactor(1)" class="markupButton" id="factor1Button">Increase Factor 1 for 10 OP</button></li>
-            <li id="factor2" style="display:none">Factor 2: <span id="factor2Mult">x1</span> <button onclick="game.buyFactor(2)" class="markupButton" id="factor2Button">Increase Factor 2 for 100 OP</button></li>
-            <li id="factor3" style="display:none">Factor 3: <span id="factor3Mult">x1</span> <button onclick="game.buyFactor(3)" class="markupButton" id="factor3Button">Increase Factor 3 for 1000 OP</button></li>
-            <li id="factor4" style="display:none">Factor 4: <span id="factor4Mult">x1</span> <button onclick="game.buyFactor(4)" class="markupButton" id="factor4Button">Increase Factor 4 for 10000 OP</button></li>
-            <li id="factor5" style="display:none">Factor 5: <span id="factor5Mult">x1</span> <button onclick="game.buyFactor(5)" class="markupButton" id="factor5Button">Increase Factor 5 for 100000 OP</button></li>
-            <li id="factor6" style="display:none">Factor 6: <span id="factor6Mult">x1</span> <button onclick="game.buyFactor(6)" class="markupButton" id="factor6Button">Increase Factor 6 for 1000000 OP</button></li>
-            <li id="factor7" style="display:none">Factor 7: <span id="factor7Mult">x1</span> <button onclick="game.buyFactor(7)" class="markupButton" id="factor7Button">Increase Factor 7 for 10000000 OP</button></li>
-          </ul>
-          <span id="factorMult">Your factors are multiplying your autoclicker speed by 1</span>
+      <div id="tab1" style="display:none">
+        <button onclick="game.increment()" class="normalButton" id="incrementButton">Increase ordinal by 1</button>
+        <button onclick="game.maximize()" class="normalButton" id="maximizeButton">Maximize ordinal, but number does not increase</button>
+        <br /><br />
+        <button onclick="game.markup()" class="markupButton" id="markupButton">Reach &omega;<sup>2</sup> to Markup</button>
+      </div>
+      <div id="tab2" style="display:none">
+        <span id="opText">You have 0 Ordinal Points</span> <button onclick="game.markup()" class="markupButton" id="markupButton2">Reach &omega;<sup>2</sup> to Markup</button>
+        <div id="subtab2Menu">
+          <button onclick="game.subtab(2, 0)" class="markupButton" id="autoclickerSubtabButton">Autoclickers</button>
+          <button onclick="game.subtab(2, 1)" class="markupButton" id="factorSubtabButton">Factors</button>
         </div>
-        <span id="factorShift">Factor Shift: Requires 1000 OP</span> <button onclick="game.factorShift()" class="markupButton" id="factorShiftButton">Do a Factor Shift</button>
-        <p>When you Factor Shift, you gain a new factor and the base decreases by 1</p>
+        <div id="subtab20">
+          <b>Tier 1 Automation</b>
+          <p id="incrementSpeed">You have 0 increment autoclickers, clicking the increment button 0 times per second</p>
+          <p id="maximizeSpeed">You have 0 maximize autoclickers, clicking the maximize button 0 times per second</p>
+          <button onclick="game.buyIncrementAuto()" class="markupButton" id="buyIncrementButton">Buy Increment Autoclicker for 100 OP</button>
+          <button onclick="game.buyMaximizeAuto()" class="markupButton" id="buyMaximizeButton">Buy Maximize Autoclicker fo 100 OP</button>
+          <button onclick="game.maxAll()" class="markupButton" id="maxAllButton">Max All</button>
+        </div>
+        <div id="subtab21" style="display:none">
+          <p id="noFactors">You have no factors. Perform a Factor Shift to get one!</p>
+          <div id="factorList" style="display:none">
+            Factors: <button onclick="game.maxFactors()" class="markupButton" id="maxFactorButton">Max all</button>
+            <ul id="factorListMain">
+              <li id="factor1">Factor 1: <span id="factor1Mult">x1</span> <button onclick="game.buyFactor(1)" class="markupButton" id="factor1Button">Increase Factor 1 for 10 OP</button></li>
+              <li id="factor2" style="display:none">Factor 2: <span id="factor2Mult">x1</span> <button onclick="game.buyFactor(2)" class="markupButton" id="factor2Button">Increase Factor 2 for 100 OP</button></li>
+              <li id="factor3" style="display:none">Factor 3: <span id="factor3Mult">x1</span> <button onclick="game.buyFactor(3)" class="markupButton" id="factor3Button">Increase Factor 3 for 1000 OP</button></li>
+              <li id="factor4" style="display:none">Factor 4: <span id="factor4Mult">x1</span> <button onclick="game.buyFactor(4)" class="markupButton" id="factor4Button">Increase Factor 4 for 10000 OP</button></li>
+              <li id="factor5" style="display:none">Factor 5: <span id="factor5Mult">x1</span> <button onclick="game.buyFactor(5)" class="markupButton" id="factor5Button">Increase Factor 5 for 100000 OP</button></li>
+              <li id="factor6" style="display:none">Factor 6: <span id="factor6Mult">x1</span> <button onclick="game.buyFactor(6)" class="markupButton" id="factor6Button">Increase Factor 6 for 1000000 OP</button></li>
+              <li id="factor7" style="display:none">Factor 7: <span id="factor7Mult">x1</span> <button onclick="game.buyFactor(7)" class="markupButton" id="factor7Button">Increase Factor 7 for 10000000 OP</button></li>
+            </ul>
+            <span id="factorMult">Your factors are multiplying your autoclicker speed by 1</span>
+          </div>
+          <span id="factorShift">Factor Shift: Requires 1000 OP</span> <button onclick="game.factorShift()" class="markupButton" id="factorShiftButton">Do a Factor Shift</button>
+          <p>When you Factor Shift, you gain a new factor and the base decreases by 1</p>
+        </div>
       </div>
     </div>
   </body>
