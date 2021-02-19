@@ -543,5 +543,5 @@ try {
 
   var loop = setInterval(game.loop, 1);
 } catch(err) {
-  document.getElementById("game").innerHTML = '<div class="center"><h1 style="font-size:40px">Sorry, Ordinal Layers is not supported on your browser.</h1><p>Please read the <a href="howtoplay.html">browser requirements</a>.</p><p><i style="font-size:12px">Error message: ' + err.message + '</i></p></div>'
+  document.getElementById("game").innerHTML = '<div class="center" style="padding:70px 0"><h1 style="font-size:40px">Sorry, Ordinal Layers is not supported on your browser.</h1><p>Please read the <a href="howtoplay.html">browser requirements</a>.</p><p><i style="font-size:12px">Error message: ' + err.message + '</i></p></div>'
 }
