@@ -16,63 +16,60 @@ try {
       factorShifts: 0,
       factors: []
     },
-    get: function(x) {
-      return document.getElementById(x);
-    },
-    music: game.get("music"),
-    header: game.get("header"),
-    colorButton: game.get("colorButton"),
-    musicButton: game.get("musicButton"),
-    markupTab: game.get("markupTabButton"),
-    markupButton: game.get("markupButton"),
-    markupButton2: game.get("markupButton2"),
-    opText: game.get("opText"),
-    incrementSpeed: game.get("incrementSpeed"),
-    maximizeSpeed: game.get("maximizeSpeed"),
-    buyIncrementButton: game.get("buyIncrementButton"),
-    buyMaximizeButton: game.get("buyMaximizeButton"),
-    factorShiftText: game.get("factorShift"),
-    noFactors: game.get("noFactors"),
-    factorList: game.get("factorList"),
-    factorMultiplier: game.get("factorMult"),
+    music: document.getElementById("music"),
+    header: document.getElementById("header"),
+    colorButton: document.getElementById("colorButton"),
+    musicButton: document.getElementById("musicButton"),
+    markupTab: document.getElementById("markupTabButton"),
+    markupButton: document.getElementById("markupButton"),
+    markupButton2: document.getElementById("markupButton2"),
+    opText: document.getElementById("opText"),
+    incrementSpeed: document.getElementById("incrementSpeed"),
+    maximizeSpeed: document.getElementById("maximizeSpeed"),
+    buyIncrementButton: document.getElementById("buyIncrementButton"),
+    buyMaximizeButton: document.getElementById("buyMaximizeButton"),
+    factorShiftText: document.getElementById("factorShift"),
+    noFactors: document.getElementById("noFactors"),
+    factorList: document.getElementById("factorList"),
+    factorMultiplier: document.getElementById("factorMult"),
     factors: [
-      game.get("factor1"),
-      game.get("factor2"),
-      game.get("factor3"),
-      game.get("factor4"),
-      game.get("factor5"),
-      game.get("factor6"),
-      game.get("factor7")
+      document.getElementById("factor1"),
+      document.getElementById("factor2"),
+      document.getElementById("factor3"),
+      document.getElementById("factor4"),
+      document.getElementById("factor5"),
+      document.getElementById("factor6"),
+      document.getElementById("factor7")
     ],
     factorMults: [
-      game.get("factor1Mult"),
-      game.get("factor2Mult"),
-      game.get("factor3Mult"),
-      game.get("factor4Mult"),
-      game.get("factor5Mult"),
-      game.get("factor6Mult"),
-      game.get("factor7Mult")
+      document.getElementById("factor1Mult"),
+      document.getElementById("factor2Mult"),
+      document.getElementById("factor3Mult"),
+      document.getElementById("factor4Mult"),
+      document.getElementById("factor5Mult"),
+      document.getElementById("factor6Mult"),
+      document.getElementById("factor7Mult")
     ],
     factorButtons: [
-      game.get("factor1Button"),
-      game.get("factor2Button"),
-      game.get("factor3Button"),
-      game.get("factor4Button"),
-      game.get("factor5Button"),
-      game.get("factor6Button"),
-      game.get("factor7Button")
+      document.getElementById("factor1Button"),
+      document.getElementById("factor2Button"),
+      document.getElementById("factor3Button"),
+      document.getElementById("factor4Button"),
+      document.getElementById("factor5Button"),
+      document.getElementById("factor6Button"),
+      document.getElementById("factor7Button")
     ],
     tabs: [
-      game.get("tab0"),
-      game.get("tab1"),
-      game.get("tab2")
+      document.getElementById("tab0"),
+      document.getElementById("tab1"),
+      document.getElementById("tab2")
     ],
     subtabs: [
       [],
       [],
       [
-        game.get("subtab20"),
-        game.get("subtab21")
+        document.getElementById("subtab20"),
+        document.getElementById("subtab21")
       ]
     ],
     factorShiftCosts: [
