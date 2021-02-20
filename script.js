@@ -434,7 +434,7 @@ var game = {
     game.opText.innerHTML = `You have ${game.number(game.data.op)} Ordinal Points`;
     
     game.incrementSpeed.innerHTML = `You have ${game.number(game.data.incrementAuto)} increment autoclickers, clicking the increment button ${game.number(game.incrementSpeed())} times per second`;
-    game.maximizeSpeed.innerHTML = `You have ${game.data.maximizeAuto.toPrecision(10)} maximize autoclickers, clicking the maximize button ${game.number(toPrecision(10))} times per second`;
+    game.maximizeSpeed.innerHTML = `You have ${game.data.maximizeAuto.toPrecision(10)} maximize autoclickers, clicking the maximize button ${game.number(game.maximizeSpeed())} times per second`;
     
     game.buyIncrementButton.innerHTML = `Buy Increment Autoclicker for ${game.number(100 * 2 ** game.data.incrementAuto)} OP`;
     game.buyMaximizeButton.innerHTML = `Buy Maximize Autoclicker for ${game.number(100 * 2 ** game.data.maximizeAuto)} OP`;
