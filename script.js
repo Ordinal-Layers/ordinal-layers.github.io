@@ -23,8 +23,8 @@ var game = {
   markupButton: document.getElementById("markupButton"),
   markupButton2: document.getElementById("markupButton2"),
   opText: document.getElementById("opText"),
-  incrementSpeed: document.getElementById("incrementSpeed"),
-  maximizeSpeed: document.getElementById("maximizeSpeed"),
+  incrementSpeedText: document.getElementById("incrementSpeed"),
+  maximizeSpeedText: document.getElementById("maximizeSpeed"),
   buyIncrementButton: document.getElementById("buyIncrementButton"),
   buyMaximizeButton: document.getElementById("buyMaximizeButton"),
   factorShiftText: document.getElementById("factorShift"),
@@ -435,8 +435,8 @@ var game = {
     
     game.opText.innerHTML = `You have ${game.number(game.data.op)} Ordinal Points`;
     
-    game.incrementSpeed.innerHTML = `You have ${game.number(game.data.incrementAuto)} increment autoclickers, clicking the increment button ${game.number(game.incrementSpeed())} times per second`;
-    game.maximizeSpeed.innerHTML = `You have ${game.number(game.data.maximizeAuto)} maximize autoclickers, clicking the maximize button ${game.number(game.maximizeSpeed())} times per second`;
+    game.incrementSpeedText.innerHTML = `You have ${game.number(game.data.incrementAuto)} increment autoclickers, clicking the increment button ${game.number(game.incrementSpeed())} times per second`;
+    game.maximizeSpeedText.innerHTML = `You have ${game.number(game.data.maximizeAuto)} maximize autoclickers, clicking the maximize button ${game.number(game.maximizeSpeed())} times per second`;
     
     game.buyIncrementButton.innerHTML = `Buy Increment Autoclicker for ${game.number(100 * 2 ** game.data.incrementAuto)} OP`;
     game.buyMaximizeButton.innerHTML = `Buy Maximize Autoclicker for ${game.number(100 * 2 ** game.data.maximizeAuto)} OP`;
@@ -453,7 +453,7 @@ var game = {
     
     game.factorMultiplier.innerHTML = `Your factors are multiplying your autoclicker speed by ${game.number(game.factorMult())}`;
     
-    game.factorShift.innerHTML = `Factor Shift: Requires ${game.number(game.factorShiftCosts[game.data.factorShifts])} OP`;
+    game.factorShiftText.innerHTML = `Factor Shift: Requires ${game.number(game.factorShiftCosts[game.data.factorShifts])} OP`;
     
     for (var i = 0; i < 7; i++) {
       if (game.data.factorShifts >= i) {
