@@ -388,15 +388,17 @@ var game = {
     
     if (game.data.pendingIncrement >= 1) {
       for (var i = 0; i < Math.floor(game.data.pendingIncrement); i++) {
-        game.data.pendingIncrement = 0;
         game.increment(0);
       }
+      
+      game.data.pendingIncrement = 0;
     }
     if ((game.data.ord % 10 === 9 && game.data.over >= 1) && game.data.pendingMaximize) {
       for (var i = 0; i < Math.floor(game.data.pendingMaximize); i++) {
-        game.data.pendingMaximize = 0;
         game.maximize(0);
       }
+      
+      game.data.pendingMaximize = 0;
     }
   },
   render: function(action, manmade = 1) {
