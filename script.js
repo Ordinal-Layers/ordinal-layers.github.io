@@ -349,7 +349,7 @@ var game = {
         if (game.hardy(ord, over) === Infinity) {
           game.header.innerHTML = `H<sub>${result}</sub>(${base})`;
         } else {
-          game.header.innerHTML = `H<sub>${result}</sub>(${base})=${game.number(game.hardy(ord, over, base).toPrecision(10))}`;
+          game.header.innerHTML = `H<sub>${result}</sub>(${base})=${game.number(game.hardy(ord, over, base))}`;
         }
       }
     }
@@ -388,11 +388,13 @@ var game = {
     
     if (game.data.pendingIncrement >= 1) {
       for (var i = 0; i < Math.floor(game.data.pendingIncrement); i++) {
+        game.data.pendingIncrement = 0;
         game.increment(0);
       }
     }
     if ((game.data.ord % 10 === 9 && game.data.over >= 1) && game.data.pendingMaximize) {
       for (var i = 0; i < Math.floor(game.data.pendingMaximize); i++) {
+        game.data.pendingMaximize = 0;
         game.maximize(0);
       }
     }
@@ -434,7 +436,7 @@ var game = {
     game.opText.innerHTML = `You have ${game.number(game.data.op)} Ordinal Points`;
     
     game.incrementSpeed.innerHTML = `You have ${game.number(game.data.incrementAuto)} increment autoclickers, clicking the increment button ${game.number(game.incrementSpeed())} times per second`;
-    game.maximizeSpeed.innerHTML = `You have ${game.data.maximizeAuto.toPrecision(10)} maximize autoclickers, clicking the maximize button ${game.number(game.maximizeSpeed())} times per second`;
+    game.maximizeSpeed.innerHTML = `You have ${game.number(game.data.maximizeAuto)} maximize autoclickers, clicking the maximize button ${game.number(game.maximizeSpeed())} times per second`;
     
     game.buyIncrementButton.innerHTML = `Buy Increment Autoclicker for ${game.number(100 * 2 ** game.data.incrementAuto)} OP`;
     game.buyMaximizeButton.innerHTML = `Buy Maximize Autoclicker for ${game.number(100 * 2 ** game.data.maximizeAuto)} OP`;
