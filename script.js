@@ -271,6 +271,13 @@ var game = {
       }
     }
   },
+  number: function(x) {
+    if (x < 1e+10) {
+      return x.toString();
+    } else {
+      return x.toPrecision(10);
+    }
+  },
   writeOrd: function(ord = game.data.ord, over = game.data.over, base = game.base(), header = true) {
     if (ord === 0) {
       if (header) {
@@ -336,13 +343,13 @@ var game = {
         if (game.hardy(ord, over) === Infinity) {
           game.header.innerHTML = `<span style="color:hsl(${color * 360}, 100%, 50%)">H<sub>${result}</sub>(${base})</span>`;
         } else {
-          game.header.innerHTML = `<span style="color:hsl(${color * 360}, 100%, 50%)">H<sub>${result}</sub>(${base})=${game.hardy(ord, over, base).toPrecision(10)}`;
+          game.header.innerHTML = `<span style="color:hsl(${color * 360}, 100%, 50%)">H<sub>${result}</sub>(${base})=${game.number(game.hardy(ord, over, base))}`;
         }
       } else {
         if (game.hardy(ord, over) === Infinity) {
           game.header.innerHTML = `H<sub>${result}</sub>(${base})`;
         } else {
-          game.header.innerHTML = `H<sub>${result}</sub>(${base})=${game.hardy(ord, over, base).toPrecision(10)}`;
+          game.header.innerHTML = `H<sub>${result}</sub>(${base})=${game.number(game.hardy(ord, over, base).toPrecision(10))}`;
         }
       }
     }
@@ -411,8 +418,8 @@ var game = {
     }
     
     if (game.data.ord >= 100) {
-      game.markupButton.innerHTML = `Markup to gain ${game.opGain().toPrecision(10)} Ordinal Points`;
-      game.markupButton2.innerHTML = `+${game.opGain().toPrecision(10)}`;
+      game.markupButton.innerHTML = `Markup to gain ${game.number(game.opGain())} Ordinal Points`;
+      game.markupButton2.innerHTML = `+${game.number(game.opGain())}`;
     } else {
       game.markupButton.innerHTML = `Reach &omega;<sup>2</sup> to Markup`;
       game.markupButton2.innerHTML = `Reach &omega;<sup>2</sup> to Markup`;
@@ -424,13 +431,13 @@ var game = {
       game.markupTab.style.display = "none";
     }
     
-    game.opText.innerHTML = `You have ${game.data.op.toPrecision(10)} Ordinal Points`;
+    game.opText.innerHTML = `You have ${game.number(game.data.op)} Ordinal Points`;
     
-    game.incrementSpeed.innerHTML = `You have ${game.data.incrementAuto.toPrecision(10)} increment autoclickers, clicking the increment button ${game.incrementSpeed().toPrecision(10)} times per second`;
-    game.maximizeSpeed.innerHTML = `You have ${game.data.maximizeAuto.toPrecision(10)} maximize autoclickers, clicking the maximize button ${game.maximizeSpeed().toPrecision(10)} times per second`;
+    game.incrementSpeed.innerHTML = `You have ${game.number(game.data.incrementAuto)} increment autoclickers, clicking the increment button ${game.number(game.incrementSpeed())} times per second`;
+    game.maximizeSpeed.innerHTML = `You have ${game.data.maximizeAuto.toPrecision(10)} maximize autoclickers, clicking the maximize button ${game.number(toPrecision(10))} times per second`;
     
-    game.buyIncrementButton.innerHTML = `Buy Increment Autoclicker for ${(100 * 2 ** game.data.incrementAuto).toPrecision(10)} OP`;
-    game.buyMaximizeButton.innerHTML = `Buy Maximize Autoclicker for ${(100 * 2 ** game.data.maximizeAuto).toPrecision(10)} OP`;
+    game.buyIncrementButton.innerHTML = `Buy Increment Autoclicker for ${game.number(100 * 2 ** game.data.incrementAuto)} OP`;
+    game.buyMaximizeButton.innerHTML = `Buy Maximize Autoclicker for ${game.number(100 * 2 ** game.data.maximizeAuto)} OP`;
     
     if (game.data.factorShifts === 0) {
       game.noFactors.style.display = "block";
@@ -442,9 +449,9 @@ var game = {
       game.factorMultiplier.style.display = "inline";
     }
     
-    game.factorMultiplier.innerHTML = `Your factors are multiplying your autoclicker speed by ${game.factorMult().toPrecision(10)}`;
+    game.factorMultiplier.innerHTML = `Your factors are multiplying your autoclicker speed by ${game.number(game.factorMult())}`;
     
-    game.factorShift.innerHTML = `Factor Shift: Requires ${game.factorShiftCosts[game.data.factorShifts].toPrecision(10)} OP`;
+    game.factorShift.innerHTML = `Factor Shift: Requires ${game.number(game.factorShiftCosts[game.data.factorShifts])} OP`;
     
     for (var i = 0; i < 7; i++) {
       if (game.data.factorShifts >= i) {
@@ -455,7 +462,7 @@ var game = {
       
       game.factorMults[i].innerHTML = `x${game.data.factors[i]}`;
       
-      game.factorButtons[i].innerHTML = `Increase Factor ${(i + 1)} for ${(10 ** ((i + 1) * game.data.factors[i])).toPrecision(10)} OP`;
+      game.factorButtons[i].innerHTML = `Increase Factor ${(i + 1)} for ${game.number(10 ** ((i + 1) * game.data.factors[i]))} OP`;
     }
   },
   save: function(action, manmade = 1) {
