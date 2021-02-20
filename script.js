@@ -75,10 +75,10 @@ var game = {
     1000,
     10000,
     100000,
-    1000000,
-    1e+10,
-    1e+20,
-    1e+100,
+    1.000e6,
+    1.000e10,
+    1.000e20,
+    1.000e100,
     Infinity
   ],
   tab: function(x) {
@@ -127,7 +127,7 @@ var game = {
       var tempvar2 = Math.pow(base, tempvar);
       var tempvar3 = Math.floor(ord / tempvar2);
       return Math.min(
-        1e223,
+        1.000e223,
         10 ** game.opGain(tempvar, 0, base) * tempvar3 +
           game.opGain(ord - tempvar2 * tempvar3, over, base)
       );
@@ -272,10 +272,28 @@ var game = {
     }
   },
   number: function(x) {
-    if (x < 1e+10) {
-      return x.toString();
+    if (x < 1.000e6) {
+      if (x < 1000) {
+        if (x % 1 === 0) {
+          return x.toFixed(0);
+        } else {
+          if (x * 10 % 1 === 0) {
+            return x.toFixed(1);
+          else {
+            if (x * 100 % 1 === 0) {
+              return x.toFixed(2);
+            else {
+              return x.toFixed(3);
+            }
+          }
+        }
+      } else {
+        return Math.round(x).toString();
+      }
     } else {
-      return x.toPrecision(10);
+      var exponent = Math.floor(Math.log10(x));
+      var mantissa = x / 10 ** exponent;
+      return `${mantissa.toFixed(3)}e${exponent}`;
     }
   },
   writeOrd: function(ord = game.data.ord, over = game.data.over, base = game.base(), header = true) {
@@ -503,7 +521,7 @@ var game = {
     
     game.save();
   },
-  import: function() {
+  importGame: function() {
     var loadgame = "";
     
     reader.readAsText(document.getElementById("importButton").files[0]);
@@ -516,7 +534,7 @@ var game = {
     
     window.location.reload();
   },
-  export: function() {
+  exportGame: function() {
     game.save();
     
     var file = new Blob([btoa(JSON.stringify(game.data))], {type: "text/plain"});
