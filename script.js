@@ -128,8 +128,8 @@ var game = {
       var tempvar3 = Math.floor(ord / tempvar2);
       return Math.min(
         1e223,
-        10 ** calcOrdPoints(tempvar, 0, base) * tempvar3 +
-          calcOrdPoints(ord - tempvar2 * tempvar3, over, base)
+        10 ** game.opGain(tempvar, 0, base) * tempvar3 +
+          game.opGain(ord - tempvar2 * tempvar3, over, base)
       );
     }
   },
