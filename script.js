@@ -457,11 +457,11 @@ var game = {
     
     game.factorShiftText.innerHTML = `Factor Shift: Requires ${game.number(game.factorShiftCosts[game.data.factorShifts])} OP`;
     
-    for (var i = 0; i < game.data.factorShifts; i++) {
-      if (game.data.factorShifts >= i) {
-        game.factors[i].style.display = "none";
-      } else {
+    for (var i = 0; i < 7; i++) {
+      if (game.data.factorShifts > i) {
         game.factors[i].style.display = "list-item";
+      } else {
+        game.factors[i].style.display = "none";
       }
       
       game.factorMults[i].innerHTML = `x${game.data.factors[i]}`;
