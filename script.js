@@ -377,8 +377,8 @@ var game = {
   loop: function() {
     game.data.diff = Date.now() - game.data.lastTick;
     
-    game.data.pendingIncrement += game.incrementSpeed() / 1000;
-    game.data.pendingMaximize += game.maximizeSpeed() / 1000;
+    game.data.pendingIncrement += game.incrementSpeed() / 20;
+    game.data.pendingMaximize += game.maximizeSpeed() / 20;
     
     if (game.data.music) {
       game.music.play();
@@ -541,4 +541,4 @@ var game = {
 
 game.load(JSON.parse(localStorage.getItem("save")));
 
-var loop = setInterval(game.loop, 1);
+var loop = setInterval(game.loop, 50);
