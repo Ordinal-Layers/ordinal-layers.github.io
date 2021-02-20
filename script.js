@@ -166,7 +166,7 @@ var game = {
     game.data.over = 0;
   },
   markup: function() {
-    if (game.data.ord >= 100) {
+    if (game.data.ord >= game.base() ** 2) {
       game.data.op += game.opGain();
       
       game.resetOrd();
