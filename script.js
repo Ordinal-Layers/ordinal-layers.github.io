@@ -321,7 +321,6 @@ var game = {
                 result = `${result}+&omega;`;
               } else {
                 result = `${result}+&omega;+${Math.floor(remainOrd / base)}`;
-                result = `${result}+&omega;+${Math.floor(remainOrd / base)}`;
               }
             } else {
               if (Math.floor(remainOrd / base ** power) === 1) {
