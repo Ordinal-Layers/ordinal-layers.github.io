@@ -279,10 +279,10 @@ var game = {
         } else {
           if (x * 10 % 1 === 0) {
             return x.toFixed(1);
-          else {
+          } else {
             if (x * 100 % 1 === 0) {
               return x.toFixed(2);
-            else {
+            } else {
               return x.toFixed(3);
             }
           }
