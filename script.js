@@ -4,6 +4,8 @@ var game = {
     diff: 0,
     pendingIncrement: 0,
     pendingMaximize: 0,
+    incrementCooldown: 1,
+    maximizeCooldown: 1,
     markupUnlocked: false,
     colors: true,
     music: true,
@@ -134,31 +136,43 @@ var game = {
     }
   },
   increment: function(manmade = 1) {
-    if (game.data.ord % game.base() === game.base() - 1) {
-      game.data.over++;
-    } else {
-      game.data.ord++;
+    if (game.data.incrementCooldown === 0) {
+      if (game.data.ord % game.base() === game.base() - 1) {
+        game.data.over++;
+      } else {
+        game.data.ord++;
+      }
+
+      if (manmade === 1) {
+        game.data.incrementCooldown = 1;
+      }
+
+      game.save("increment", manmade);
     }
-    
-    game.save("increment", manmade);
   },
   maximize: function(manmade = 1) {
-    if (game.data.ord % game.base() === game.base() - 1 && game.data.over >= 1) {
-      game.data.ord -= game.base() - 1;
-      game.data.over += game.base() - 1;
-      
-      do {
-        game.data.over -= Math.ceil((game.data.over + game.base()) / 2);
-        game.data.ord += game.base();
-      } while (game.data.over + game.base() >= game.base() * 2 && game.data.ord % game.base() ** 2 !== 0);
-      
-      if (game.data.ord % game.base() ** 2 !== 0) {
-        game.data.ord += game.data.over;
+    if (game.data.maximizeCooldown === 0) {
+      if (game.data.ord % game.base() === game.base() - 1 && game.data.over >= 1) {
+        game.data.ord -= game.base() - 1;
+        game.data.over += game.base() - 1;
+
+        do {
+          game.data.over -= Math.ceil((game.data.over + game.base()) / 2);
+          game.data.ord += game.base();
+        } while (game.data.over + game.base() >= game.base() * 2 && game.data.ord % game.base() ** 2 !== 0);
+
+        if (game.data.ord % game.base() ** 2 !== 0) {
+          game.data.ord += game.data.over;
+        }
+
+        game.data.over = 0;
+        
+        if (manmade === 1) {
+          game.data.maximizeCooldown = 1;
+        }
+
+        game.save("maximize", manmade);
       }
-      
-      game.data.over = 0;
-      
-      game.save("maximize", manmade);
     }
   },
   resetOrd: function() {
@@ -397,6 +411,13 @@ var game = {
     game.data.pendingIncrement += game.incrementSpeed() / 20;
     game.data.pendingMaximize += game.maximizeSpeed() / 20;
     
+    if (game.data.incrementCooldown > 0) {
+      game.data.incrementCooldown--;
+    }
+    if (game.data.maximizeCooldown > 0) {
+      game.data.maximizeCooldown--;
+    }
+    
     if (game.data.music) {
       game.music.play();
     } else {
@@ -496,8 +517,8 @@ var game = {
   load: function(loadgame) {
     game.data = loadgame;
     
-    game.music.loop = true;
-    game.music.volume = 0.5;
+    game.data.incrementCooldown = 1;
+    game.data.maximizeCooldown = 1;
     
     game.save("load");
   },
