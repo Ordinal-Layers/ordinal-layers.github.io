@@ -528,6 +528,8 @@ var game = {
       diff: 0,
       pendingIncrement: 0,
       pendingMaximize: 0,
+      incrementCooldown: 1,
+      maximizeCooldown: 1,
       markupUnlocked: false,
       colors: true,
       music: true,
