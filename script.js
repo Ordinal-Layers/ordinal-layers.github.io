@@ -263,7 +263,7 @@ var game = {
     while (factorSort[0] < 10 && game.data.op >= costSort[0]) {
       var costs = [];
     
-      for (var i = 1; i < 8; i++) {
+      for (var i = 1; i < game.data.factorShifts + 1; i++) {
         costs.push(10 ** (i * game.data.factors[i - 1]));
       }
       
