@@ -220,7 +220,7 @@ var game = {
     }
   },
   maxAll: function() {
-    while (game.data.op >= Math.min(100 * 2 ** game.data.incrementAuto, game.data.op >= 100 * 2 ** game.data.maximizeAuto)) {
+    while (game.data.op >= Math.min(100 * 2 ** game.data.incrementAuto, 100 * 2 ** game.data.maximizeAuto)) {
       game.buyIncrementAuto();
       if (game.data.incrementAuto / game.data.maximizeAuto > game.base()) {
         game.buyMaximizeAuto();
