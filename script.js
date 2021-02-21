@@ -334,7 +334,7 @@ var game = {
               if (Math.floor(remainOrd / base) === 1) {
                 result = `&omega;`;
               } else {
-                result = `&omega;` + Math.floor(remainOrd / base);
+                result = `&omega;${Math.floor(remainOrd / base)}`;
               }
             } else {
               if (Math.floor(remainOrd / base ** power) === 1) {
@@ -352,7 +352,7 @@ var game = {
               if (Math.floor(remainOrd / base) === 1) {
                 result = `${result}+&omega;`;
               } else {
-                result = `${result}+&omega;+${Math.floor(remainOrd / base)}`;
+                result = `${result}+&omega;${Math.floor(remainOrd / base)}`;
               }
             } else {
               if (Math.floor(remainOrd / base ** power) === 1) {
