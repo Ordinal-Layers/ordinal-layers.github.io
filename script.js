@@ -270,7 +270,7 @@ var game = {
       factorSort = game.data.factors.sort(function(a, b){return a - b});
       costSort = costs.sort(function(a, b){return a - b});
       
-      for (var i = 1; i < 8; i++) {
+      for (var i = 1; i < game.data.factorShifts + 1; i++) {
         game.buyFactor(i);
       }
     }
@@ -521,7 +521,11 @@ var game = {
       
       game.factorMults[i].innerHTML = `x${game.data.factors[i]}`;
       
-      game.factorButtons[i].innerHTML = `Increase Factor ${(i + 1)} for ${game.number(10 ** ((i + 1) * game.data.factors[i]))} OP`;
+      if (game.data.factors[i] === 10) {
+        game.factorButtons[i].innerHTML = `Maxed!`;
+      } else {
+        game.factorButtons[i].innerHTML = `Increase Factor ${(i + 1)} for ${game.number(10 ** ((i + 1) * game.data.factors[i]))} OP`;
+      }
     }
   },
   save: function(action, manmade = 1) {
