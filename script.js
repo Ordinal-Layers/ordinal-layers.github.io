@@ -289,28 +289,32 @@ var game = {
     }
   },
   number: function(x) {
-    if (x < 1.000e6) {
-      if (x < 1000) {
-        if (x % 1 === 0) {
-          return x.toFixed(0);
-        } else {
-          if (x * 10 % 1 === 0) {
-            return x.toFixed(1);
+    if (x === Infinity) {
+      return "Infinity";
+    } else {
+      if (x < 1.000e6) {
+        if (x < 1000) {
+          if (x % 1 === 0) {
+            return x.toFixed(0);
           } else {
-            if (x * 100 % 1 === 0) {
-              return x.toFixed(2);
+            if (x * 10 % 1 === 0) {
+              return x.toFixed(1);
             } else {
-              return x.toFixed(3);
+              if (x * 100 % 1 === 0) {
+                return x.toFixed(2);
+              } else {
+                return x.toFixed(3);
+              }
             }
           }
+        } else {
+          return Math.round(x).toString();
         }
       } else {
-        return Math.round(x).toString();
+        var exponent = Math.floor(Math.log10(x));
+        var mantissa = x / 10 ** exponent;
+        return `${mantissa.toFixed(3)}e${exponent}`;
       }
-    } else {
-      var exponent = Math.floor(Math.log10(x));
-      var mantissa = x / 10 ** exponent;
-      return `${mantissa.toFixed(3)}e${exponent}`;
     }
   },
   writeOrd: function(ord = game.data.ord, over = game.data.over, base = game.base(), header = true) {
