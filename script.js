@@ -228,7 +228,12 @@ var game = {
       game.data.incrementAuto = 0;
       game.data.maximizeAuto = 0;
       
+      for (var i = 0; i < game.data.factorShifts; i++) {
+        game.data.factors[i] = 1;
+      }
+      
       game.data.factorShifts++;
+      
       game.data.factors.push(1);
       
       game.resetOrd();
