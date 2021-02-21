@@ -257,8 +257,8 @@ var game = {
     }
   },
   maxFactors: function() {
-    var factorSort;
-    var costSort;
+    var factorSort = [1];
+    var costSort = [10];
     
     while (factorSort[0] < 10 && game.data.op >= costSort[0]) {
       var costs = [];
