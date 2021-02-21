@@ -247,16 +247,19 @@ var game = {
     }
   },
   maxFactors: function() {
-    var costs = [];
-    
-    for (var i = 1; i < 8; i++) {
-      costs.push(10 ** (i * game.data.factors[i - 1]));
-    }
-    
-    var factorSort = game.data.factors.sort(function(a, b){return a - b});
-    var costSort = costs.sort(function(a, b){return a - b});
+    var factorSort;
+    var costSort;
     
     while (factorSort[0] < 10 && game.data.op >= costSort[0]) {
+      var costs = [];
+    
+      for (var i = 1; i < 8; i++) {
+        costs.push(10 ** (i * game.data.factors[i - 1]));
+      }
+      
+      factorSort = game.data.factors.sort(function(a, b){return a - b});
+      costSort = costs.sort(function(a, b){return a - b});
+      
       for (var i = 1; i < 8; i++) {
         game.buyFactor(i);
       }
