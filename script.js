@@ -156,11 +156,12 @@ var game = {
         game.data.ord -= game.base() - 1;
         game.data.over += game.base() - 1;
         
-        while (game.data.over + game.base() >= game.base() * 2 && game.data.ord % game.base() ** 2 !== 0) {
+        do {
           game.data.over -= Math.ceil((game.data.over + game.base()) / 2);
           game.data.ord += game.base();
         }
-
+        while (game.data.over + game.base() >= game.base() * 2 && game.data.ord % game.base() ** 2 !== 0);
+        
         if (game.data.ord % game.base() ** 2 !== 0) {
           game.data.ord += game.data.over;
         }
