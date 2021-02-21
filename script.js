@@ -462,7 +462,7 @@ var game = {
       game.musicButton.innerHTML = `Music: OFF`;
     }
     
-    if (game.data.ord >= 100) {
+    if (game.data.ord >= game.base() ** 2) {
       game.markupButton.innerHTML = `Markup to gain ${game.number(game.opGain())} Ordinal Points`;
       game.markupButton2.innerHTML = `+${game.number(game.opGain())}`;
     } else {
