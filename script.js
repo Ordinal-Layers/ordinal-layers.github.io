@@ -155,11 +155,11 @@ var game = {
       if (game.data.ord % game.base() === game.base() - 1 && game.data.over >= 1) {
         game.data.ord -= game.base() - 1;
         game.data.over += game.base() - 1;
-
-        do {
+        
+        while (game.data.over + game.base() >= game.base() * 2 && game.data.ord % game.base() ** 2 !== 0) {
           game.data.over -= Math.ceil((game.data.over + game.base()) / 2);
           game.data.ord += game.base();
-        } while (game.data.over + game.base() >= game.base() * 2 && game.data.ord % game.base() ** 2 !== 0);
+        }
 
         if (game.data.ord % game.base() ** 2 !== 0) {
           game.data.ord += game.data.over;
@@ -434,7 +434,7 @@ var game = {
       
       game.data.pendingIncrement -= Math.floor(game.data.pendingIncrement);
     }
-    if ((game.data.ord % 10 === 9 && game.data.over >= 1) && game.data.pendingMaximize) {
+    if ((game.data.ord % game.base() === game.base() - 1 && game.data.over >= 1) && game.data.pendingMaximize) {
       for (var i = 0; i < Math.floor(game.data.pendingMaximize); i++) {
         game.maximize(0);
       }
