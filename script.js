@@ -125,18 +125,22 @@ var game = {
     if (ord < base) {
       return ord + over;
     } else {
-      var tempvar = Math.floor(Math.log(ord) / Math.log(base));
-      var tempvar2 = Math.pow(base, tempvar);
-      var tempvar3 = Math.floor(ord / tempvar2);
-      return Math.min(
-        1.000e223,
-        10 ** game.opGain(tempvar, 0, base) * tempvar3 +
-          game.opGain(ord - tempvar2 * tempvar3, over, base)
-      );
+      if (ord >= base ** (base ** base)) {
+        return 1.000e223;
+      } else {
+        var tempvar = Math.floor(Math.log(ord) / Math.log(base));
+        var tempvar2 = base ** tempvar;
+        var tempvar3 = Math.floor(ord / tempvar2);
+        return Math.min(
+          1.000e223,
+          10 ** game.opGain(tempvar, 0, base) * tempvar3 +
+            game.opGain(ord - tempvar2 * tempvar3, over, base)
+        );
+      }
     }
   },
   increment: function(manmade = 1) {
-    if (game.data.incrementCooldown === 0) {
+    if (manmade === 0 || game.data.incrementCooldown === 0) {
       if (game.data.ord % game.base() === game.base() - 1) {
         game.data.over++;
       } else {
@@ -151,7 +155,7 @@ var game = {
     }
   },
   maximize: function(manmade = 1) {
-    if (game.data.maximizeCooldown === 0) {
+    if (manmade === 0 || game.data.maximizeCooldown === 0) {
       if (game.data.ord % game.base() === game.base() - 1 && game.data.over >= 1) {
         game.data.ord -= game.base() - 1;
         game.data.over += game.base() - 1;
@@ -431,6 +435,10 @@ var game = {
       game.music.play();
     } else {
       game.music.pause();
+    }
+    
+    if (game.data.op > 1.000e223) {
+      game.data.op = 1.000e223;
     }
     
     if (game.data.pendingIncrement >= 1) {
