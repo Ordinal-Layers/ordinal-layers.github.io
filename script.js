@@ -220,9 +220,11 @@ var game = {
     }
   },
   maxAll: function() {
-    while (game.data.op >= 100 * 2 ** game.data.incrementAuto || game.data.op >= 100 * 2 ** game.data.maximizeAuto) {
+    while (game.data.op >= Math.min(100 * 2 ** game.data.incrementAuto, game.data.op >= 100 * 2 ** game.data.maximizeAuto)) {
       game.buyIncrementAuto();
-      game.buyMaximizeAuto();
+      if (game.data.incrementAuto / game.data.maximizeAuto > game.base()) {
+        game.buyMaximizeAuto();
+      }
     }
   },
   factorShift: function() {
@@ -257,20 +259,8 @@ var game = {
     }
   },
   maxFactors: function() {
-    var factorSort = [1];
-    var costSort = [10];
-    
-    while (factorSort[0] < 10 && game.data.op >= costSort[0]) {
-      var costs = [];
-    
-      for (var i = 1; i < game.data.factorShifts + 1; i++) {
-        costs.push(10 ** (i * game.data.factors[i - 1]));
-      }
-      
-      factorSort = game.data.factors.sort(function(a, b){return a - b});
-      costSort = costs.sort(function(a, b){return a - b});
-      
-      for (var i = 1; i < game.data.factorShifts + 1; i++) {
+    for (var i = game.data.factorShifts; i > 0; i--) {
+      while (game.data.factors[i - 1] < 10 && game.data.op >= 10 ** (i * game.data.factors[i - 1])) {
         game.buyFactor(i);
       }
     }
