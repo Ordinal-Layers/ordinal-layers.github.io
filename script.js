@@ -4,8 +4,7 @@ var game = {
     lastTick: Date.now(),
     pendingIncrement: 0,
     pendingMaximize: 0,
-    incrementCooldown: 1,
-    maximizeCooldown: 1,
+    clickCooldown: 1,
     markupUnlocked: false,
     colors: true,
     music: true,
@@ -137,21 +136,21 @@ var game = {
       );
     }
   },
-  increment: function(manmade = 1) {
-    if (manmade === 0 || game.data.incrementCooldown === 0) {
+  increment: function(manmade = true) {
+    if (!manmade || game.data.clickCooldown === 0) {
       if (game.data.ord % game.base() === game.base() - 1) {
         game.data.over++;
       } else {
         game.data.ord++;
       }
 
-      if (manmade === 1) {
-        game.data.incrementCooldown = 1;
+      if (manmade) {
+        game.data.clickCooldown = 1;
       }
     }
   },
-  maximize: function(manmade = 1) {
-    if (manmade === 0 || game.data.maximizeCooldown === 0) {
+  maximize: function(manmade = true) {
+    if (!manmade || game.data.clickCooldown === 0) {
       if (game.data.ord % game.base() === game.base() - 1 && game.data.over >= 1) {
         game.data.ord -= game.base() - 1;
         game.data.over += game.base() - 1;
@@ -168,8 +167,8 @@ var game = {
 
         game.data.over = 0;
         
-        if (manmade === 1) {
-          game.data.maximizeCooldown = 1;
+        if (manmade) {
+          game.data.clickCooldown = 1;
         }
       }
     }
@@ -178,62 +177,112 @@ var game = {
     game.data.ord = 0;
     game.data.over = 0;
   },
-  markup: function() {
-    if (game.data.ord >= game.base() ** 2) {
-      game.data.op += game.opGain();
-      game.resetOrd();
+  markup: function(manmade = true) {
+    if (!manmade || game.data.clickCooldown === 0) {
+      if (game.data.ord >= game.base() ** 2) {
+        game.data.op += game.opGain();
+        game.resetOrd();
+
+        if (game.data.markupUnlocked === false) {
+          game.data.markupUnlocked = true;
+        }
+
+        if (manmade) {
+          game.data.clickCooldown = 1;
+        }
+      }
+    }
+  },
+  buyIncrementAuto: function(manmade = true) {
+    if (!manmade || game.data.clickCooldown === 0) {
+      if (game.data.op >= 100 * 2 ** game.data.incrementAuto) {
+        game.data.op -= 100 * 2 ** game.data.incrementAuto;
+        game.data.incrementAuto++;
+        game.resetOrd();
+
+        if (manmade) {
+          game.data.clickCooldown = 1;
+        }
+      }
+    }
+  },
+  buyMaximizeAuto: function(manmade = true) {
+    if (!manmade || game.data.clickCooldown === 0) {
+      if (game.data.op >= 100 * 2 ** game.data.maximizeAuto) {
+        game.data.op -= 100 * 2 ** game.data.maximizeAuto;
+        game.data.maximizeAuto++;
+        game.resetOrd();
+
+        if (manmade) {
+          game.data.clickCooldown = 1;
+        }
+      }
+    }
+  },
+  maxAll: function(manmade = true) {
+    if (!manmade || game.data.clickCooldown === 0) {
+      var bulk = 0;
+
+      game.buyIncrementAuto(false);
+      game.buyMaximizeAuto(false);
+      bulk = Math.floor(
+        Math.log(1 + game.data.op / (100 * 2 ** game.data.incrementAuto)) / Math.log(2)
+      );
+      game.data.op -= (2 ** bulk - 1) * (100 * 2 ** game.data.incrementAuto);
+      game.data.incrementAuto += bulk;
+      bulk = Math.floor(
+        Math.log(1 + game.data.op / (100 * 2 ** game.data.maximizeAuto)) / Math.log(2)
+      );
+      game.data.op -= (2 ** bulk - 1) * (100 * 2 ** game.data.maximizeAuto);
+      game.data.maximizeAuto += bulk;
+
+      if (manmade) {
+        game.data.clickCooldown = 1;
+      }
+    }
+  },
+  factorShift: function(manmade = true) {
+    if (!manmade || game.data.clickCooldown === 0) {
+      if (game.data.op >= game.factorShiftCosts[game.data.factorShifts]) {
+        game.data.op = 0;
+        game.data.incrementAuto = 0;
+        game.data.maximizeAuto = 0;
+        for (var i = 0; i < game.data.factorShifts; i++) {
+          game.data.factors[i] = 1;
+        }
+        game.data.factorShifts++;
+        game.data.factors.push(1);
+        game.resetOrd();
+
+        if (manmade) {
+          game.data.clickCooldown = 1;
+        }
+      }
+    }
+  },
+  buyFactor: function(x, manmade = true) {
+    if (!manmade || game.data.clickCooldown === 0) {
+      if (game.data.op >= 10 ** (x * game.data.factors[x - 1]) && game.data.factors[x - 1] < 10) {
+        game.data.op -= 10 ** (x * game.data.factors[x - 1]);
+        game.data.factors[x - 1]++;
+        game.resetOrd();
+      }
       
-      if (game.data.markupUnlocked === false) {
-        game.data.markupUnlocked = true;
+      if (manmade) {
+        game.data.clickCooldown = 1;
       }
     }
   },
-  buyIncrementAuto: function() {
-    if (game.data.op >= 100 * 2 ** game.data.incrementAuto) {
-      game.data.op -= 100 * 2 ** game.data.incrementAuto;
-      game.data.incrementAuto++;
-      game.resetOrd();
-    }  
-  },
-  buyMaximizeAuto: function() {
-    if (game.data.op >= 100 * 2 ** game.data.maximizeAuto) {
-      game.data.op -= 100 * 2 ** game.data.maximizeAuto;
-      game.data.maximizeAuto++;
-      game.resetOrd();
-    }
-  },
-  maxAll: function() {
-    while (game.data.op >= Math.min(100 * 2 ** game.data.incrementAuto, 100 * 2 ** game.data.maximizeAuto)) {
-      game.buyIncrementAuto();
-      if (game.data.incrementAuto / game.data.maximizeAuto > game.base()) {
-        game.buyMaximizeAuto();
+  maxFactors: function(manmade = true) {
+    if (!manmade || game.data.clickCooldown === 0) {
+      for (var i = game.data.factorShifts; i > 0; i--) {
+        while (game.data.factors[i - 1] < 10 && game.data.op >= 10 ** (i * game.data.factors[i - 1])) {
+          game.buyFactor(i, false);
+        }
       }
-    }
-  },
-  factorShift: function() {
-    if (game.data.op >= game.factorShiftCosts[game.data.factorShifts]) {
-      game.data.op = 0;
-      game.data.incrementAuto = 0;
-      game.data.maximizeAuto = 0;
-      for (var i = 0; i < game.data.factorShifts; i++) {
-        game.data.factors[i] = 1;
-      }
-      game.data.factorShifts++;
-      game.data.factors.push(1);
-      game.resetOrd();
-    }
-  },
-  buyFactor: function(x) {
-    if (game.data.op >= 10 ** (x * game.data.factors[x - 1]) && game.data.factors[x - 1] < 10) {
-      game.data.op -= 10 ** (x * game.data.factors[x - 1]);
-      game.data.factors[x - 1]++;
-      game.resetOrd();
-    }
-  },
-  maxFactors: function() {
-    for (var i = game.data.factorShifts; i > 0; i--) {
-      while (game.data.factors[i - 1] < 10 && game.data.op >= 10 ** (i * game.data.factors[i - 1])) {
-        game.buyFactor(i);
+      
+      if (manmade) {
+        game.data.clickCooldown = 1;
       }
     }
   },
@@ -521,8 +570,7 @@ var game = {
       lastTick: Date.now(),
       pendingIncrement: 0,
       pendingMaximize: 0,
-      incrementCooldown: 1,
-      maximizeCooldown: 1,
+      clickCooldown: 1,
       markupUnlocked: false,
       colors: true,
       music: true,
