@@ -275,7 +275,7 @@ var game = {
   },
   maxFactors: function(manmade = true) {
     if (!manmade || game.data.clickCooldown === 0) {
-      for (var i = game.data.factorShifts; i > 0; i--) {
+      for (var i = 1; i <= game.data.factorShifts; i++) {
         while (game.data.factors[i - 1] < 10 && game.data.op >= 10 ** (i * game.data.factors[i - 1])) {
           game.buyFactor(i, false);
         }
