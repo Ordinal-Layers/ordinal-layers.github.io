@@ -16,61 +16,60 @@ var game = {
     factorShifts: 0,
     factors: []
   },
-  get: x => document.getElementById(x),
-  music: this.get("music"),
-  header: this.get("header"),
-  colorButton: this.get("colorButton"),
-  musicButton: this.get("musicButton"),
-  markupTab: this.get("markupTabButton"),
-  markupButton: this.get("markupButton"),
-  markupButton2: this.get("markupButton2"),
-  opText: this.get("opText"),
-  incrementSpeedText: this.get("incrementSpeed"),
-  maximizeSpeedText: this.get("maximizeSpeed"),
-  buyIncrementButton: this.get("buyIncrementButton"),
-  buyMaximizeButton: this.get("buyMaximizeButton"),
-  factorShiftText: this.get("factorShift"),
-  noFactors: this.get("noFactors"),
-  factorList: this.get("factorList"),
-  factorMultiplier: this.get("factorMult"),
+  music: document.getElementById("music"),
+  header: document.getElementById("header"),
+  colorButton: document.getElementById("colorButton"),
+  musicButton: document.getElementById("musicButton"),
+  markupTab: document.getElementById("markupTabButton"),
+  markupButton: document.getElementById("markupButton"),
+  markupButton2: document.getElementById("markupButton2"),
+  opText: document.getElementById("opText"),
+  incrementSpeedText: document.getElementById("incrementSpeed"),
+  maximizeSpeedText: document.getElementById("maximizeSpeed"),
+  buyIncrementButton: document.getElementById("buyIncrementButton"),
+  buyMaximizeButton: document.getElementById("buyMaximizeButton"),
+  factorShiftText: document.getElementById("factorShift"),
+  noFactors: document.getElementById("noFactors"),
+  factorList: document.getElementById("factorList"),
+  factorMultiplier: document.getElementById("factorMult"),
   factors: [
-    this.get("factor1"),
-    this.get("factor2"),
-    this.get("factor3"),
-    this.get("factor4"),
-    this.get("factor5"),
-    this.get("factor6"),
-    this.get("factor7")
+    document.getElementById("factor1"),
+    document.getElementById("factor2"),
+    document.getElementById("factor3"),
+    document.getElementById("factor4"),
+    document.getElementById("factor5"),
+    document.getElementById("factor6"),
+    document.getElementById("factor7")
   ],
   factorMults: [
-    this.get("factor1Mult"),
-    this.get("factor2Mult"),
-    this.get("factor3Mult"),
-    this.get("factor4Mult"),
-    this.get("factor5Mult"),
-    this.get("factor6Mult"),
-    this.get("factor7Mult")
+    document.getElementById("factor1Mult"),
+    document.getElementById("factor2Mult"),
+    document.getElementById("factor3Mult"),
+    document.getElementById("factor4Mult"),
+    document.getElementById("factor5Mult"),
+    document.getElementById("factor6Mult"),
+    document.getElementById("factor7Mult")
   ],
   factorButtons: [
-    this.get("factor1Button"),
-    this.get("factor2Button"),
-    this.get("factor3Button"),
-    this.get("factor4Button"),
-    this.get("factor5Button"),
-    this.get("factor6Button"),
-    this.get("factor7Button")
+    document.getElementById("factor1Button"),
+    document.getElementById("factor2Button"),
+    document.getElementById("factor3Button"),
+    document.getElementById("factor4Button"),
+    document.getElementById("factor5Button"),
+    document.getElementById("factor6Button"),
+    document.getElementById("factor7Button")
   ],
   tabs: [
-    this.get("tab0"),
-    this.get("tab1"),
-    this.get("tab2")
+    document.getElementById("tab0"),
+    document.getElementById("tab1"),
+    document.getElementById("tab2")
   ],
   subtabs: [
     [],
     [],
     [
-      this.get("subtab20"),
-      this.get("subtab21")
+      document.getElementById("subtab20"),
+      document.getElementById("subtab21")
     ]
   ],
   tab: x => {
