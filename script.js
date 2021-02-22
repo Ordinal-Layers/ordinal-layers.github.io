@@ -121,7 +121,7 @@ var game = {
     return mult;
   },
   incrementSpeed: () => game.data.incrementAuto * game.factorMult(),
-  maximizeSpeed: () >= game.data.maximizeAuto * game.factorMult(),
+  maximizeSpeed: () => game.data.maximizeAuto * game.factorMult(),
   opGain: (ord = game.data.ord, over = game.data.over, base = game.base()) => {
     if (ord < base) {
       return ord + over;
