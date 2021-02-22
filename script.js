@@ -1,7 +1,7 @@
 var game = {
   data: {
+    version: "0.1.1",
     lastTick: Date.now(),
-    diff: 0,
     pendingIncrement: 0,
     pendingMaximize: 0,
     incrementCooldown: 1,
@@ -94,7 +94,6 @@ var game = {
   },
   subtab: function(x, y) {
     game.tab(x);
-    
     var numTabs = game.subtabs[x].length;
     
     for (var i = 0; i < numTabs; i++) {
@@ -124,19 +123,18 @@ var game = {
   opGain: function(ord = game.data.ord, over = game.data.over, base = game.base()) {
     if (ord < base) {
       return ord + over;
+    } else if (ord >= base ** (base ** base)) {
+      return 1.000e230;
     } else {
-      if (ord >= base ** (base ** base)) {
-        return 1.000e223;
-      } else {
-        var tempvar = Math.floor(Math.log(ord) / Math.log(base));
-        var tempvar2 = base ** tempvar;
-        var tempvar3 = Math.floor(ord / tempvar2);
-        return Math.min(
-          1.000e223,
-          10 ** game.opGain(tempvar, 0, base) * tempvar3 +
-            game.opGain(ord - tempvar2 * tempvar3, over, base)
-        );
-      }
+      var tempvar = Math.floor(Math.log(ord) / Math.log(base));
+      var tempvar2 = base ** tempvar;
+      var tempvar3 = Math.floor(ord / tempvar2);
+      
+      return Math.min(
+        1.000e230,
+        10 ** game.opGain(tempvar, 0, base) * tempvar3 +
+          game.opGain(ord - tempvar2 * tempvar3, over, base)
+      );
     }
   },
   increment: function(manmade = 1) {
@@ -150,8 +148,6 @@ var game = {
       if (manmade === 1) {
         game.data.incrementCooldown = 1;
       }
-
-      game.save("increment", manmade);
     }
   },
   maximize: function(manmade = 1) {
@@ -175,8 +171,6 @@ var game = {
         if (manmade === 1) {
           game.data.maximizeCooldown = 1;
         }
-
-        game.save("maximize", manmade);
       }
     }
   },
@@ -187,36 +181,25 @@ var game = {
   markup: function() {
     if (game.data.ord >= game.base() ** 2) {
       game.data.op += game.opGain();
-      
       game.resetOrd();
       
       if (game.data.markupUnlocked === false) {
         game.data.markupUnlocked = true;
       }
-      
-      game.save("markup");
     }
   },
   buyIncrementAuto: function() {
     if (game.data.op >= 100 * 2 ** game.data.incrementAuto) {
       game.data.op -= 100 * 2 ** game.data.incrementAuto;
-      
       game.data.incrementAuto++;
-      
       game.resetOrd();
-      
-      game.save("buyIncrementAuto");
     }  
   },
   buyMaximizeAuto: function() {
     if (game.data.op >= 100 * 2 ** game.data.maximizeAuto) {
       game.data.op -= 100 * 2 ** game.data.maximizeAuto;
-      
       game.data.maximizeAuto++;
-      
       game.resetOrd();
-      
-      game.save("buyMaximizeAuto");
     }
   },
   maxAll: function() {
@@ -230,32 +213,21 @@ var game = {
   factorShift: function() {
     if (game.data.op >= game.factorShiftCosts[game.data.factorShifts]) {
       game.data.op = 0;
-      
       game.data.incrementAuto = 0;
       game.data.maximizeAuto = 0;
-      
       for (var i = 0; i < game.data.factorShifts; i++) {
         game.data.factors[i] = 1;
       }
-      
       game.data.factorShifts++;
-      
       game.data.factors.push(1);
-      
       game.resetOrd();
-      
-      game.save("factorShift");
     }
   },
   buyFactor: function(x) {
     if (game.data.op >= 10 ** (x * game.data.factors[x - 1]) && game.data.factors[x - 1] < 10) {
       game.data.op -= 10 ** (x * game.data.factors[x - 1]);
-      
       game.data.factors[x - 1]++;
-      
       game.resetOrd();
-      
-      game.save("buyFactor" + x);
     }
   },
   maxFactors: function() {
@@ -268,53 +240,34 @@ var game = {
   hardy: function(ord = game.data.ord, over = game.data.over, base = game.base()) {
     if (ord >= base ** 3) {
       return Infinity;
+    } else if (ord >= base ** 2) {
+      return game.hardy(ord - base ** 2, over, base) * 2 ** game.hardy(ord - base ** 2, over, base);
     } else {
-      if (ord >= base ** 2) {
-        return game.hardy(ord - base ** 2, over, base) * 2 ** game.hardy(ord - base ** 2, over, base);
-      } else {
-        if (ord >= base) {
-            return game.hardy(ord - base, over) * 2;
-        } else {
-          if (ord >= 1) {
-            if (over === 0) {
-              return game.hardy(ord - 1, 0) + 1;
-            } else {
-              return game.hardy(ord, over - 1) + 1;
-            }
-          } else {
-            return base;
-          }
-        }
-      }
+      var tempvar = Math.floor(ord / base);
+      return 2 ** tempvar * (base + ord - base * tempvar + over);
     }
   },
-  number: function(x) {
+  beautify: function(x) {
     if (x === Infinity) {
       return "Infinity";
-    } else {
-      if (x < 1.000e6) {
-        if (x < 1000) {
-          if (x % 1 === 0) {
-            return x.toFixed(0);
-          } else {
-            if (x * 10 % 1 === 0) {
-              return x.toFixed(1);
-            } else {
-              if (x * 100 % 1 === 0) {
-                return x.toFixed(2);
-              } else {
-                return x.toFixed(3);
-              }
-            }
-          }
+    } else if (x < 1.000e6) {
+      if (x < 1000) {
+        if (x % 1 === 0) {
+          return x.toFixed(0);
+        } else if (x * 10 % 1 === 0) {
+          return x.toFixed(1);
+        } else if (x * 100 % 1 === 0) {
+          return x.toFixed(2);
         } else {
-          return Math.round(x).toString();
+          return x.toFixed(3);
         }
       } else {
-        var exponent = Math.floor(Math.log10(x));
-        var mantissa = x / 10 ** exponent;
-        return `${mantissa.toFixed(3)}e${exponent}`;
+        return Math.round(x).toString();
       }
+    } else {
+      var exponent = Math.floor(Math.log10(x));
+      var mantissa = x / 10 ** exponent;
+      return `${mantissa.toFixed(3)}e${exponent}`;
     }
   },
   writeOrd: function(ord = game.data.ord, over = game.data.over, base = game.base(), header = true) {
@@ -370,6 +323,7 @@ var game = {
             }
           }
         }
+        
         remainOrd -= base ** power * Math.floor(remainOrd / base ** power);
       }
     }
@@ -377,17 +331,16 @@ var game = {
     if (header) {
       if (game.data.colors) {
         var color = Math.log(ord + over) / (Math.log(3) * 27);
-        
         if (game.hardy(ord, over) === Infinity) {
           game.header.innerHTML = `<span style="color:hsl(${color * 360}, 100%, 50%)">H<sub>${result}</sub>(${base})</span>`;
         } else {
-          game.header.innerHTML = `<span style="color:hsl(${color * 360}, 100%, 50%)">H<sub>${result}</sub>(${base})=${game.number(game.hardy(ord, over, base))}`;
+          game.header.innerHTML = `<span style="color:hsl(${color * 360}, 100%, 50%)">H<sub>${result}</sub>(${base})=${game.beautify(game.hardy(ord, over, base))}`;
         }
       } else {
         if (game.hardy(ord, over) === Infinity) {
           game.header.innerHTML = `H<sub>${result}</sub>(${base})`;
         } else {
-          game.header.innerHTML = `H<sub>${result}</sub>(${base})=${game.number(game.hardy(ord, over, base))}`;
+          game.header.innerHTML = `H<sub>${result}</sub>(${base})=${game.beautify(game.hardy(ord, over, base))}`;
         }
       }
     }
@@ -400,62 +353,75 @@ var game = {
     } else {
       game.data.colors = true;
     }
-    
     game.save();
   },
   toggleMusic: function() {
     if (game.data.music) {
       game.data.music = false;
+      game.music.pause();
     } else {
       game.data.music = true;
+      game.music.play();
     }
-    
     game.save();
   },
-  loop: function() {
-    game.data.diff = Date.now() - game.data.lastTick;
+  loop: function(unadjusted, off = false) {
+    var ms = Math.max(0, unadjusted);
     
-    game.data.pendingIncrement += game.incrementSpeed() / 20;
-    game.data.pendingMaximize += game.maximizeSpeed() / 20;
+    game.data.lastTick = Date.now();
+    
+    if (game.data.op > 1.000e230) {
+      game.data.op = 1.000e230;
+    }
+    
+    if (game.incrementSpeed() > 0) {
+      game.data.pendingIncrement += ms / 1000 * game.incrementSpeed();
+
+      if (game.data.pendingIncrement >= 1) {
+        game.data.pendingIncrement -= 1;
+        game.increment(0);
+      }
+    }
+    
+    if (game.maximizeSpeed() > 0) {
+      game.data.pendingMaximize += ms / 1000 * game.maximizeSpeed();
+
+      if ((game.data.ord % game.base() === game.base() - 1 && game.data.over >= 1) && game.data.pendingMaximize >= 1) {
+        game.data.pendingMaximize -= 1;
+        game.maximize(0);
+      }
+    }
+    
+    if (game.data.pendingIncrement >= 1) {
+      if (game.data.pendingMaximize >= 1) {
+        game.over = 0;
+        
+        game.ord += Math.min(
+          Math.floor(game.data.pendingIncrement),
+          game.base * Math.floor(game.data.pendingMaximize);
+        );
+        
+        game.data.pendingIncrement %= 1;
+        game.data.pendingMaximize %= 1;
+      } else if (Math.floor(game.data.pendingIncrement) >= game.base() - (game.data.ord % game.base())) {
+        game.ord += game.base - (game.ord % game.base) - 1;
+        game.over += Math.floor(game.data.pendingIncrement) - game.base + (game.ord % game.base) + 1;
+        game.data.pendingIncrement %= 1;
+      } else {
+        game.ord += Math.floor(game.data.pendingIncrement);
+        game.data.pendingIncrement %= 1;
+      }
+    }
     
     if (game.data.incrementCooldown > 0) {
       game.data.incrementCooldown--;
     }
+    
     if (game.data.maximizeCooldown > 0) {
       game.data.maximizeCooldown--;
     }
-    
-    if (game.data.music) {
-      game.music.play();
-    } else {
-      game.music.pause();
-    }
-    
-    if (game.data.op > 1.000e223) {
-      game.data.op = 1.000e223;
-    }
-    
-    if (game.data.pendingIncrement >= 1) {
-      for (var i = 0; i < Math.floor(game.data.pendingIncrement); i++) {
-        game.increment(0);
-      }
-      
-      game.data.pendingIncrement -= Math.floor(game.data.pendingIncrement);
-    }
-    if ((game.data.ord % game.base() === game.base() - 1 && game.data.over >= 1) && game.data.pendingMaximize) {
-      for (var i = 0; i < Math.floor(game.data.pendingMaximize); i++) {
-        game.maximize(0);
-      }
-      
-      game.data.pendingMaximize -= Math.floor(game.data.pendingMaximize);
-    }
   },
-  render: function(action, manmade = 1) {
-    game.data.pendingIncrement += (Date.now() - game.data.lastTick) * game.incrementSpeed() / 1000;
-    game.data.pendingMaximize += (Date.now() - game.data.lastTick) * game.maximizeSpeed() / 1000;
-    
-    game.data.lastTick = Date.now();
-    
+  render: function(action, manmade = 1) { 
     game.writeOrd();
     
     if (game.data.colors) {
@@ -471,8 +437,8 @@ var game = {
     }
     
     if (game.data.ord >= game.base() ** 2) {
-      game.markupButton.innerHTML = `Markup to gain ${game.number(game.opGain())} Ordinal Points`;
-      game.markupButton2.innerHTML = `+${game.number(game.opGain())}`;
+      game.markupButton.innerHTML = `Markup to gain ${game.beautify(game.opGain())} Ordinal Points`;
+      game.markupButton2.innerHTML = `+${game.beautify(game.opGain())}`;
     } else {
       game.markupButton.innerHTML = `Reach &omega;<sup>2</sup> to Markup`;
       game.markupButton2.innerHTML = `Reach &omega;<sup>2</sup> to Markup`;
@@ -484,13 +450,13 @@ var game = {
       game.markupTab.style.display = "none";
     }
     
-    game.opText.innerHTML = `You have ${game.number(game.data.op)} Ordinal Points`;
+    game.opText.innerHTML = `You have ${game.beautify(game.data.op)} Ordinal Points`;
     
-    game.incrementSpeedText.innerHTML = `You have ${game.number(game.data.incrementAuto)} increment autoclickers, clicking the increment button ${game.number(game.incrementSpeed())} times per second`;
-    game.maximizeSpeedText.innerHTML = `You have ${game.number(game.data.maximizeAuto)} maximize autoclickers, clicking the maximize button ${game.number(game.maximizeSpeed())} times per second`;
+    game.incrementSpeedText.innerHTML = `You have ${game.beautify(game.data.incrementAuto)} increment autoclickers, clicking the increment button ${game.beautify(game.incrementSpeed())} times per second`;
+    game.maximizeSpeedText.innerHTML = `You have ${game.beautify(game.data.maximizeAuto)} maximize autoclickers, clicking the maximize button ${game.beautify(game.maximizeSpeed())} times per second`;
     
-    game.buyIncrementButton.innerHTML = `Buy Increment Autoclicker for ${game.number(100 * 2 ** game.data.incrementAuto)} OP`;
-    game.buyMaximizeButton.innerHTML = `Buy Maximize Autoclicker for ${game.number(100 * 2 ** game.data.maximizeAuto)} OP`;
+    game.buyIncrementButton.innerHTML = `Buy Increment Autoclicker for ${game.beautify(100 * 2 ** game.data.incrementAuto)} OP`;
+    game.buyMaximizeButton.innerHTML = `Buy Maximize Autoclicker for ${game.beautify(100 * 2 ** game.data.maximizeAuto)} OP`;
     
     if (game.data.factorShifts === 0) {
       game.noFactors.style.display = "block";
@@ -502,9 +468,8 @@ var game = {
       game.factorMultiplier.style.display = "inline";
     }
     
-    game.factorMultiplier.innerHTML = `Your factors are multiplying your autoclicker speed by ${game.number(game.factorMult())}`;
-    
-    game.factorShiftText.innerHTML = `Factor Shift: Requires ${game.number(game.factorShiftCosts[game.data.factorShifts])} OP`;
+    game.factorMultiplier.innerHTML = `Your factors are multiplying your autoclicker speed by ${game.beautify(game.factorMult())}`;
+    game.factorShiftText.innerHTML = `Factor Shift: Requires ${game.beautify(game.factorShiftCosts[game.data.factorShifts])} OP`;
     
     for (var i = 0; i < 7; i++) {
       if (game.data.factorShifts > i) {
@@ -518,13 +483,18 @@ var game = {
       if (game.data.factors[i] === 10) {
         game.factorButtons[i].innerHTML = `Maxed!`;
       } else {
-        game.factorButtons[i].innerHTML = `Increase Factor ${(i + 1)} for ${game.number(10 ** ((i + 1) * game.data.factors[i]))} OP`;
+        game.factorButtons[i].innerHTML = `Increase Factor ${(i + 1)} for ${game.beautify(10 ** ((i + 1) * game.data.factors[i]))} OP`;
       }
+    }
+  },
+  handleOldVersions: function(loadgame) {
+    if (loadgame.version = "0.1") {
+      game.data.factorShifts = 0;
+      game.data.factors = [];
     }
   },
   save: function(action, manmade = 1) {
     localStorage.clear();
-    
     localStorage.setItem("save", JSON.stringify(game.data));
     
     game.render(action, manmade);
@@ -532,15 +502,23 @@ var game = {
   load: function(loadgame) {
     game.data = loadgame;
     
-    game.data.incrementCooldown = 1;
-    game.data.maximizeCooldown = 1;
+    var diff = Date.now() - game.data.lastTick;
+    
+    game.handleOldVersions(loadgame);
     
     game.save("load");
+    
+    game.loop(diff, true);
+    
+    game.data.lastTick = Date.now();
+    
+    if (game.data.music) {
+      game.music.play();
+    }
   },
   reset: function() {
     game.data = {
       lastTick: Date.now(),
-      diff: 0,
       pendingIncrement: 0,
       pendingMaximize: 0,
       incrementCooldown: 1,
@@ -600,4 +578,6 @@ var game = {
 
 game.load(JSON.parse(localStorage.getItem("save")));
 
-var loop = setInterval(game.loop, 50);
+var loop = setInterval(function(){game.loop(Date.now() - game.data.lastTick)}, 50);
+
+var autoSave = setInterval(function(){game.save("autosave", 0)}, 5000);
