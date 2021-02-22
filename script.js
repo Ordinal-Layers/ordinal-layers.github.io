@@ -532,12 +532,12 @@ var game = {
     game.render();
   },
   handleOldVersions: function(loadgame) {
+    game.data.version = "0.1.1";
     if (loadgame.version = "0.1") {
       game.data.clickCooldown = 1;
       game.data.factorShifts = 0;
       game.data.factors = [];
     }
-    game.data.version = "0.1.1";
   },
   save: function(action, manmade = true) {
     localStorage.clear();
