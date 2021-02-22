@@ -414,62 +414,6 @@ var game = {
     }
     game.save();
   },
-  loop: function(unadjusted, off = false) {
-    var ms = Math.max(0, unadjusted);
-    
-    game.data.lastTick = Date.now();
-    
-    if (game.data.op > 1.000e230) {
-      game.data.op = 1.000e230;
-    }
-    
-    if (game.incrementSpeed() > 0) {
-      game.data.pendingIncrement += ms / 1000 * game.incrementSpeed();
-
-      if (game.data.pendingIncrement >= 1) {
-        game.data.pendingIncrement -= 1;
-        game.increment(0);
-      }
-    }
-    
-    if (game.maximizeSpeed() > 0) {
-      game.data.pendingMaximize += ms / 1000 * game.maximizeSpeed();
-
-      if ((game.data.ord % game.base() === game.base() - 1 && game.data.over >= 1) && game.data.pendingMaximize >= 1) {
-        game.data.pendingMaximize -= 1;
-        game.maximize(0);
-      }
-    }
-    
-    if (game.data.pendingIncrement >= 1) {
-      if (game.data.pendingMaximize >= 1) {
-        game.over = 0;
-        
-        game.ord += Math.min(
-          Math.floor(game.data.pendingIncrement),
-          game.base * Math.floor(game.data.pendingMaximize),
-        );
-        
-        game.data.pendingIncrement %= 1;
-        game.data.pendingMaximize %= 1;
-      } else if (Math.floor(game.data.pendingIncrement) >= game.base() - (game.data.ord % game.base())) {
-        game.ord += game.base - (game.ord % game.base) - 1;
-        game.over += Math.floor(game.data.pendingIncrement) - game.base + (game.ord % game.base) + 1;
-        game.data.pendingIncrement %= 1;
-      } else {
-        game.ord += Math.floor(game.data.pendingIncrement);
-        game.data.pendingIncrement %= 1;
-      }
-    }
-    
-    if (game.data.incrementCooldown > 0) {
-      game.data.incrementCooldown--;
-    }
-    
-    if (game.data.maximizeCooldown > 0) {
-      game.data.maximizeCooldown--;
-    }
-  },
   render: function(action, manmade = 1) { 
     game.writeOrd();
     
@@ -536,6 +480,65 @@ var game = {
       }
     }
   },
+  loop: function(unadjusted, off = false) {
+    var ms = Math.max(0, unadjusted);
+    
+    game.data.lastTick = Date.now();
+    
+    if (game.data.op > 1.000e230) {
+      game.data.op = 1.000e230;
+    }
+    
+    if (game.incrementSpeed() > 0) {
+      game.data.pendingIncrement += ms / 1000 * game.incrementSpeed();
+
+      if (game.data.pendingIncrement >= 1) {
+        game.data.pendingIncrement -= 1;
+        game.increment(0);
+      }
+    }
+    
+    if (game.maximizeSpeed() > 0) {
+      game.data.pendingMaximize += ms / 1000 * game.maximizeSpeed();
+
+      if ((game.data.ord % game.base() === game.base() - 1 && game.data.over >= 1) && game.data.pendingMaximize >= 1) {
+        game.data.pendingMaximize -= 1;
+        game.maximize(0);
+      }
+    }
+    
+    if (game.data.pendingIncrement >= 1) {
+      if (game.data.pendingMaximize >= 1) {
+        game.over = 0;
+        
+        game.ord += Math.min(
+          Math.floor(game.data.pendingIncrement),
+          game.base * Math.floor(game.data.pendingMaximize),
+        );
+        
+        game.data.pendingIncrement %= 1;
+        game.data.pendingMaximize %= 1;
+      } else if (Math.floor(game.data.pendingIncrement) >= game.base() - (game.data.ord % game.base())) {
+        game.ord += game.base - (game.ord % game.base) - 1;
+        game.over += Math.floor(game.data.pendingIncrement) - game.base + (game.ord % game.base) + 1;
+        game.data.pendingIncrement %= 1;
+      } else {
+        game.ord += Math.floor(game.data.pendingIncrement);
+        game.data.pendingIncrement %= 1;
+      }
+    }
+    
+    if (game.data.incrementCooldown > 0) {
+      game.data.incrementCooldown--;
+    }
+    
+    game.render();
+    
+    if (game.data.maximizeCooldown > 0) {
+      game.data.maximizeCooldown--;
+    }
+  },
+  
   handleOldVersions: function(loadgame) {
     if (loadgame.version = "0.1") {
       game.data.factorShifts = 0;
