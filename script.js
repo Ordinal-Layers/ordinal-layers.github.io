@@ -528,15 +528,11 @@ var game = {
       }
     }
     
-    if (game.data.incrementCooldown > 0) {
-      game.data.incrementCooldown--;
+    if (game.data.clickCooldown > 0) {
+      game.data.clickCooldown--;
     }
     
     game.render();
-    
-    if (game.data.maximizeCooldown > 0) {
-      game.data.maximizeCooldown--;
-    }
   },
   
   handleOldVersions: function(loadgame) {
