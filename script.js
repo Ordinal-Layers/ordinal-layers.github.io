@@ -564,7 +564,7 @@ var game = {
   },
   reset: function() {
     game.data = {
-      varsion: "0.1.1",
+      version: "0.1.1",
       lastTick: Date.now(),
       pendingIncrement: 0,
       pendingMaximize: 0,
