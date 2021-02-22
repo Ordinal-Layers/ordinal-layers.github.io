@@ -540,7 +540,7 @@ var game = {
     }
   },
   save: function(action, manmade = true) {
-    localStorage.clear();
+    localStorage.clear()
     localStorage.setItem("save", JSON.stringify(game.data));
     
     game.render(action, manmade);
@@ -552,7 +552,7 @@ var game = {
     
     game.handleOldVersions(loadgame);
     
-    game.save("load");
+    game.save("load", false);
     
     game.loop(diff, true);
     
@@ -581,7 +581,7 @@ var game = {
       factors: []
     };
     
-    game.save();
+    game.save("reset", false);
   },
   importGame: function() {
     var loadgame = "";
@@ -597,7 +597,7 @@ var game = {
     window.location.reload();
   },
   exportGame: function() {
-    game.save();
+    game.save("export", false);
     
     var file = new Blob([btoa(JSON.stringify(game.data))], {type: "text/plain"});
     
