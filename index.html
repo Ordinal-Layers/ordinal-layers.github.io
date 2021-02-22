@@ -17,8 +17,9 @@
       </div>
       <br />
       <div id="tab0">
-        <p><input type="file" id="importButton" class="normalButton" oninput="game.importGame()">  Import your game save via file (will overwrite save)</p>
+        <button onclick="game.save()" class="normalButton">Save your game</button>
         <button onclick="game.exportGame()" class="normalButton">Export your game save via file</button>
+        <p><input type="file" id="importButton" class="normalButton" oninput="game.importGame()" /> Import your game save via file (will overwrite save)</p>
         <button onclick="game.resetConf()" id="resetButton">RESET YOUR GAME</button>
         <br />
         <button onclick="game.toggleColor()" class="normalButton" id="colorButton">Colors: ON</button>
