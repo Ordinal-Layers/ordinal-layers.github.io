@@ -537,6 +537,7 @@ var game = {
   
   handleOldVersions: function(loadgame) {
     if (loadgame.version = "0.1") {
+      game.data.clickCooldown = 1;
       game.data.factorShifts = 0;
       game.data.factors = [];
     }
