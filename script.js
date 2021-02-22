@@ -16,62 +16,90 @@ var game = {
     factorShifts: 0,
     factors: []
   },
-  music: document.getElementById("music"),
-  header: document.getElementById("header"),
-  colorButton: document.getElementById("colorButton"),
-  musicButton: document.getElementById("musicButton"),
-  markupTab: document.getElementById("markupTabButton"),
-  markupButton: document.getElementById("markupButton"),
-  markupButton2: document.getElementById("markupButton2"),
-  opText: document.getElementById("opText"),
-  incrementSpeedText: document.getElementById("incrementSpeed"),
-  maximizeSpeedText: document.getElementById("maximizeSpeed"),
-  buyIncrementButton: document.getElementById("buyIncrementButton"),
-  buyMaximizeButton: document.getElementById("buyMaximizeButton"),
-  factorShiftText: document.getElementById("factorShift"),
-  noFactors: document.getElementById("noFactors"),
-  factorList: document.getElementById("factorList"),
-  factorMultiplier: document.getElementById("factorMult"),
+  get: x => document.getElementById(x),
+  music: game.get("music"),
+  header: game.get("header"),
+  colorButton: game.get("colorButton"),
+  musicButton: game.get("musicButton"),
+  markupTab: game.get("markupTabButton"),
+  markupButton: game.get("markupButton"),
+  markupButton2: game.get("markupButton2"),
+  opText: game.get("opText"),
+  incrementSpeedText: game.get("incrementSpeed"),
+  maximizeSpeedText: game.get("maximizeSpeed"),
+  buyIncrementButton: game.get("buyIncrementButton"),
+  buyMaximizeButton: game.get("buyMaximizeButton"),
+  factorShiftText: game.get("factorShift"),
+  noFactors: game.get("noFactors"),
+  factorList: game.get("factorList"),
+  factorMultiplier: game.get("factorMult"),
   factors: [
-    document.getElementById("factor1"),
-    document.getElementById("factor2"),
-    document.getElementById("factor3"),
-    document.getElementById("factor4"),
-    document.getElementById("factor5"),
-    document.getElementById("factor6"),
-    document.getElementById("factor7")
+    game.get("factor1"),
+    game.get("factor2"),
+    game.get("factor3"),
+    game.get("factor4"),
+    game.get("factor5"),
+    game.get("factor6"),
+    game.get("factor7")
   ],
   factorMults: [
-    document.getElementById("factor1Mult"),
-    document.getElementById("factor2Mult"),
-    document.getElementById("factor3Mult"),
-    document.getElementById("factor4Mult"),
-    document.getElementById("factor5Mult"),
-    document.getElementById("factor6Mult"),
-    document.getElementById("factor7Mult")
+    game.get("factor1Mult"),
+    game.get("factor2Mult"),
+    game.get("factor3Mult"),
+    game.get("factor4Mult"),
+    game.get("factor5Mult"),
+    game.get("factor6Mult"),
+    game.get("factor7Mult")
   ],
   factorButtons: [
-    document.getElementById("factor1Button"),
-    document.getElementById("factor2Button"),
-    document.getElementById("factor3Button"),
-    document.getElementById("factor4Button"),
-    document.getElementById("factor5Button"),
-    document.getElementById("factor6Button"),
-    document.getElementById("factor7Button")
+    game.get("factor1Button"),
+    game.get("factor2Button"),
+    game.get("factor3Button"),
+    game.get("factor4Button"),
+    game.get("factor5Button"),
+    game.get("factor6Button"),
+    game.get("factor7Button")
   ],
   tabs: [
-    document.getElementById("tab0"),
-    document.getElementById("tab1"),
-    document.getElementById("tab2")
+    game.get("tab0"),
+    game.get("tab1"),
+    game.get("tab2")
   ],
   subtabs: [
     [],
     [],
     [
-      document.getElementById("subtab20"),
-      document.getElementById("subtab21")
+      game.get("subtab20"),
+      game.get("subtab21")
     ]
   ],
+  tab: x => {
+    if (game.data.clickCooldown === 0) {
+      var numTabs = game.tabs.length;
+
+      for (var i = 0; i < numTabs; i++) {
+        game.tabs[i].style.display = "none";
+      }
+
+      game.tabs[x].style.display = "block";
+      
+      game.data.clickCooldown = 1;
+    }
+  },
+  subtab: (x, y) => {
+    if (game.data.clickCooldown === 0) {
+      game.tab(x);
+      var numTabs = game.subtabs[x].length;
+
+      for (var i = 0; i < numTabs; i++) {
+        game.subtabs[x][i].style.display = "none";
+      }
+
+      game.subtabs[x][y].style.display = "block";
+      
+      game.data.clickCooldown = 1;
+    }
+  },
   factorShiftCosts: [
     1000,
     10000,
@@ -82,29 +110,8 @@ var game = {
     1.000e100,
     Infinity
   ],
-  tab: function(x) {
-    var numTabs = game.tabs.length;
-    
-    for (var i = 0; i < numTabs; i++) {
-      game.tabs[i].style.display = "none";
-    }
-    
-    game.tabs[x].style.display = "block";
-  },
-  subtab: function(x, y) {
-    game.tab(x);
-    var numTabs = game.subtabs[x].length;
-    
-    for (var i = 0; i < numTabs; i++) {
-      game.subtabs[x][i].style.display = "none";
-    }
-    
-    game.subtabs[x][y].style.display = "block";
-  },
-  base: function() {
-    return 10 - game.data.factorShifts;
-  },
-  factorMult: function() {
+  base: () => 10 - game.data.factorShifts,
+  factorMult: () => {
     var mult = 1;
     
     for (var i = 0; i < game.data.factorShifts; i++) {
@@ -113,13 +120,9 @@ var game = {
     
     return mult;
   },
-  incrementSpeed: function() {
-    return game.data.incrementAuto * game.factorMult();
-  },
-  maximizeSpeed: function() {
-    return game.data.maximizeAuto * game.factorMult();
-  },
-  opGain: function(ord = game.data.ord, over = game.data.over, base = game.base()) {
+  incrementSpeed: () => game.data.incrementAuto * game.factorMult(),
+  maximizeSpeed: () >= game.data.maximizeAuto * game.factorMult(),
+  opGain: (ord = game.data.ord, over = game.data.over, base = game.base()) => {
     if (ord < base) {
       return ord + over;
     } else if (ord >= base ** (base ** base)) {
@@ -136,7 +139,7 @@ var game = {
       );
     }
   },
-  increment: function(manmade = true) {
+  increment: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
       if (game.data.ord % game.base() === game.base() - 1) {
         game.data.over++;
@@ -149,7 +152,7 @@ var game = {
       }
     }
   },
-  maximize: function(manmade = true) {
+  maximize: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
       if (game.data.ord % game.base() === game.base() - 1 && game.data.over >= 1) {
         game.data.ord -= game.base() - 1;
@@ -173,11 +176,11 @@ var game = {
       }
     }
   },
-  resetOrd: function() {
+  resetOrd: () => {
     game.data.ord = 0;
     game.data.over = 0;
   },
-  markup: function(manmade = true) {
+  markup: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
       if (game.data.ord >= game.base() ** 2) {
         game.data.op += game.opGain();
@@ -193,7 +196,7 @@ var game = {
       }
     }
   },
-  buyIncrementAuto: function(manmade = true) {
+  buyIncrementAuto: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
       if (game.data.op >= 100 * 2 ** game.data.incrementAuto) {
         game.data.op -= 100 * 2 ** game.data.incrementAuto;
@@ -205,7 +208,7 @@ var game = {
       }
     }
   },
-  buyMaximizeAuto: function(manmade = true) {
+  buyMaximizeAuto: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
       if (game.data.op >= 100 * 2 ** game.data.maximizeAuto) {
         game.data.op -= 100 * 2 ** game.data.maximizeAuto;
@@ -217,7 +220,7 @@ var game = {
       }
     }
   },
-  maxAll: function(manmade = true) {
+  maxAll: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
       var bulk = 0;
 
@@ -239,7 +242,7 @@ var game = {
       }
     }
   },
-  factorShift: function(manmade = true) {
+  factorShift: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
       if (game.data.op >= game.factorShiftCosts[game.data.factorShifts]) {
         game.data.op = 0;
@@ -250,6 +253,9 @@ var game = {
         }
         game.data.factorShifts++;
         game.data.factors.push(1);
+        if (game.data.ord >= game.base() ** 2) {
+          game.markup(false);
+        }
         game.resetOrd();
 
         if (manmade) {
@@ -258,7 +264,7 @@ var game = {
       }
     }
   },
-  buyFactor: function(x, manmade = true) {
+  buyFactor: (x, manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
       if (game.data.op >= 10 ** (x * game.data.factors[x - 1]) && game.data.factors[x - 1] < 10) {
         game.data.op -= 10 ** (x * game.data.factors[x - 1]);
@@ -270,7 +276,7 @@ var game = {
       }
     }
   },
-  maxFactors: function(manmade = true) {
+  maxFactors: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
       for (var i = 1; i <= game.data.factorShifts; i++) {
         while (game.data.factors[i - 1] < 10 && game.data.op >= 10 ** (i * game.data.factors[i - 1])) {
@@ -283,40 +289,14 @@ var game = {
       }
     }
   },
+  fghexp: (n, x) => (n === 0) ? x : game.fghexp(n - 1, x) * 2 ** game.fghexp(n - 1, x),
   hardy: function(ord = game.data.ord, over = game.data.over, base = game.base()) {
-    if (ord >= base ** 3) {
-      return Infinity;
-    } else if (ord >= base ** 2) {
-      return game.hardy(ord - base ** 2, over, base) * 2 ** game.hardy(ord - base ** 2, over, base);
-    } else {
-      var tempvar = Math.floor(ord / base);
-      return 2 ** tempvar * (base + ord - base * tempvar + over);
-    }
+    var tempvar = Math.floor(ord / base);
+    var tempvar2 = Math.floor(ord / base ** 2);
+    return (ord >= base ** 3) ? Infinity : game.fghexp(tempvar2, 2 ** tempvar * (base + ord - base * tempvar - base ** 2 * tempvar2 + over));
   },
-  beautify: function(x) {
-    if (x === Infinity) {
-      return "Infinity";
-    } else if (x < 1.000e6) {
-      if (x < 1000) {
-        if (x % 1 === 0) {
-          return x.toFixed(0);
-        } else if (x * 10 % 1 === 0) {
-          return x.toFixed(1);
-        } else if (x * 100 % 1 === 0) {
-          return x.toFixed(2);
-        } else {
-          return x.toFixed(3);
-        }
-      } else {
-        return Math.round(x).toString();
-      }
-    } else {
-      var exponent = Math.floor(Math.log10(x));
-      var mantissa = x / 10 ** exponent;
-      return `${mantissa.toFixed(3)}e${exponent}`;
-    }
-  },
-  writeOrd: function(ord = game.data.ord, over = game.data.over, base = game.base(), header = true) {
+  beautify: x => (x === Infinity) ? "Infinity" : (x < 1.000e6) ? (x < 1000 && x % 1 !== 0) ? (x * 10 % 1 === 0) ? x.toFixed(1) : (x * 100 % 1 === 0) ? x.toFixed(2) : x.toFixed(3) : x.toFixed(0) : `${(x / 10 ** Math.floor(Math.log10(x))).toFixed(3)}e${Math.floor(Math.log10(x))}`,
+  writeOrd: (ord = game.data.ord, over = game.data.over, base = game.base(), header = true) => {
     if (ord === 0) {
       if (header) {
         if (game.data.colors) {
@@ -393,25 +373,35 @@ var game = {
     
     return result;
   },
-  toggleColor: function() {
-    if (game.data.colors) {
-      game.data.colors = false;
-    } else {
-      game.data.colors = true;
+  toggleColor: () => {
+    if (game.data.clickCooldown === 0) {
+      if (game.data.colors) {
+        game.data.colors = false;
+      } else {
+        game.data.colors = true;
+      }
+      
+      game.data.clickCooldown++;
+      
+      game.save("toggleColor", false);
     }
-    game.save();
   },
-  toggleMusic: function() {
-    if (game.data.music) {
-      game.data.music = false;
-      game.music.pause();
-    } else {
-      game.data.music = true;
-      game.music.play();
+  toggleMusic: () => {
+    if (game.data.clickCooldown === 0) {
+      if (game.data.music) {
+        game.data.music = false;
+        game.music.pause();
+      } else {
+        game.data.music = true;
+        game.music.play();
+      }
+
+      game.data.clickCooldown++;
+
+      game.save("toggleMusic", false);
     }
-    game.save();
   },
-  render: function(action, manmade = 1) { 
+  render: () => { 
     game.writeOrd();
     
     if (game.data.colors) {
@@ -477,7 +467,7 @@ var game = {
       }
     }
   },
-  loop: function(unadjusted, off = false) {
+  loop: (unadjusted, off = false) => {
     var ms = Math.max(0, unadjusted);
     
     game.data.lastTick = Date.now();
@@ -531,7 +521,7 @@ var game = {
     
     game.render();
   },
-  handleOldVersions: function(loadgame) {
+  handleOldVersions: loadgame => {
     game.data.version = "0.1.1";
     if (loadgame.version = "0.1") {
       game.data.clickCooldown = 1;
@@ -539,14 +529,22 @@ var game = {
       game.data.factors = [];
     }
   },
-  save: function(action, manmade = true) {
-    localStorage.clear()
-    localStorage.setItem("save", JSON.stringify(game.data));
-    
-    game.render(action, manmade);
+  save: (action, manmade = true) => {
+    if (!manmade || game.data.clickCooldown === 0) {
+      if (manmade) {
+        game.data.clickCooldown = 1;
+      }
+      
+      localStorage.clear()
+      localStorage.setItem("save", JSON.stringify(game.data));
+
+      game.render();
+    }
   },
-  load: function(loadgame) {
+  load: loadgame => {
     game.data = loadgame;
+    
+    game.data.clickCooldown = 1;
     
     var diff = Date.now() - game.data.lastTick;
     
@@ -562,7 +560,7 @@ var game = {
       game.music.play();
     }
   },
-  reset: function() {
+  reset: () => {
     game.data = {
       version: "0.1.1",
       lastTick: Date.now(),
@@ -583,47 +581,57 @@ var game = {
     
     game.save("reset", false);
   },
-  importGame: function() {
-    var loadgame = "";
-    
-    reader.readAsText(document.getElementById("importButton").files[0]);
-    
-    loadgame = JSON.parse(atob(reader.result));
-    
-    if (loadgame !== "") {
-      game.load(loadgame);
-    }
-    
-    window.location.reload();
-  },
-  exportGame: function() {
-    game.save("export", false);
-    
-    var file = new Blob([btoa(JSON.stringify(game.data))], {type: "text/plain"});
-    
-    window.URL = window.URL || window.webkitURL;
-    
-    var importButton = document.createElement("importButton");
-    
-    importButton.href = window.URL.createObjectURL(file);
-    importButton.download = "Ordinal Markup Save.txt";
-    importButton.click();
-  },
-  resetConf: function() {
-    var code = prompt(
-      'Are you sure you want to delete all of your progress? Type in "reset game" to reset all of your progress.'
-    );
-    
-    if (code !== null) {
-      if (code.toLowerCase() === "reset game") {
-        game.reset();
+  importGame: () => {
+    if (game.data.clickCooldown === 0) {
+      var loadgame = "";
+
+      reader.readAsText(document.getElementById("importButton").files[0]);
+
+      loadgame = JSON.parse(atob(reader.result));
+
+      if (loadgame !== "") {
+        game.load(loadgame);
       }
+
+      window.location.reload();
+    }
+  },
+  exportGame: () => {
+    if (game.data.clickCooldown === 0) {
+      game.save("export", false);
+
+      var file = new Blob([btoa(JSON.stringify(game.data))], {type: "text/plain"});
+
+      window.URL = window.URL || window.webkitURL;
+
+      var importButton = document.createElement("importButton");
+
+      importButton.href = window.URL.createObjectURL(file);
+      importButton.download = "Ordinal Markup Save.txt";
+      importButton.click();
+      
+      game.data.clickCooldown = 1;
+    }
+  },
+  resetConf: () => {
+    if (game.data.clickCooldown === 0) {
+      var code = prompt(
+        'Are you sure you want to delete all of your progress? Type in "reset game" to reset all of your progress.'
+      );
+
+      if (code !== null) {
+        if (code.toLowerCase() === "reset game") {
+          game.reset();
+        }
+      }
+      
+      game.data.clickCooldown = 1;
     }
   }
 };
 
 game.load(JSON.parse(localStorage.getItem("save")));
 
-var loop = setInterval(function(){game.loop(Date.now() - game.data.lastTick)}, 50);
+var loop = setInterval(() => game.loop(Date.now() - game.data.lastTick), 50);
 
-var autoSave = setInterval(function(){game.save("autosave", false)}, 5000);
+var autoSave = setInterval(() => game.save("autosave", false), 5000);
