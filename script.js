@@ -250,6 +250,7 @@ var game = {
         }
         game.data.factorShifts++;
         game.data.factors.push(1);
+        game.resetOrd();
 
         if (manmade) {
           game.data.clickCooldown = 1;
