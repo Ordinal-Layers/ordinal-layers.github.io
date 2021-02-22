@@ -447,7 +447,7 @@ var game = {
         
         game.ord += Math.min(
           Math.floor(game.data.pendingIncrement),
-          game.base * Math.floor(game.data.pendingMaximize);
+          game.base * Math.floor(game.data.pendingMaximize),
         );
         
         game.data.pendingIncrement %= 1;
