@@ -17,60 +17,60 @@ var game = {
     factors: []
   },
   get: x => document.getElementById(x),
-  music: game.get("music"),
-  header: game.get("header"),
-  colorButton: game.get("colorButton"),
-  musicButton: game.get("musicButton"),
-  markupTab: game.get("markupTabButton"),
-  markupButton: game.get("markupButton"),
-  markupButton2: game.get("markupButton2"),
-  opText: game.get("opText"),
-  incrementSpeedText: game.get("incrementSpeed"),
-  maximizeSpeedText: game.get("maximizeSpeed"),
-  buyIncrementButton: game.get("buyIncrementButton"),
-  buyMaximizeButton: game.get("buyMaximizeButton"),
-  factorShiftText: game.get("factorShift"),
-  noFactors: game.get("noFactors"),
-  factorList: game.get("factorList"),
-  factorMultiplier: game.get("factorMult"),
+  music: this.get("music"),
+  header: this.get("header"),
+  colorButton: this.get("colorButton"),
+  musicButton: this.get("musicButton"),
+  markupTab: this.get("markupTabButton"),
+  markupButton: this.get("markupButton"),
+  markupButton2: this.get("markupButton2"),
+  opText: this.get("opText"),
+  incrementSpeedText: this.get("incrementSpeed"),
+  maximizeSpeedText: this.get("maximizeSpeed"),
+  buyIncrementButton: this.get("buyIncrementButton"),
+  buyMaximizeButton: this.get("buyMaximizeButton"),
+  factorShiftText: this.get("factorShift"),
+  noFactors: this.get("noFactors"),
+  factorList: this.get("factorList"),
+  factorMultiplier: this.get("factorMult"),
   factors: [
-    game.get("factor1"),
-    game.get("factor2"),
-    game.get("factor3"),
-    game.get("factor4"),
-    game.get("factor5"),
-    game.get("factor6"),
-    game.get("factor7")
+    this.get("factor1"),
+    this.get("factor2"),
+    this.get("factor3"),
+    this.get("factor4"),
+    this.get("factor5"),
+    this.get("factor6"),
+    this.get("factor7")
   ],
   factorMults: [
-    game.get("factor1Mult"),
-    game.get("factor2Mult"),
-    game.get("factor3Mult"),
-    game.get("factor4Mult"),
-    game.get("factor5Mult"),
-    game.get("factor6Mult"),
-    game.get("factor7Mult")
+    this.get("factor1Mult"),
+    this.get("factor2Mult"),
+    this.get("factor3Mult"),
+    this.get("factor4Mult"),
+    this.get("factor5Mult"),
+    this.get("factor6Mult"),
+    this.get("factor7Mult")
   ],
   factorButtons: [
-    game.get("factor1Button"),
-    game.get("factor2Button"),
-    game.get("factor3Button"),
-    game.get("factor4Button"),
-    game.get("factor5Button"),
-    game.get("factor6Button"),
-    game.get("factor7Button")
+    this.get("factor1Button"),
+    this.get("factor2Button"),
+    this.get("factor3Button"),
+    this.get("factor4Button"),
+    this.get("factor5Button"),
+    this.get("factor6Button"),
+    this.get("factor7Button")
   ],
   tabs: [
-    game.get("tab0"),
-    game.get("tab1"),
-    game.get("tab2")
+    this.get("tab0"),
+    this.get("tab1"),
+    this.get("tab2")
   ],
   subtabs: [
     [],
     [],
     [
-      game.get("subtab20"),
-      game.get("subtab21")
+      this.get("subtab20"),
+      this.get("subtab21")
     ]
   ],
   tab: x => {
