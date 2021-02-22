@@ -198,7 +198,6 @@ var game = {
       if (game.data.op >= 100 * 2 ** game.data.incrementAuto) {
         game.data.op -= 100 * 2 ** game.data.incrementAuto;
         game.data.incrementAuto++;
-        game.resetOrd();
 
         if (manmade) {
           game.data.clickCooldown = 1;
@@ -211,7 +210,6 @@ var game = {
       if (game.data.op >= 100 * 2 ** game.data.maximizeAuto) {
         game.data.op -= 100 * 2 ** game.data.maximizeAuto;
         game.data.maximizeAuto++;
-        game.resetOrd();
 
         if (manmade) {
           game.data.clickCooldown = 1;
@@ -252,7 +250,6 @@ var game = {
         }
         game.data.factorShifts++;
         game.data.factors.push(1);
-        game.resetOrd();
 
         if (manmade) {
           game.data.clickCooldown = 1;
@@ -265,7 +262,6 @@ var game = {
       if (game.data.op >= 10 ** (x * game.data.factors[x - 1]) && game.data.factors[x - 1] < 10) {
         game.data.op -= 10 ** (x * game.data.factors[x - 1]);
         game.data.factors[x - 1]++;
-        game.resetOrd();
       }
       
       if (manmade) {
