@@ -542,7 +542,7 @@ var game = {
       game.data.factors = [];
     }
   },
-  save: function(action, manmade = 1) {
+  save: function(action, manmade = true) {
     localStorage.clear();
     localStorage.setItem("save", JSON.stringify(game.data));
     
@@ -629,4 +629,4 @@ game.load(JSON.parse(localStorage.getItem("save")));
 
 var loop = setInterval(function(){game.loop(Date.now() - game.data.lastTick)}, 50);
 
-var autoSave = setInterval(function(){game.save("autosave", 0)}, 5000);
+var autoSave = setInterval(function(){game.save("autosave", false)}, 5000);
