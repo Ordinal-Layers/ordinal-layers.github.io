@@ -469,6 +469,8 @@ var game = {
   loop: (unadjusted, off = false) => {
     var ms = Math.max(0, unadjusted);
     
+    console.log(unadjusted);
+    
     game.data.lastTick = Date.now();
     
     if (game.data.op > 1.000e230) {
@@ -514,12 +516,12 @@ var game = {
       }
     }
     
-    if (game.data.clickCooldown > 0) {
-      game.data.clickCooldown--;
-    }
-    
     if (ms > 0) {
       game.render();
+    }
+    
+    if (game.data.clickCooldown > 0) {
+      game.data.clickCooldown--;
     }
   },
   handleOldVersions: loadgame => {
