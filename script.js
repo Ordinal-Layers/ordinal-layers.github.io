@@ -501,14 +501,14 @@ var game = {
         
         game.ord += Math.min(
           Math.floor(game.data.pendingIncrement),
-          game.base * Math.floor(game.data.pendingMaximize),
+          game.base * Math.floor(game.data.pendingMaximize * game.factorMult()),
         );
         
         game.data.pendingIncrement %= 1;
         game.data.pendingMaximize %= 1;
       } else if (Math.floor(game.data.pendingIncrement) >= game.base() - (game.data.ord % game.base())) {
         game.ord += game.base - (game.ord % game.base) - 1;
-        game.over += Math.floor(game.data.pendingIncrement) - game.base + (game.ord % game.base) + 1;
+        game.over += Math.floor(game.data.pendingIncrement) - game.base() + (game.ord % game.base()) + 1;
         game.data.pendingIncrement %= 1;
       } else {
         game.ord += Math.floor(game.data.pendingIncrement);
