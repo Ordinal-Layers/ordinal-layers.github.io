@@ -521,7 +521,6 @@ var game = {
     game.render();
   },
   handleOldVersions: loadgame => {
-    game.data.version = "0.1.1";
     if (loadgame.version = "0.1") {
       game.data.clickCooldown = 1;
       game.data.factorShifts = 0;
@@ -543,6 +542,7 @@ var game = {
   load: loadgame => {
     game.data = loadgame;
     
+    game.data.version = "0.1.1";
     game.data.clickCooldown = 1;
     
     var diff = Date.now() - game.data.lastTick;
@@ -552,7 +552,6 @@ var game = {
     game.save("load", false);
     
     game.loop(diff, true);
-    
     game.data.lastTick = Date.now();
     
     if (game.data.music) {
