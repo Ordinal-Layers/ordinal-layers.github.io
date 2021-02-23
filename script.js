@@ -292,7 +292,7 @@ var game = {
   hardy: function(ord = game.data.ord, over = game.data.over, base = game.base()) {
     var tempvar = Math.floor(ord / base);
     var tempvar2 = Math.floor(ord / base ** 2);
-    return (ord >= base ** 3) ? Infinity : game.fghexp(tempvar2, 2 ** tempvar * (base + ord - base * tempvar - base ** 2 * tempvar2 + over));
+    return (ord >= base ** 3) ? Infinity : game.fghexp(tempvar2, 2 ** (tempvar % base) * (base + ord - base * (tempvar % base) - base ** 2 * tempvar2 + over));
   },
   beautify: x => (x === Infinity) ? "Infinity" : (x < 1.000e6) ? (x < 1000 && x % 1 !== 0) ? (x * 10 % 1 === 0) ? x.toFixed(1) : (x * 100 % 1 === 0) ? x.toFixed(2) : x.toFixed(3) : x.toFixed(0) : `${(x / 10 ** Math.floor(Math.log10(x))).toFixed(3)}e${Math.floor(Math.log10(x))}`,
   writeOrd: (ord = game.data.ord, over = game.data.over, base = game.base(), header = true) => {
