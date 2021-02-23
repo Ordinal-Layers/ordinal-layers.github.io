@@ -518,10 +518,12 @@ var game = {
       game.data.clickCooldown--;
     }
     
-    game.render();
+    if (ms > 0) {
+      game.render();
+    }
   },
   handleOldVersions: loadgame => {
-    if (loadgame.version = "0.1") {
+    if (loadgame.version === "0.1") {
       game.data.clickCooldown = 1;
       game.data.factorShifts = 0;
       game.data.factors = [];
