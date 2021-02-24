@@ -357,13 +357,13 @@ var game = {
     if (header) {
       if (game.data.colors) {
         var color = Math.log(ord + over) / (Math.log(3) * 27);
-        if (game.hardy(ord, over) === Infinity) {
+        if (game.hardy(ord, over, base) === Infinity) {
           game.header.innerHTML = `<span style="color:hsl(${color * 360}, 100%, 50%)">H<sub>${result}</sub>(${base})</span>`;
         } else {
           game.header.innerHTML = `<span style="color:hsl(${color * 360}, 100%, 50%)">H<sub>${result}</sub>(${base})=${game.beautify(game.hardy(ord, over, base))}`;
         }
       } else {
-        if (game.hardy(ord, over) === Infinity) {
+        if (game.hardy(ord, over, base) === Infinity) {
           game.header.innerHTML = `H<sub>${result}</sub>(${base})`;
         } else {
           game.header.innerHTML = `H<sub>${result}</sub>(${base})=${game.beautify(game.hardy(ord, over, base))}`;
