@@ -469,7 +469,7 @@ var game = {
   loop: (unadjusted, off = false) => {
     var ms = Math.max(0, unadjusted);
     
-    console.log(unadjusted);
+    console.log(ms);
     
     game.data.lastTick = Date.now();
     
@@ -489,7 +489,7 @@ var game = {
     if (game.maximizeSpeed() > 0) {
       game.data.pendingMaximize += ms / 1000 * game.maximizeSpeed();
 
-      if ((game.data.ord % game.base() === game.base() - 1 && game.data.over >= 1) && game.data.pendingMaximize >= 1) {
+      if (game.data.pendingMaximize >= 1) {
         game.data.pendingMaximize -= 1;
         game.maximize(0);
       }
