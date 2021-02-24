@@ -1,6 +1,6 @@
 "use strict";
 
-const game = {
+var game = {
   data: {
     version: "0.1.1",
     lastTick: Date.now(),
@@ -76,9 +76,9 @@ const game = {
   ],
   tab: x => {
     if (game.data.clickCooldown === 0) {
-      const numTabs = game.tabs.length;
+      var numTabs = game.tabs.length;
 
-      for (let i = 0; i < numTabs; i++) {
+      for (var i = 0; i < numTabs; i++) {
         game.tabs[i].style.display = "none";
       }
 
@@ -89,9 +89,9 @@ const game = {
   },
   subtab: (x, y) => {
     if (game.data.clickCooldown === 0) {
-      const numTabs = game.subtabs[x].length;
+      var numTabs = game.subtabs[x].length;
 
-      for (let i = 0; i < numTabs; i++) {
+      for (var i = 0; i < numTabs; i++) {
         game.subtabs[x][i].style.display = "none";
       }
 
@@ -112,9 +112,9 @@ const game = {
   ],
   base: () => 10 - game.data.factorShifts,
   factorMult: () => {
-    let mult = 1;
+    var mult = 1;
     
-    for (let i = 0; i < game.data.factorShifts; i++) {
+    for (var i = 0; i < game.data.factorShifts; i++) {
       mult *= game.data.factors[i];
     }
     
@@ -222,7 +222,7 @@ const game = {
   },
   maxAll: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
-      let bulk = 0;
+      var bulk = 0;
 
       game.buyIncrementAuto(false);
       game.buyMaximizeAuto(false);
@@ -248,7 +248,7 @@ const game = {
         game.data.op = 0;
         game.data.incrementAuto = 0;
         game.data.maximizeAuto = 0;
-        for (let i = 0; i < game.data.factorShifts; i++) {
+        for (var i = 0; i < game.data.factorShifts; i++) {
           game.data.factors[i] = 1;
         }
         game.data.factorShifts++;
@@ -278,7 +278,7 @@ const game = {
   },
   maxFactors: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
-      for (let i = 1; i <= game.data.factorShifts; i++) {
+      for (var i = 1; i <= game.data.factorShifts; i++) {
         while (game.data.factors[i - 1] < 10 && game.data.op >= 10 ** (i * game.data.factors[i - 1])) {
           game.buyFactor(i, false);
         }
@@ -291,8 +291,8 @@ const game = {
   },
   fghexp: (n, x) => (n === 0) ? x : game.fghexp(n - 1, x) * 2 ** game.fghexp(n - 1, x),
   hardy: function(ord = game.data.ord, over = game.data.over, base = game.base()) {
-    const tempvar = Math.floor(ord / base);
-    const tempvar2 = Math.floor(ord / base ** 2);
+    var tempvar = Math.floor(ord / base);
+    var tempvar2 = Math.floor(ord / base ** 2);
     return (ord >= base ** 3) ? Infinity : game.fghexp(tempvar2, 2 ** (tempvar % base) * (base + ord - base * (tempvar % base) - base ** 2 * tempvar2 + over));
   },
   beautify: x => (x === Infinity) ? "Infinity" : (x < 1.000e6) ? (x < 1000 && x % 1 !== 0) ? (x * 10 % 1 === 0) ? x.toFixed(1) : (x * 100 % 1 === 0) ? x.toFixed(2) : x.toFixed(3) : x.toFixed(0) : `${(x / 10 ** Math.floor(Math.log10(x))).toFixed(3)}e${Math.floor(Math.log10(x))}`,
@@ -308,10 +308,10 @@ const game = {
       
       return `0`;
     } else {
-      let result = ``;
-      let remainOrd = ord;
+      var result = ``;
+      var remainOrd = ord;
       while (remainOrd > 0) {
-        let power = Math.floor(Math.log(remainOrd) / Math.log(base));
+        var power = Math.floor(Math.log(remainOrd) / Math.log(base));
         if (result === ``) {
           if (power === 0) {
             result = remainOrd + over;
@@ -356,7 +356,7 @@ const game = {
     
     if (header) {
       if (game.data.colors) {
-        const color = Math.log(ord + over) / (Math.log(3) * 27);
+        var color = Math.log(ord + over) / (Math.log(3) * 27);
         if (game.hardy(ord, over) === Infinity) {
           game.header.innerHTML = `<span style="color:hsl(${color * 360}, 100%, 50%)">H<sub>${result}</sub>(${base})</span>`;
         } else {
@@ -451,7 +451,7 @@ const game = {
     game.factorMultiplier.innerHTML = `Your factors are multiplying your autoclicker speed by ${game.beautify(game.factorMult())}`;
     game.factorShiftText.innerHTML = `Factor Shift: Requires ${game.beautify(game.factorShiftCosts[game.data.factorShifts])} OP`;
     
-    for (let i = 0; i < 7; i++) {
+    for (var i = 0; i < 7; i++) {
       if (game.data.factorShifts > i) {
         game.factors[i].style.display = "list-item";
       } else {
@@ -468,7 +468,7 @@ const game = {
     }
   },
   loop: (unadjusted, off = false) => {
-    let ms = Math.max(0, unadjusted);
+    var ms = Math.max(0, unadjusted);
     
     console.log(ms);
     
@@ -548,7 +548,7 @@ const game = {
     game.data.version = "0.1.1";
     game.data.clickCooldown = 1;
     
-    const diff = Date.now() - game.data.lastTick;
+    var diff = Date.now() - game.data.lastTick;
     
     game.handleOldVersions(loadgame);
     
@@ -584,7 +584,7 @@ const game = {
   },
   importGame: () => {
     if (game.data.clickCooldown === 0) {
-      let loadgame = "";
+      var loadgame = "";
 
       reader.readAsText(document.getElementById("importButton").files[0]);
 
@@ -601,11 +601,11 @@ const game = {
     if (game.data.clickCooldown === 0) {
       game.save("export", false);
 
-      const file = new Blob([btoa(JSON.stringify(game.data))], {type: "text/plain"});
+      var file = new Blob([btoa(JSON.stringify(game.data))], {type: "text/plain"});
 
       window.URL = window.URL || window.webkitURL;
 
-      const importButton = document.createElement("importButton");
+      var importButton = document.createElement("importButton");
 
       importButton.href = window.URL.createObjectURL(file);
       importButton.download = "Ordinal Markup Save.txt";
@@ -616,7 +616,7 @@ const game = {
   },
   resetConf: () => {
     if (game.data.clickCooldown === 0) {
-      const code = prompt(
+      var code = prompt(
         'Are you sure you want to delete all of your progress? Type in "reset game" to reset all of your progress.'
       );
 
@@ -633,6 +633,6 @@ const game = {
 
 game.load(JSON.parse(localStorage.getItem("save")));
 
-const loop = setInterval(() => game.loop(Date.now() - game.data.lastTick), 50);
+var loop = setInterval(() => game.loop(Date.now() - game.data.lastTick), 50);
 
-const autoSave = setInterval(() => game.save("autosave", false), 5000);
+var autoSave = setInterval(() => game.save("autosave", false), 5000);
