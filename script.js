@@ -540,8 +540,6 @@ const game = {
       
       localStorage.clear()
       localStorage.setItem("save", JSON.stringify(game.data));
-
-      game.render();
     }
   },
   load: loadgame => {
