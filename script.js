@@ -7,7 +7,14 @@ var game = {
     pendingIncrement: 0,
     pendingMaximize: 0,
     clickCooldown: 1,
+    achievements: [
+      [false, false, false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, false, false, false, false, false]
+    ],
     markupUnlocked: false,
+    boosterUnlocked: false,
     colors: true,
     music: true,
     ord: 0,
@@ -16,7 +23,14 @@ var game = {
     incrementAuto: 0,
     maximizeAuto: 0,
     factorShifts: 0,
-    factors: []
+    factors: [],
+    factorBoosts: 0,
+    bups: [
+      [false, false, false, false],
+      [false, false, false, false],
+      [false, false, false, false],
+      [false, false, false, false]
+    ]
   },
   music: document.getElementById("music"),
   header: document.getElementById("header"),
@@ -26,8 +40,8 @@ var game = {
   markupButton: document.getElementById("markupButton"),
   markupButton2: document.getElementById("markupButton2"),
   opText: document.getElementById("opText"),
-  incrementSpeedText: document.getElementById("incrementSpeed"),
-  maximizeSpeedText: document.getElementById("maximizeSpeed"),
+  incrementAuto: document.getElementById("incrementAuto"),
+  maximizeAuto: document.getElementById("maximizeAuto"),
   buyIncrementButton: document.getElementById("buyIncrementButton"),
   buyMaximizeButton: document.getElementById("buyMaximizeButton"),
   factorShiftText: document.getElementById("factorShift"),
@@ -61,17 +75,56 @@ var game = {
     document.getElementById("factor6Button"),
     document.getElementById("factor7Button")
   ],
+  factorBoostText: document.getElementById("factorBoost"),
+  factorBoostButton: document.getElementById("factorBoostButton"),
+  dynamicMult: document.getElementById("dynamicMult"),
+  bups: [
+    [
+      document.getElementById("bup00"),
+      document.getElementById("bup01"),
+      document.getElementById("bup02"),
+      document.getElementById("bup03")
+    ],
+    [
+      document.getElementById("bup10"),
+      document.getElementById("bup11"),
+      document.getElementById("bup12"),
+      document.getElementById("bup13")
+    ],
+    [
+      document.getElementById("bup20"),
+      document.getElementById("bup21"),
+      document.getElementById("bup22"),
+      document.getElementById("bup23")
+    ],
+    [
+      document.getElementById("bup30"),
+      document.getElementById("bup31"),
+      document.getElementById("bup32"),
+      document.getElementById("bup33")
+    ]
+  ],
+  maxAllAuto: document.getElementById("maxAllAuto"),
+  markupAuto: document.getElementById("markupAuto"),
   tabs: [
     document.getElementById("tab0"),
     document.getElementById("tab1"),
-    document.getElementById("tab2")
+    document.getElementById("tab2"),
+    document.getElementById("tab3"),
+    document.getElementById("tab4")
   ],
   subtabs: [
     [],
     [],
+    [],
     [
-      document.getElementById("subtab20"),
-      document.getElementById("subtab21")
+      document.getElementById("subtab30"),
+      document.getElementById("subtab31"),
+      document.getElementById("subtab32")
+    ],
+    [
+      document.getElementById("subtab40"),
+      document.getElementById("subtab41")
     ]
   ],
   tab: x => {
@@ -110,7 +163,25 @@ var game = {
     1.000e100,
     Infinity
   ],
-  base: () => 10 - game.data.factorShifts,
+  factorBoostCosts: [3, 3, 9, 3, 3, 9, 3, 3, 27, 3, 3, 9, 3, 3, 9, 3, 3, 27, 3, 3, 9, 3, 3, 9, 3, 3, 729],
+  bupCosts: [
+    [1, 1, 1, 15],
+    [6, 6, 10, 45],
+    [66, 66, 21, 120],
+    [55, 78, 66, 378]
+  ],
+  boosters: () => {
+    var boost = game.data.factorBoosts * (game.data.factorBoosts + 1) / 2;
+    for (var y = 0; y < 4; y++) {
+      for (var x = 0; x < 4; x++) {
+        if (game.data.bups[y][x]) {
+          boost -= game.bupCosts[y][x];
+        }
+      }
+    }
+    return boost;
+  },
+  base: () => game.data.bups[2][1] && game.data.ord < 1.000e230 ? 5 : 10 - game.data.factorShifts - game.data.bups[2][0] && game.data.factorShifts < 3 ? 4 : 0,
   factorMult: () => {
     var mult = 1;
     
@@ -120,8 +191,8 @@ var game = {
     
     return mult;
   },
-  incrementSpeed: () => game.data.incrementAuto * game.factorMult(),
-  maximizeSpeed: () => game.data.maximizeAuto * game.factorMult(),
+  incrementSpeed: () => game.data.incrementAuto * game.factorMult() * (game.data.boosterUnlocked ? game.data.dynamicFactor * 5 : 1),
+  maximizeSpeed: () => game.data.maximizeAuto * game.factorMult() * (game.data.boosterUnlocked ? game.data.dynamicFactor * 5 : 1),
   opGain: (ord = game.data.ord, over = game.data.over, base = game.base()) => {
     if (ord < base) {
       return ord + over;
@@ -253,9 +324,6 @@ var game = {
         }
         game.data.factorShifts++;
         game.data.factors.push(1);
-        if (game.data.ord >= game.base() ** 2) {
-          game.markup(false);
-        }
         game.resetOrd();
 
         if (manmade) {
@@ -278,9 +346,13 @@ var game = {
   },
   maxFactors: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
-      for (var i = 1; i <= game.data.factorShifts; i++) {
-        while (game.data.factors[i - 1] < 10 && game.data.op >= 10 ** (i * game.data.factors[i - 1])) {
-          game.buyFactor(i, false);
+      if (game.base() === 3 && game.data.op >= 1.000e230) {
+        game.data.factors = [10, 10, 10, 10, 10, 10, 10];
+      } else {
+        for (var i = 1; i <= game.data.factorShifts; i++) {
+          while (game.data.factors[i - 1] < 10 && game.data.op >= 10 ** (i * game.data.factors[i - 1])) {
+            game.buyFactor(i, false);
+          }
         }
       }
       
@@ -289,6 +361,183 @@ var game = {
       }
     }
   },
+  resetMarkup: () => {
+    game.resetOrd();
+    game.data.op = 0;
+    game.data.incrementAuto = 0;
+    game.data.maximizeAuto = 0;
+    game.data.factorShifts = 0;
+    game.data.factors = [];
+  },
+  V: x => x === 0 ? 1.000e230 : x >= 27 ? Infinity : V(x - 1) * game.factorBoostCosts[x - 1],
+  factorBoost: (manmade = true) => {
+    if (!manmade || game.data.clickCooldown === 0) {
+      if (game.base() === 3 && game.data.op >= V(game.data.factorBoosts + 1)) {
+        var conf = true;
+        if (manmade) {
+          conf = confirm(
+            'Are you sure you want to do a Factor Boost?'
+          );
+        }
+        if (conf) {
+          game.resetMarkup();
+          game.factorBoosts++;
+        }
+      }
+      
+      if (manmade) {
+        game.data.clickCooldown = 1;
+      }
+    }
+  },
+  refund: (manmade = true) => {
+    if (!manmade || game.data.clickCooldown === 0) {
+      if (game.data.bups !== [
+        [false, false, false, false],
+        [false, false, false, false],
+        [false, false, false, false],
+        [false, false, false, false]
+      ]) {
+        var conf = true;
+        if (manmade) {
+          conf = confirm(
+            "Are you sure you want to refund your boosters? You'll reset this Factor Boost!";
+          );
+        }
+        if (conf) {
+          var rightrow = [];
+          for (var i = 0; i < 4; i++) {
+            rightrow.push(game.data.bups[i][3]);
+          }
+          game.data.bups = [
+            [false, false, false, rightrow[0]],
+            [false, false, false, rightrow[1]],
+            [false, false, false, rightrow[2]],
+            [false, false, false, rightrow[3]]
+          ];
+        }
+      }
+      
+      if (manmade) {
+        game.data.clickCooldown = 1;
+      }
+    }
+  },
+  achieve: {
+    achieveReq: [
+      [
+        () => game.data.ord >= 1,
+        () => game.data.ord >= game.base(),
+        () => game.data.ord >= game.base() ** 2,
+        () => game.data.ord >= game.base() ** 3,
+        () => game.data.ord >= game.base() ** game.base(),
+        () => game.data.ord >= 1.000e230,
+        () => game.data.ord >= game.V(9),
+        () => game.data.ord >= game.V(18),
+        () => false,
+        () => false
+      ],
+      [
+        () => game.data.op >= 100,
+        () => game.data.op >= 1000,
+        () => game.data.op >= 1.000e6,
+        () => game.data.op >= 1.000e10,
+        () => game.data.op >= 1.000e100,
+        () => game.data.op >= 1.000e230,
+        () => game.data.op >= game.V(9),
+        () => game.data.op >= game.V(18),
+        () => false,
+        () => false
+      ],
+      [
+        () => game.data.factorShifts >= 1,
+        () => game.data.factorShifts >= 2,
+        () => game.data.factorShifts >= 3,
+        () => game.data.factorShifts >= 4,
+        () => game.data.factorShifts >= 5,
+        () => game.data.factorShifts >= 6,
+        () => game.data.factorShifts >= 7,
+        () => game.factorMult() >= 1.000e7,
+        () => game.factorMult() >= 1.000e9,
+        () => false
+      ],
+      [
+        () => game.data.factorBoosts >= 1,
+        () => game.data.factorBoosts >= 5,
+        () => game.data.factorBoosts >= 9,
+        () => game.data.factorBoosts >= 15,
+        () => false,
+        () => false,
+        () => false,
+        () => false,
+        () => false
+        () => false
+      ]
+    ],
+    achieveName: [
+      [
+        "You gotta start somewhere",
+        "Maximizable",
+        "Markupable",
+        "able",
+        "Hyperdimensional",
+        "Ordinal Collapsing Functions",
+        "Ackermann Ordinal",
+        "Double Ackermann Ordinal",
+        "Way too much",
+        "Way too much"
+      ],
+      [
+        "Markup!",
+        "Shiftable",
+        "Quadruple Shiftable",
+        "Quintuple Shiftable",
+        "Septuple Shiftable",
+        "Boostable",
+        "Nonuple Boostable",
+        "Octendecuple Boostable",
+        "Way too much",
+        "Way too much"
+      ],
+      [
+        "I've been Multiplied!",
+        "100 Ordinal Points is a Lot",
+        "Illuminati Confirmed!",
+        "Left and Right 3 Factors",
+        "5 Factor Ordinal Punch",
+        "We can't afford 8",
+        "Luck Related Achievement",
+        "Faster than a potato",
+        "Faster than a hundred potatoes",
+        "Way too much"
+      ],
+      [
+        "Boost!",
+        "Quintuple Boost",
+        "Nonuple Boost",
+        "Quindecuple Boost",
+        "Way too much",
+        "Way too much",
+        "Way too much",
+        "Way too much",
+        "Way too much",
+        "Way too much"
+      ]
+    ]
+  },
+  keybinds: {
+    i: () => game.markup(),
+    m: () => {
+      if (game.data.clickCooldown === 0) {
+        game.maxAll(false);
+        game.maxFactors(false);
+        game.data.clickCooldown = 1;
+      }
+    },
+    s: () => game.factorShift(),
+    b: () => game.factorBoost(),
+    r: () => game.refund(),
+  },
   fghexp: (n, x) => (n === 0) ? x : game.fghexp(n - 1, x) * 2 ** game.fghexp(n - 1, x),
   hardy: function(ord = game.data.ord, over = game.data.over, base = game.base()) {
     var tempvar = Math.floor(ord / base);
@@ -296,6 +545,50 @@ var game = {
     return (ord >= base ** 3) ? Infinity : game.fghexp(tempvar2, 2 ** (tempvar % base) * (base + ord - base * (tempvar % base) - base ** 2 * tempvar2 + over));
   },
   beautify: x => (x === Infinity) ? "Infinity" : (x < 1.000e6) ? (x < 1000 && x % 1 !== 0) ? (x * 10 % 1 === 0) ? x.toFixed(1) : (x * 100 % 1 === 0) ? x.toFixed(2) : x.toFixed(3) : x.toFixed(0) : `${(x / 10 ** Math.floor(Math.log10(x))).toFixed(3)}e${Math.floor(Math.log10(x))}`,
+  ordMarks: [
+    x => `&psi;(${x})`,
+    x => `&psi;(&Omega;${x})`,
+    x => `&psi;(&Omega;<sup>2</sup>${x})`,
+    x => `&psi;(&Omega;<sup>${x}</sup>)`,
+    x => `&psi;(&Omega;<sup>&Omega;</sup>${x})`,
+    x => `&psi;(&Omega;<sup>&Omega;+1</sup>${x})`,
+    x => `&psi;(&Omega;<sup>&Omega;+2</sup>${x})`,
+    x => `&psi;(&Omega;<sup>&Omega;+${x}</sup>)`,
+    x => `&psi;(&Omega;<sup>&Omega;2</sup>${x})`,
+    x => `&psi;(&Omega;<sup>&Omega;2+1</sup>${x})`,
+    x => `&psi;(&Omega;<sup>&Omega;2+2</sup>${x})`,
+    x => `&psi;(&Omega;<sup>&Omega;2+${x}</sup>)`,
+    x => `&psi;(&Omega;<sup>&Omega;${x}</sup>)`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup></sup>${x})`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+1</sup>${x})`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+2</sup>${x})`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+${x}</sup>)`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;</sup>${x})`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;+1</sup>${x})`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;+2</sup>${x})`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;+${x}</sup>)`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;2</sup>${x})`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;2+1</sup>${x})`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;2+2</sup>${x})`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;2+${x}</sup>)`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;${x}</sup>)`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2</sup>${x})`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+1</sup>${x})`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+2</sup>${x})`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+${x}</sup>)`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;</sup>${x})`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;+1</sup>${x})`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;+2</sup>${x})`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;+${x}</sup>)`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;2</sup>${x})`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;2+1</sup>${x})`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;2+2</sup>${x})`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;2+${x}</sup>)`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;${x}</sup>)`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2<sup>${x}</sup>)`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>${x}</sup></sup>)`,
+    x => `&psi;(&Omega;&uarr;&uarr;${x})`
+  ],
   writeOrd: (ord = game.data.ord, over = game.data.over, base = game.base(), header = true) => {
     if (ord === 0) {
       if (header) {
@@ -307,9 +600,10 @@ var game = {
       }
       
       return `0`;
-    } else {
+    } else if (ord < 1.000e230 || base > 3) {
       var result = ``;
       var remainOrd = ord;
+      
       while (remainOrd > 0) {
         var power = Math.floor(Math.log(remainOrd) / Math.log(base));
         if (result === ``) {
@@ -352,26 +646,57 @@ var game = {
         
         remainOrd -= base ** power * Math.floor(remainOrd / base ** power);
       }
-    }
-    
-    if (header) {
-      if (game.data.colors) {
-        var color = Math.log(ord + over) / (Math.log(3) * 27);
-        if (game.hardy(ord, over, base) === Infinity) {
-          game.header.innerHTML = `<span style="color:hsl(${color * 360}, 100%, 50%)">H<sub>${result}</sub>(${base})</span>`;
+      
+      if (header) {
+        if (game.data.colors) {
+          var color = Math.log(ord + over) / (Math.log(3) * 27);
+          if (game.hardy(ord, over, base) === Infinity) {
+            game.header.innerHTML = `<span style="color:hsl(${color * 360}, 100%, 50%)">H<sub>${result}</sub>(${base})</span>`;
+          } else {
+            game.header.innerHTML = `<span style="color:hsl(${color * 360}, 100%, 50%)">H<sub>${result}</sub>(${base})=${game.beautify(game.hardy(ord, over, base))}`;
+          }
         } else {
-          game.header.innerHTML = `<span style="color:hsl(${color * 360}, 100%, 50%)">H<sub>${result}</sub>(${base})=${game.beautify(game.hardy(ord, over, base))}`;
-        }
-      } else {
-        if (game.hardy(ord, over, base) === Infinity) {
-          game.header.innerHTML = `H<sub>${result}</sub>(${base})`;
-        } else {
-          game.header.innerHTML = `H<sub>${result}</sub>(${base})=${game.beautify(game.hardy(ord, over, base))}`;
+          if (game.hardy(ord, over, base) === Infinity) {
+            game.header.innerHTML = `H<sub>${result}</sub>(${base})`;
+          } else {
+            game.header.innerHTML = `H<sub>${result}</sub>(${base})=${game.beautify(game.hardy(ord, over, base))}`;
+          }
         }
       }
+      
+      return result;
+    } else {
+      var result = ``;
+      var remainOrd = ord;
+      
+      while (remainOrd > 0) {
+        var power = Math.min(41, Math.floor(Math.log(remainOrd / 1.000e230) / Math.log(3));
+                             
+        if (result = ``) {
+          if (power === 0) {
+            result = `1`;
+          }
+          if (power === 3 || power === 7 || power === 11 || power === 12 || power === 16 || power === 20 || power === 24 || power === 25 || power === 29 || power == 33 || power === 37 || power === 38 || power === 39 || power === 40 || power === 41) {
+            result = `&omega;`;
+          }
+        }
+        
+        result = game.ordMarks[power](result);
+        
+        remainOrd -= 1.000e230 * 3 ** power;
+      }
+      
+      if (header) {
+        if (game.data.colors) {
+          var color = Math.log(ord / 1.000e230) / (Math.log(3) * 42);
+          game.header.innerHTML = `<span style="color:hsl(${color * 360}, 100%, 50%)">H<sub>${result}</sub>(${base})</span>`;
+        } else {
+          game.header.innerHTML = `H<sub>${result}</sub>(${base})`;
+        }
+      }
+      
+      return result;
     }
-    
-    return result;
   },
   toggleColor: () => {
     if (game.data.clickCooldown === 0) {
@@ -632,6 +957,13 @@ var game = {
 };
 
 game.load(JSON.parse(localStorage.getItem("save")));
+
+onkeypress = _ => {
+  var k = _.key.toLowerCase();
+  if (typeof game.keybinds[k] !== "undefined") {
+    game.keybinds[k]()
+  };
+};
 
 var loop = setInterval(() => game.loop(Date.now() - game.data.lastTick), 50);
 
