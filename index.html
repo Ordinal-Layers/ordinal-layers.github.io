@@ -34,6 +34,11 @@
         <p>v0.2</p>
         <p>Click the Ordinals tab to start the game</p>
       </div>
+      <div id="tab1" style="display:none">
+        <p>Your current Ordinal Level is 0</p>
+        <p>Next Ordinal Level is at 1</p>
+        <p>Your highest Ordinal Level was 0</p>
+      </div>
       <div id="tab2" style="display:none">
         <button onclick="game.increment()" class="normalButton" id="incrementButton">Increase ordinal by 1</button>
         <button onclick="game.maximize()" class="normalButton" id="maximizeButton">Maximize ordinal, but number does not increase</button>
@@ -74,6 +79,7 @@
           </div>
           <p><span id="factorShift">Factor Shift: Requires 1000 OP</span> <button onclick="game.factorShift()" class="markupButton" id="factorShiftButton">Do a Factor Shift (S)</button></p>
           <p>When you Factor Shift, you gain a new factor and the base decreases by 1</p>
+          <p><span id="factorBoost">Factor Boost: requires g<sub>&psi;(&Omega;)</sub>(10) OP</span> <button onclick="game.factorBoost()" class="boosterButton" id="factorBoostButton">Gain 1 Boosters (B)</button></p>
         </div>
         <div id="subtab32" style="display:none">
           <p id="dynamicMult">Your Dynamic Factor is x1</p>
@@ -109,7 +115,7 @@
                 </tr>
                 <tr>
                   <td><button onclick="game.bup(2, 0)" class="treeButton locked" id="bup20">The base is reduced by 4 if it's over 7. buying this resets your ordinal<br /><br />66 Boosters</button></td>
-                  <td><button onclick="game.bup(2, 1)" class="treeButton locked" id="bup21">The base is always 5 below &psi;(&omega;). Buying this resets your ordinal<br /><br />66 Boosters</button></td>
+                  <td><button onclick="game.bup(2, 1)" class="treeButton locked" id="bup21">The base is always 5 below &psi;(1). Buying this resets your ordinal<br /><br />66 Boosters</button></td>
                   <td><button onclick="game.bup(2, 2)" class="treeButton locked" id="bup22">You get 5 free factors each<br /><br />21 Boosters</button></td>
                   <td><button onclick="game.bup(2, 3)" class="treeButton locked" id="bup23">Unlock Manifolds<br /><br />Need 120 Boosters and 9 Challenge Completions</button></td>
                 </tr>
