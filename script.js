@@ -742,8 +742,8 @@ var game = {
     }
     
     if (game.data.ord >= game.base() ** 2) {
-      game.markupButton.innerHTML = `Markup to gain ${game.beautify(game.opGain())} Ordinal Points`;
-      game.markupButton2.innerHTML = `+${game.beautify(game.opGain())}`;
+      game.markupButton.innerHTML = `Markup to gain ${game.beautify(game.opGain())} Ordinal Points (I)`;
+      game.markupButton2.innerHTML = `+${game.beautify(game.opGain())} (I)`;
     } else {
       game.markupButton.innerHTML = `Reach &omega;<sup>2</sup> to Markup`;
       game.markupButton2.innerHTML = `Reach &omega;<sup>2</sup> to Markup`;
@@ -854,6 +854,21 @@ var game = {
       game.data.factorShifts = 0;
       game.data.factors = [];
     }
+    if (loadgame.version === "0.1" || loadgame.version === "0.1.1") {
+      game.data.factorBoosts = 0;
+      game.data.bups = [
+        [false, false, false, false],
+        [false, false, false, false],
+        [false, false, false, false],
+        [false, false, false, false]
+      ];
+      game.data.achievements = [
+        [false, false, false, false, false, false, false, false, false, false],
+        [false, false, false, false, false, false, false, false, false, false],
+        [false, false, false, false, false, false, false, false, false, false],
+        [false, false, false, false, false, false, false, false, false, false]
+      ];
+    }
   },
   save: (action, manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
@@ -961,7 +976,7 @@ game.load(JSON.parse(localStorage.getItem("save")));
 onkeypress = _ => {
   var k = _.key.toLowerCase();
   if (typeof game.keybinds[k] !== "undefined") {
-    game.keybinds[k]()
+    game.keybinds[k]();
   };
 };
 
