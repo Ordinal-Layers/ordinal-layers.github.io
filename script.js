@@ -470,8 +470,6 @@ var game = {
   loop: (unadjusted, off = false) => {
     var ms = Math.max(0, unadjusted);
     
-    console.log(ms);
-    
     game.data.lastTick = Date.now();
     
     if (game.data.op > 1.000e230) {
@@ -556,6 +554,8 @@ var game = {
     
     game.loop(diff, true);
     game.data.lastTick = Date.now();
+    
+    console.log(diff);
     
     if (game.data.music) {
       game.music.play();
