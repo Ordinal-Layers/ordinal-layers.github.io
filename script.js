@@ -523,6 +523,20 @@ var game = {
         "Way too much",
         "Way too much"
       ]
+    ],
+    achieveTooltip: [
+      [
+        "Click the successor button",
+        "Reach the ordinal &omega;",
+        "Reach the ordinal &omega;<sup>2</sup>",
+        "Reach the ordinal &omega;<sup>3</sup>",
+        "Reach the ordinal &omega;<sup>&omega;</sup>",
+        "Reach the ordinal &psi;(1)",
+        "Reach the ordinal &psi;(&Omega;<sup>&Omega;<sup>2</sup></sup>)",
+        "Reach the ordinal &psi;(&Omega;<sup>&Omega;<sup>2</sup>2</sup>)",
+        "Reach the ordinal &omega;<sub>1</sub><sup>CK</sup>",
+        "Reach the ordinal &omega;<sub>1</sub><sup>CK</sup>"
+      ]
     ]
   },
   keybinds: {
@@ -665,6 +679,16 @@ var game = {
       }
       
       return result;
+    } else if (ord === Infinity) {
+      if (header) {
+        if (game.data.colors) {
+          game.header.innerHTML = `<span style="color:hsl(0, 100%, 50%)">H<sub>&omega;<sub>1</sub><sup>CK<sup></sub>(${base})</span>`;
+        } else {
+          game.header.innerHTML = `H<sub>&omega;<sub>1</sub><sup>CK</sup></sub>(${base})`;
+        }
+      }
+      
+      return `&omega;<sub>1</sub><sup>CK</sup>`;
     } else {
       var result = ``;
       var remainOrd = ord;
