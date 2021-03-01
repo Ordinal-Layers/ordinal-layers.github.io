@@ -896,12 +896,19 @@ var game = {
   },
   reset: () => {
     game.data = {
-      version: "0.1.1",
+      version: "0.2",
       lastTick: Date.now(),
       pendingIncrement: 0,
       pendingMaximize: 0,
       clickCooldown: 1,
+      achievements: [
+        [false, false, false, false, false, false, false, false, false, false],
+        [false, false, false, false, false, false, false, false, false, false],
+        [false, false, false, false, false, false, false, false, false, false],
+        [false, false, false, false, false, false, false, false, false, false]
+      ],
       markupUnlocked: false,
+      boosterUnlocked: false,
       colors: true,
       music: true,
       ord: 0,
@@ -910,7 +917,14 @@ var game = {
       incrementAuto: 0,
       maximizeAuto: 0,
       factorShifts: 0,
-      factors: []
+      factors: [],
+      factorBoosts: 0,
+      bups: [
+        [false, false, false, false],
+        [false, false, false, false],
+        [false, false, false, false],
+        [false, false, false, false]
+      ]
     };
     
     game.save("reset", false);
