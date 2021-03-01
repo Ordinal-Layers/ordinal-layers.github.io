@@ -2,7 +2,7 @@
 
 var game = {
   data: {
-    version: "0.1.1",
+    version: "0.2",
     lastTick: Date.now(),
     pendingIncrement: 0,
     pendingMaximize: 0,
@@ -603,17 +603,11 @@ var game = {
     x => `&psi;(&Omega;<sup>&Omega;<sup>${x}</sup></sup>)`,
     x => `&psi;(&Omega;&uarr;&uarr;${x})`
   ],
-  writeOrd: (ord = game.data.ord, over = game.data.over, base = game.base(), header = true) => {
+  writeOrd: (ord = game.data.ord, over = game.data.over, base = game.base()) => {
     if (ord === 0) {
-      if (header) {
-        if (game.data.colors) {
-          game.header.innerHTML = `<span style="color:hsl(0, 100%, 50%)">H<sub>0</sub>(${base})=${base}</span>`;
-        } else {
-          game.header.innerHTML = `H<sub>0</sub>(${base})=${base}`;
-        }
-      }
-      
       return `0`;
+    } else if (ord === Infinity) {
+      return `&omega;<sub>1</sub><sup>CK</sup>`;
     } else if (ord < 1.000e230 || base > 3) {
       var result = ``;
       var remainOrd = ord;
@@ -661,34 +655,7 @@ var game = {
         remainOrd -= base ** power * Math.floor(remainOrd / base ** power);
       }
       
-      if (header) {
-        if (game.data.colors) {
-          var color = Math.log(ord + over) / (Math.log(3) * 27);
-          if (game.hardy(ord, over, base) === Infinity) {
-            game.header.innerHTML = `<span style="color:hsl(${color * 360}, 100%, 50%)">H<sub>${result}</sub>(${base})</span>`;
-          } else {
-            game.header.innerHTML = `<span style="color:hsl(${color * 360}, 100%, 50%)">H<sub>${result}</sub>(${base})=${game.beautify(game.hardy(ord, over, base))}`;
-          }
-        } else {
-          if (game.hardy(ord, over, base) === Infinity) {
-            game.header.innerHTML = `H<sub>${result}</sub>(${base})`;
-          } else {
-            game.header.innerHTML = `H<sub>${result}</sub>(${base})=${game.beautify(game.hardy(ord, over, base))}`;
-          }
-        }
-      }
-      
       return result;
-    } else if (ord === Infinity) {
-      if (header) {
-        if (game.data.colors) {
-          game.header.innerHTML = `<span style="color:hsl(0, 100%, 50%)">H<sub>&omega;<sub>1</sub><sup>CK<sup></sub>(${base})</span>`;
-        } else {
-          game.header.innerHTML = `H<sub>&omega;<sub>1</sub><sup>CK</sup></sub>(${base})`;
-        }
-      }
-      
-      return `&omega;<sub>1</sub><sup>CK</sup>`;
     } else {
       var result = ``;
       var remainOrd = ord;
@@ -710,16 +677,16 @@ var game = {
         remainOrd -= 1.000e230 * 3 ** power;
       }
       
-      if (header) {
-        if (game.data.colors) {
-          var color = Math.log(ord / 1.000e230) / (Math.log(3) * 42);
-          game.header.innerHTML = `<span style="color:hsl(${color * 360}, 100%, 50%)">H<sub>${result}</sub>(${base})</span>`;
-        } else {
-          game.header.innerHTML = `H<sub>${result}</sub>(${base})`;
-        }
-      }
-      
       return result;
+    }
+  },
+  ordColor: (ord = game.data.ord, over = game.data.over, base = game.data.base) => {
+    if (ord === 0 || ord === Infinity) {
+      return 0;
+    } else if (ord < 1.000e230) {
+      return Math.log(ord + over) / (Math.log(3) * 27);
+    } else {
+      return Math.log(ord / 1.000e230) / (Math.log(3) * 42);
     }
   },
   toggleColor: () => {
@@ -751,7 +718,7 @@ var game = {
     }
   },
   render: () => { 
-    game.writeOrd();
+    game.header.innerHTML = `${game.data.colors ? `<span style="color:hsl(${game.ordColor()}, 100%, 50%)">` : ``}H<sub>${game.writeOrd()}</sub>(${game.base()})${game.hardy() === Infinity ? ``: `=${game.hardy()}`}${game.data.colors ? `</span>` : ``}`;
     
     if (game.data.colors) {
       game.colorButton.innerHTML = `Colors: ON`;
@@ -902,6 +869,8 @@ var game = {
       
       localStorage.clear()
       localStorage.setItem("save", JSON.stringify(game.data));
+      
+      $.notify("Game Saved!", success);
     }
   },
   load: loadgame => {
@@ -987,6 +956,7 @@ var game = {
       if (code !== null) {
         if (code.toLowerCase() === "reset game") {
           game.reset();
+          $.notify("Hard Reset Successful", "success");
         }
       }
       
