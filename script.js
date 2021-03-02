@@ -970,7 +970,9 @@ var game = {
       localStorage.clear()
       localStorage.setItem("save", JSON.stringify(game.data));
       
-      $.notify("Game Saved!", "success");
+      if (manmade) {
+        $.notify("Game Saved!", "success");
+      }
     }
   },
   load: loadgame => {
