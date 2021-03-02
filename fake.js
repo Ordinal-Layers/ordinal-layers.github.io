@@ -1,11 +1,16 @@
-var fake = false;
+var real = false;
 var sPath = location.origin;
+var realSites = [
+  "https://ordinal-layers.github.io",
+  "https://ordinal-layers.github.io/index.html",
+  "https://ordinal-layers.github.io/index"
+];
 
-if (sPath !== "https://ordinal-layers.github.io") {
-  fake = true;
+if (realSites.includes(sPath)) {
+  real = true;
 }
 
-if (fake) {
-  document.getElementById("game").style.display = "none";
-  document.getElementById("fake").style.display = "block";
+if (real) {
+  document.getElementById("game").style.display = "block";
+  document.getElementById("fake").style.display = "none";
 }
