@@ -759,7 +759,7 @@ var game = {
       var remainOrd = ord;
       
       while (remainOrd > 0) {
-        var power = Math.min(41, Math.floor(Math.log(remainOrd / 1.000e230) / Math.log(3));
+        var power = Math.min(41, Math.floor(Math.log(remainOrd / 1.000e230) / Math.log(3)));
                              
         if (result = ``) {
           if (power === 0) {
