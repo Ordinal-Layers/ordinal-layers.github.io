@@ -180,7 +180,7 @@ var game = {
     }
     return boost;
   },
-  base: () => game.data.bups[2][1] && game.data.ord < 1.000e230 ? 5 : 10 - game.data.factorShifts - game.data.bups[2][0] && game.data.factorShifts < 3 ? 4 : 0,
+  base: () => game.data.bups[2][1] && game.data.ord < 1.000e230 ? 5 : 10 - game.data.factorShifts - (game.data.bups[2][0] && game.data.factorShifts < 3 ? 4 : 0),
   factorMult: () => {
     var mult = 1;
     
