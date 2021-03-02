@@ -8,11 +8,9 @@ var game = {
     pendingMaximize: 0,
     clickCooldown: 1,
     achievements: [
-      [false, false, false, false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false, false, false, false],
-      [false, false, false, false, false, false, false, false, false, false],
       [false, false, false, false, false, false, false, false, false, false]
     ],
+    highestLevel: 0,
     markupUnlocked: false,
     boosterUnlocked: false,
     colors: true,
@@ -25,6 +23,7 @@ var game = {
     factorShifts: 0,
     factors: [],
     factorBoosts: 0,
+    dynamicFactor: 1,
     bups: [
       [false, false, false, false],
       [false, false, false, false],
@@ -186,9 +185,8 @@ var game = {
     var mult = 1;
     
     for (var i = 0; i < game.data.factorShifts; i++) {
-      mult *= game.data.factors[i];
+      mult *= (game.data.factors[i] + (game.data.bups[2][2] ? 5 : 0)) * (game.data.bups[0][0] ? 2 : 1);
     }
-    
     return mult;
   },
   incrementSpeed: () => game.data.incrementAuto * game.factorMult() * (game.data.boosterUnlocked ? game.data.dynamicFactor * 5 : 1),
@@ -209,6 +207,54 @@ var game = {
           game.opGain(ord - tempvar2 * tempvar3, over, base)
       );
     }
+  },
+  ordLevels: [
+    () => 0,
+    () => 1,
+    () => game.base(),
+    () => game.base() * 2,
+    () => game.base() * 3,
+    () => game.base() ** 2,
+    () => game.base() ** 3,
+    () => game.base() ** game.base(),
+    () => game.base() ** (game.base() * 2),
+    () => game.base() ** (game.base() ** 2),
+    () => game.V(0),
+    () => game.V(1),
+    () => game.V(2),
+    () => game.V(3),
+    () => game.V(4),
+    () => game.V(5),
+    () => game.V(6),
+    () => game.V(7),
+    () => game.V(8),
+    () => game.V(9),
+    () => game.V(10),
+    () => game.V(11),
+    () => game.V(12),
+    () => game.V(13),
+    () => game.V(14),
+    () => game.V(15),
+    () => game.V(16),
+    () => game.V(17),
+    () => game.V(18),
+    () => game.V(19),
+    () => game.V(20),
+    () => game.V(21),
+    () => game.V(22),
+    () => game.V(23),
+    () => game.V(24),
+    () => game.V(25),
+    () => game.V(26),
+    () => game.V(27),
+    () => Infinity
+  ],
+  currentLevel: () => {
+    var level = 0;
+    while (game.ord >= game.ordLevels[level]) {
+      level++;
+    }
+    return level - 1;
   },
   increment: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
@@ -256,6 +302,8 @@ var game = {
       if (game.data.ord >= game.base() ** 2) {
         game.data.op += game.opGain();
         game.resetOrd();
+        
+        game.data.dynamicFactor = 1;
 
         if (game.data.markupUnlocked === false) {
           game.data.markupUnlocked = true;
@@ -435,6 +483,25 @@ var game = {
     }
   },
   achieve: {
+    rowReq: [
+      () => true,
+      () => game.data.op >= 100,
+      () => game.data.factorShifts >= 1,
+      () => game.data.factorBoosts >= 1,
+      () => false
+    ],
+    rowName: [
+      "Ordinals",
+      "Markup",
+      "Factors",
+      "Boosters"
+    ],
+    rowTooltip: [
+      "Perform a Markup to unlock t next row of achievements",
+      "Perform a Factor Shift to unlock the next row of achievements",
+      "Perform a Factor Boost to unlock the next row of achievements",
+      "Next row of achievements is coming soon!"
+    ],
     achieveReq: [
       [
         () => game.data.ord >= 1,
@@ -549,6 +616,26 @@ var game = {
         "Reach the ordinal &omega;<sub>1</sub><sup>CK</sup>"
       ]
     ]
+  },
+  checkAchieve: function() {
+    for (var y = 0; y < game.data.achievements.length; y++) {
+      if (game.achieve.rowReq[y] && y > 0) {
+        game.data.achievements.push(
+          [false, false, false, false, false, false, false, false, false, false]
+        );
+        $.notify("New Achievement Row Unlocked: " + game.achieve.rowName[y], "achieve");
+      }
+      for (var x = 0; x < 10; x++) {
+        if (game.achieve.achieveReq[y][x]) {
+          game.data.achievements[y][x] = true;
+          $.notify("New Achievement Unlocked: " + game.achieve.achieveName[y][x], "achieve");
+        }
+      }
+    }
+    if (game.currentLevel() > game.data.highestLevel) {
+      game.data.highestLevel = game.currentLevel();
+      $.notify("Ordinal Level " + game.currentLevel() + " Reached!", "achieve");
+    }
   },
   keybinds: {
     i: () => game.markup(),
@@ -799,16 +886,20 @@ var game = {
     
     game.data.lastTick = Date.now();
     
-    if (game.data.op > 1.000e230) {
+    if (game.base() > 3 && game.data.op > 1.000e230) {
       game.data.op = 1.000e230;
     }
+    
+    game.checkAchieve();
+    
+    game.dynamicFactor += ms / 10000;
     
     if (game.incrementSpeed() > 0) {
       game.data.pendingIncrement += ms / 1000 * game.incrementSpeed();
 
       if (game.data.pendingIncrement >= 1) {
         game.data.pendingIncrement -= 1;
-        game.increment(0);
+        game.increment(false);
       }
     }
     
@@ -817,7 +908,7 @@ var game = {
 
       if (game.data.pendingMaximize >= 1) {
         game.data.pendingMaximize -= 1;
-        game.maximize(0);
+        game.maximize(false);
       }
     }
     
@@ -858,17 +949,15 @@ var game = {
     }
     if (loadgame.version === "0.1" || loadgame.version === "0.1.1") {
       game.data.factorBoosts = 0;
+      game.data.dynamicFactor = 1;
+      game.data.achievements = [
+        [false, false, false, false, false, false, false, false, false, false],
+      ];
       game.data.bups = [
         [false, false, false, false],
         [false, false, false, false],
         [false, false, false, false],
         [false, false, false, false]
-      ];
-      game.data.achievements = [
-        [false, false, false, false, false, false, false, false, false, false],
-        [false, false, false, false, false, false, false, false, false, false],
-        [false, false, false, false, false, false, false, false, false, false],
-        [false, false, false, false, false, false, false, false, false, false]
       ];
     }
   },
@@ -881,7 +970,7 @@ var game = {
       localStorage.clear()
       localStorage.setItem("save", JSON.stringify(game.data));
       
-      $.notify("Game Saved!", success);
+      $.notify("Game Saved!", "success");
     }
   },
   load: loadgame => {
@@ -914,10 +1003,8 @@ var game = {
       clickCooldown: 1,
       achievements: [
         [false, false, false, false, false, false, false, false, false, false],
-        [false, false, false, false, false, false, false, false, false, false],
-        [false, false, false, false, false, false, false, false, false, false],
-        [false, false, false, false, false, false, false, false, false, false]
       ],
+      highestLevel: 0,
       markupUnlocked: false,
       boosterUnlocked: false,
       colors: true,
@@ -930,6 +1017,7 @@ var game = {
       factorShifts: 0,
       factors: [],
       factorBoosts: 0,
+      dynamicFactor: 1,
       bups: [
         [false, false, false, false],
         [false, false, false, false],
