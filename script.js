@@ -173,7 +173,7 @@ var game = {
   boosters: () => {
     var boost = game.data.factorBoosts * (game.data.factorBoosts + 1) / 2;
     for (var y = 0; y < 4; y++) {
-      for (var x = 0; x < 4; x++) {
+      for (var x = 0; x < 3; x++) {
         if (game.data.bups[y][x]) {
           boost -= game.bupCosts[y][x];
         }
@@ -390,7 +390,18 @@ var game = {
       }
     }
   },
-  refund: (manmade = true) => {
+  buyBup: (x, y, manmade = true) => {
+    if (!manmade || game.data.clickCooldown === 0) {
+      if (game.boosters() >= game.bupCosts[y][x]) {
+        game.data.bups[y][x] = true;
+      }
+      
+      if (manmade) {
+        game.data.clickCooldown = 1;
+      }
+    }
+  },
+  refundBups: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
       if (game.data.bups !== [
         [false, false, false, false],
