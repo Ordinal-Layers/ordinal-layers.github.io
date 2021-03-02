@@ -548,7 +548,7 @@ var game = {
         () => false,
         () => false,
         () => false,
-        () => false
+        () => false,
         () => false
       ]
     ],
