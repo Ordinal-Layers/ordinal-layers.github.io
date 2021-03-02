@@ -401,7 +401,7 @@ var game = {
         var conf = true;
         if (manmade) {
           conf = confirm(
-            "Are you sure you want to refund your boosters? You'll reset this Factor Boost!";
+            "Are you sure you want to refund your boosters? You'll reset this Factor Boost!"
           );
         }
         if (conf) {
