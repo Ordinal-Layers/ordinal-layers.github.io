@@ -208,54 +208,7 @@ var game = {
       );
     }
   },
-  ordLevels: [
-    () => 0,
-    () => 1,
-    () => game.base(),
-    () => game.base() * 2,
-    () => game.base() * 3,
-    () => game.base() ** 2,
-    () => game.base() ** 3,
-    () => game.base() ** game.base(),
-    () => game.base() ** (game.base() * 2),
-    () => game.base() ** (game.base() ** 2),
-    () => game.V(0),
-    () => game.V(1),
-    () => game.V(2),
-    () => game.V(3),
-    () => game.V(4),
-    () => game.V(5),
-    () => game.V(6),
-    () => game.V(7),
-    () => game.V(8),
-    () => game.V(9),
-    () => game.V(10),
-    () => game.V(11),
-    () => game.V(12),
-    () => game.V(13),
-    () => game.V(14),
-    () => game.V(15),
-    () => game.V(16),
-    () => game.V(17),
-    () => game.V(18),
-    () => game.V(19),
-    () => game.V(20),
-    () => game.V(21),
-    () => game.V(22),
-    () => game.V(23),
-    () => game.V(24),
-    () => game.V(25),
-    () => game.V(26),
-    () => game.V(27),
-    () => Infinity
-  ],
-  currentLevel: () => {
-    var level = 0;
-    while (game.ord >= game.ordLevels[level]) {
-      level++;
-    }
-    return level - 1;
-  },
+  
   increment: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
       if (game.data.ord % game.base() === game.base() - 1) {
@@ -417,10 +370,10 @@ var game = {
     game.data.factorShifts = 0;
     game.data.factors = [];
   },
-  V: x => x === 0 ? 1.000e230 : x >= 27 ? Infinity : V(x - 1) * game.factorBoostCosts[x - 1],
+  V: x => x === 0 ? 1.000e230 : x >= 27 ? Infinity : game.V(x - 1) * game.factorBoostCosts[x - 1],
   factorBoost: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
-      if (game.base() === 3 && game.data.op >= V(game.data.factorBoosts + 1)) {
+      if (game.base() === 3 && game.data.op >= game.V(game.data.factorBoosts + 1)) {
         var conf = true;
         if (manmade) {
           conf = confirm(
@@ -636,6 +589,54 @@ var game = {
       game.data.highestLevel = game.currentLevel();
       $.notify("Ordinal Level " + game.currentLevel() + " Reached!", "achieve");
     }
+  },
+  ordLevels: [
+    () => 0,
+    () => 1,
+    () => game.base(),
+    () => game.base() * 2,
+    () => game.base() * 3,
+    () => game.base() ** 2,
+    () => game.base() ** 3,
+    () => game.base() ** game.base(),
+    () => game.base() ** (game.base() * 2),
+    () => game.base() ** (game.base() ** 2),
+    () => game.V(0),
+    () => game.V(1),
+    () => game.V(2),
+    () => game.V(3),
+    () => game.V(4),
+    () => game.V(5),
+    () => game.V(6),
+    () => game.V(7),
+    () => game.V(8),
+    () => game.V(9),
+    () => game.V(10),
+    () => game.V(11),
+    () => game.V(12),
+    () => game.V(13),
+    () => game.V(14),
+    () => game.V(15),
+    () => game.V(16),
+    () => game.V(17),
+    () => game.V(18),
+    () => game.V(19),
+    () => game.V(20),
+    () => game.V(21),
+    () => game.V(22),
+    () => game.V(23),
+    () => game.V(24),
+    () => game.V(25),
+    () => game.V(26),
+    () => game.V(27),
+    () => Infinity
+  ],
+  currentLevel: () => {
+    var level = 0;
+    while (game.ord >= game.ordLevels[level]) {
+      level++;
+    }
+    return level - 1;
   },
   keybinds: {
     i: () => game.markup(),
