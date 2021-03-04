@@ -6,6 +6,8 @@ var game = {
     lastTick: Date.now(),
     pendingIncrement: 0,
     pendingMaximize: 0,
+    pendingMaxAll: 0,
+    pendingMarkup: 0,
     clickCooldown: 1,
     achievements: [
       [false, false, false, false, false, false, false, false, false, false]
@@ -155,6 +157,7 @@ var game = {
       game.data.clickCooldown = 1;
     }
   },
+  autoclickerCost: x => x < 2.000e230 ? 100 * 2 ** x: x,
   factorShiftCosts: [
     1000,
     10000,
@@ -189,7 +192,7 @@ var game = {
     if (game.data.bups[2][0] && base > 7) {
       base -= 4;
     }
-    if (game.data.bups[2][1] && game.data.ord <= 1.000e230) {
+    if (game.data.bups[2][1] && game.data.ord < 1.000e230) {
       base = 5;
     }
     return base;
@@ -198,31 +201,53 @@ var game = {
     var mult = 1;
     
     for (var i = 0; i < game.data.factorShifts; i++) {
-      mult *= (game.data.factors[i] + (game.data.bups[2][2] ? 5 : 0)) * (game.data.bups[0][0] ? 2 : 1);
+      mult *= (game.data.factors[i] + (game.data.bups[2][2] ? 5: 0)) * (game.data.bups[0][0] ? 2: 1);
     }
+    
     return mult;
   },
-  incrementSpeed: () => game.data.incrementAuto * game.factorMult() * (game.data.boosterUnlocked ? game.data.dynamicFactor * 5 : 1) * (game.data.bups[1][1] ? Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2 : 1),
-  maximizeSpeed: () => (game.data.maximizeAuto + (game.data.boosterUnlocked ? 1 : 0)) * game.factorMult() * (game.data.boosterUnlocked ? game.data.dynamicFactor * 5 : 1) * (game.data.bups[1][1] ? Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2 : 1),
+  incrementSpeed: () => 
+    game.data.incrementAuto *
+    game.factorMult() *
+    (game.data.boosterUnlocked ? game.data.dynamicFactor * 5: 1) *
+    (game.data.bups[1][1] ? Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2: 1),
+  maximizeSpeed: () => 
+    (game.data.maximizeAuto + (game.data.boosterUnlocked ? 1: 0)) *
+    game.factorMult() *
+    (game.data.boosterUnlocked ? game.data.dynamicFactor * 5: 1) *
+    (game.data.bups[1][1] ? Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2: 1),
+  maxAllSpeed: () =>
+    game.data.bups[0][1] ?
+      game.data.bups[1][1] ?
+        Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2:
+        1:
+      0,
+  markupSpeed: () =>
+    game.data.bups[0][2] ?
+      game.data.bups[1][1] ?
+        Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2:
+        1:
+      0,
   opGain: (ord = game.data.ord, over = game.data.over, base = game.base()) => {
     if (ord < base) {
       return ord + over;
-    } else if (ord >= 1.000e230 && base === 3) {
-      return ord;
+    } else if (ord >= 1.000e230) {
+      return ord + 1.000e230;
     } else if (ord >= base ** (base ** base)) {
-      return 1.000e223;
+      return 1.000e230;
     } else {
       var tempvar = Math.floor(Math.log(ord) / Math.log(base));
       var tempvar2 = base ** tempvar;
       var tempvar3 = Math.floor(ord / tempvar2);
       
       return Math.min(
-        1.000e223,
-        10 ** game.opGain(tempvar, 0, base) * tempvar3 +
-          game.opGain(ord - tempvar2 * tempvar3, over, base)
+        1.000e230,
+        10 ** game.opGain(tempvar, 0, base) * tempvar3 + 
+        game.opGain(ord - tempvar2 * tempvar3, over, base)
       );
     }
   },
+  V: x => x === 0 ? 1.000e230: (x >= 27 ? Infinity: game.V(x - 1) * game.factorBoostCosts[x - 1]),
   increment: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
       if (game.data.ord % game.base() === game.base() - 1) {
@@ -267,12 +292,25 @@ var game = {
   markup: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
       if (game.data.ord >= game.base() ** 2) {
-        game.data.op += game.opGain() * (game.data.ord < 1.000e230 && game.data.bups[1][0] ? 5 : 1) * (game.data.bups[3][2] && game.base() < 6 ? 666666 : 1);
+        if (game.opGain() >= 2.000e230) {
+          game.data.op = game.opGain();
+        } else {
+          game.data.op += Math.min(
+            game.opGain() * 
+            (game.data.op < 2.000e230 && game.data.bups[1][0] ? 5: 1) * 
+            (game.data.op < 2.000e230 && game.data.bups[3][2] && game.base() < 6 ? 666666: 1),
+            1.000e230
+          );
+          if (game.data.op > 1.000e230) {
+            game.data.op = 1.000e230;
+          }
+        }
+        
         game.resetOrd();
         
         game.data.dynamicFactor = 1;
 
-        if (game.data.markupUnlocked === false) {
+        if (!game.data.markupUnlocked) {
           game.data.markupUnlocked = true;
         }
 
@@ -284,9 +322,9 @@ var game = {
   },
   buyIncrementAuto: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
-      if (game.data.op >= 100 * 2 ** game.data.incrementAuto) {
-        if (game.data.op < 1.000e230) {
-          game.data.op -= 100 * 2 ** game.data.incrementAuto;
+      if (game.data.op >= game.autoclickerCost(game.data.incrementAuto)) {
+        if (game.data.op < 2.000e230) {
+          game.data.op -= game.autoclickerCost(game.data.incrementAuto);
         }
         game.data.incrementAuto++;
 
@@ -298,9 +336,9 @@ var game = {
   },
   buyMaximizeAuto: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
-      if (game.data.op >= 100 * 2 ** game.data.maximizeAuto) {
-        if (game.data.op < 1.000e230) {
-          game.data.op -= 100 * 2 ** game.data.maximizeAuto;
+      if (game.data.op >= game.autoclickerCost(game.data.maximizeAuto)) {
+        if (game.data.op < 2.000e230) {
+          game.data.op -= game.autoclickerCost(game.data.maximizeAuto);
         }
         game.data.maximizeAuto++;
 
@@ -312,19 +350,23 @@ var game = {
   },
   maxAll: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
-      if (game.data.op < 1.000e230) {
+      if (game.data.op < 2.000e230) {
         var bulk = 0;
 
         game.buyIncrementAuto(false);
         game.buyMaximizeAuto(false);
+        
         bulk = Math.floor(
           Math.log(1 + game.data.op / (100 * 2 ** game.data.incrementAuto)) / Math.log(2)
         );
+        
         game.data.op -= (2 ** bulk - 1) * (100 * 2 ** game.data.incrementAuto);
         game.data.incrementAuto += bulk;
+        
         bulk = Math.floor(
           Math.log(1 + game.data.op / (100 * 2 ** game.data.maximizeAuto)) / Math.log(2)
         );
+        
         game.data.op -= (2 ** bulk - 1) * (100 * 2 ** game.data.maximizeAuto);
         game.data.maximizeAuto += bulk;
       } else {
@@ -359,7 +401,7 @@ var game = {
   buyFactor: (x, manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
       if (game.data.op >= 10 ** (x * game.data.factors[x - 1]) && game.data.factors[x - 1] < 10) {
-        if (game.base() > 3 || game.data.op < 1.000e230) {
+        if (game.data.op < 2.000e230) {
           game.data.op -= 10 ** (x * game.data.factors[x - 1]);
         }
         game.data.factors[x - 1]++;
@@ -372,7 +414,7 @@ var game = {
   },
   maxFactors: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
-      if (game.data.op >= 1.000e230) {
+      if (game.data.op >= 2.000e230) {
         game.data.factors = [10, 10, 10, 10, 10, 10, 10];
       } else {
         for (var i = 1; i <= game.data.factorShifts; i++) {
@@ -404,11 +446,11 @@ var game = {
     game.data.maximizeAuto = 0;
     game.data.factorShifts = 0;
     game.data.factors = [];
+    game.data.dynamicFactor = 1;
   },
-  V: x => x === 0 ? 1.000e230 : x >= 27 ? Infinity : game.V(x - 1) * game.factorBoostCosts[x - 1],
   factorBoost: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
-      if (game.base() === 3 && game.data.op >= game.V(game.data.factorBoosts + 1)) {
+      if (game.data.op >= game.V(game.data.factorBoosts + 1) + 1.000e230) {
         var conf = true;
         if (manmade) {
           conf = confirm(
@@ -418,6 +460,10 @@ var game = {
         if (conf) {
           game.factorBoosts++;
           game.resetMarkup();
+          
+          if (!game.data.boosterUnlocked) {
+            game.data.boosterUnlocked = true;
+          }
         }
       }
       
@@ -686,7 +732,7 @@ var game = {
   hardy: function(ord = game.data.ord, over = game.data.over, base = game.base()) {
     var tempvar = Math.floor(ord / base);
     var tempvar2 = Math.floor(ord / base ** 2);
-    return (ord >= base ** 3) ? Infinity : game.fghexp(tempvar2, 2 ** (tempvar % base) * (base + ord - base * (tempvar % base) - base ** 2 * tempvar2 + over));
+    return (ord >= base ** 3) ? Infinity: game.fghexp(tempvar2, 2 ** (tempvar % base) * (base + ord - base * (tempvar % base) - base ** 2 * tempvar2 + over));
   },
   ordMarks: [
     x => `&psi;(${x})`,
@@ -826,142 +872,111 @@ var game = {
       return result;
     }
   },
-  beautify: x => (x === Infinity) ?
-  `Infinity` :
-  (x >= 1.000e230) ?
-  `g<sub>${game.writeOrd(x)}</sub>(10)` :
-  (x < 1.000e6) ?
-  (x < 1000 && x % 1 !== 0) ?
-  (x * 10 % 1 === 0) ?
-  x.toFixed(1) :
-  (x * 100 % 1 === 0) ?
-  x.toFixed(2) :
-  x.toFixed(3) :
-  x.toFixed(0) :
-  `${(x / 10 ** Math.floor(Math.log10(x))).toFixed(3)}e${Math.floor(Math.log10(x))}`,
-  ordColor: (ord = game.data.ord, over = game.data.over, base = game.data.base) => {
-    if (ord === 0 || ord === Infinity) {
-      return 0;
-    } else if (ord < 1.000e230) {
-      return Math.log(ord + over) / (Math.log(3) * 27);
-    } else {
-      return Math.log(ord / 1.000e230) / (Math.log(3) * 42);
-    }
-  },
+  beautify: x => 
+    (x === Infinity) ?
+      `Infinity`:
+      (x >= 2.000e230) ?
+        `g<sub>${game.writeOrd(x - 1.000e230)}</sub>(10)`:
+        (x < 1.000e6) ?
+          (x < 1000 && x % 1 !== 0) ?
+            (x * 10 % 1 === 0) ?
+              x.toFixed(1):
+              (x * 100 % 1 === 0) ?
+                x.toFixed(2):
+                x.toFixed(3):
+          x.toFixed(0):
+        `${(x / 10 ** Math.floor(Math.log10(x))).toFixed(3)}e${Math.floor(Math.log10(x))}`,
+  ordColor: (ord = game.data.ord, over = game.data.over, base = game.data.base) => 
+    ord === 0 || ord === Infinity ?
+      0:
+      ord < 1.000e230 ?
+        Math.log(ord + over) / (Math.log(3) * 27):
+        Math.log(ord / 1.000e230) / (Math.log(3) * 42),
   toggleColor: () => {
     if (game.data.clickCooldown === 0) {
-      if (game.data.colors) {
-        game.data.colors = false;
-      } else {
-        game.data.colors = true;
-      }
+      game.data.colors = !game.data.colors;
       
-      game.data.clickCooldown++;
+      game.data.clickCooldown = 1;
       
       game.save("toggleColor", false);
     }
   },
   toggleMusic: () => {
     if (game.data.clickCooldown === 0) {
+      game.data.music = !game.data.music;
+      
       if (game.data.music) {
-        game.data.music = false;
-        game.music.pause();
-      } else {
-        game.data.music = true;
         game.music.play();
+      } else {
+        game.music.pause();
       }
-
-      game.data.clickCooldown++;
+      
+      game.data.clickCooldown = 1;
 
       game.save("toggleMusic", false);
     }
   },
   render: () => { 
-    game.header.innerHTML = `${game.data.colors ? `<span style="color:hsl(${game.ordColor()}, 100%, 50%)">` : ``}H<sub>${game.writeOrd()}</sub>(${game.base()})${game.hardy() === Infinity ? ``: `=${game.hardy()}`}${game.data.colors ? `</span>` : ``}`;
+    game.header.innerHTML = 
+      `${game.data.colors ? `<span style="color:hsl(${game.ordColor()}, 100%, 50%)">`: ``}H<sub>${game.writeOrd()}</sub>(${game.base()})${game.hardy() === Infinity ? ``: `=${game.hardy()}`}${game.data.colors ? `</span>`: ``}`;
     
-    if (game.data.colors) {
-      game.colorButton.innerHTML = `Colors: ON`;
-    } else {
-      game.colorButton.innerHTML = `Colors: OFF`;
-    }
+    game.colorButton.innerHTML = game.data.colors ? `Colors: ON`: `Colors: OFF`;
     
-    if (game.data.music) {
-      game.musicButton.innerHTML = `Music: ON`;
-    } else {
-      game.musicButton.innerHTML = `Music: OFF`;
-    }
+    game.musicButton.innerHTML = game.data.music ? `Music: ON`: `Music: OFF`;
     
     game.currentLevelText = `Your current Ordinal Level is ${game.currentLevel()}`;
     game.nextLevelText = `Next Ordinal Level is at ${game.writeOrd(game.ordLevels[game.currentLevel() + 1])}`;
     game.highestLevelText = `Your highest Ordinal Level was ${game.data.highestlevel}`;
-
-    if (game.data.ord >= game.base() ** 2) {
-      game.markupButton.innerHTML = `Markup to gain ${game.beautify(game.opGain())} Ordinal Points (I)`;
-      game.markupButton2.innerHTML = `+${game.beautify(game.opGain())} (I)`;
-    } else {
-      game.markupButton.innerHTML = `Reach &omega;<sup>2</sup> to Markup`;
-      game.markupButton2.innerHTML = `Reach &omega;<sup>2</sup> to Markup`;
-    }
     
-    if (game.data.markupUnlocked) {
-      game.markupTab.style.display = "inline";
-    } else {
-      game.markupTab.style.display = "none";
-    }
+    game.markupButton.innerHTML = 
+      game.data.ord >= game.base() ** 2 ? `Markup to gain ${game.beautify(game.opGain())} Ordinal Points (I)`: `Reach &omega;<sup>2</sup> to Markup`;
+    game.markupButton2.innerHTML = 
+      game.data.ord >= game.base() ** 2 ? `+${game.beautify(game.opGain())} (I)`: `Reach &omega;<sup>2</sup> to Markup`;
+    
+    game.markupTab.style.display = game.data.markupUnlocked ? "inline": "none";
     
     game.opText.innerHTML = `You have ${game.beautify(game.data.op)} Ordinal Points`;
     
-    game.incrementAuto.innerHTML = `You have ${game.beautify(game.data.incrementAuto)} increment autoclickers, clicking the increment button ${game.beautify(game.incrementSpeed())} times per second`;
-    game.maximizeAuto.innerHTML = `You have ${game.beautify(game.data.maximizeAuto + (game.data.boosterUnlocked ? 1 : 0))} maximize autoclickers, clicking the maximize button ${game.beautify(game.maximizeSpeed())} times per second`;
+    game.incrementAuto.innerHTML = 
+      `You have ${game.beautify(game.data.incrementAuto)} increment autoclickers, clicking the increment button ${game.beautify(game.incrementSpeed())} times per second`;
+    game.maximizeAuto.innerHTML = 
+      `You have ${game.beautify(game.data.maximizeAuto + (game.data.boosterUnlocked ? 1: 0))} maximize autoclickers, clicking the maximize button ${game.beautify(game.maximizeSpeed())} times per second`;
     
     game.buyIncrementButton.innerHTML = `Buy Increment Autoclicker for ${game.beautify(100 * 2 ** game.data.incrementAuto)} OP`;
     game.buyMaximizeButton.innerHTML = `Buy Maximize Autoclicker for ${game.beautify(100 * 2 ** game.data.maximizeAuto)} OP`;
     
-    if (game.data.factorShifts === 0) {
-      game.noFactors.style.display = "block";
-      game.factorList.style.display = "none";
-      game.factorMultiplier.style.display = "none";
-    } else {
-      game.noFactors.style.display = "none";
-      game.factorList.style.display = "block";
-      game.factorMultiplier.style.display = "inline";
-    }
+    game.noFactors.style.display = game.data.factorShifts === 0 ? "block": "none";
+    game.factorList.style.display = game.data.factorShifts === 0 ? "none": "block";
+    game.factorMultiplier.style.display = game.data.factorShifts === 0 ? "none": "inline";
     
     game.factorMultiplier.innerHTML = `Your factors are multiplying your autoclicker speed by ${game.beautify(game.factorMult())}`;
     game.factorShiftText.innerHTML = `Factor Shift: Requires ${game.beautify(game.factorShiftCosts[game.data.factorShifts])} OP`;
     
     for (var i = 0; i < 7; i++) {
-      if (game.data.factorShifts > i) {
-        game.factors[i].style.display = "list-item";
-      } else {
-        game.factors[i].style.display = "none";
-      }
-      
+      game.factors[i].style.display = game.data.factorShifts > i ? "list-item": "none";
       game.factorMults[i].innerHTML = `x${game.data.factors[i]}`;
-      
-      if (game.data.factors[i] === 10) {
-        game.factorButtons[i].innerHTML = `Maxed!`;
-      } else {
-        game.factorButtons[i].innerHTML = `Increase Factor ${(i + 1)} for ${game.beautify(10 ** ((i + 1) * game.data.factors[i]))} OP`;
-      }
+      game.factorButtons[i].innerHTML = 
+        game.data.factors[i] === 10 ? 
+          `Maxed!`:
+          `Increase Factor ${(i + 1)} for ${game.beautify(10 ** ((i + 1) * game.data.factors[i]))} OP`;
     }
     
-    game.factorBoostText.innerHTML = `Factor Boost: Requires ${game.writeOrd(game.V(game.data.factorBoosts + 1))} OP`;
+    game.factorBoostText.innerHTML = `Factor Boost: Requires ${game.beautify(game.V(game.data.factorBoosts + 1) + 1.000e230)} OP`;
     game.factorBoostButton.innerHTML = `Gain ${game.data.factorBoosts + 1} Boosters (B)`;
     
     for (var y = 0; y < 4; y++) {
       for (var x = 0; x < 4; x++) {
-        game.bups[y][x].class.remove("locked");
-        game.bups[y][x].class.remove("canbuy");
-        game.bups[y][x].class.remove("bought");
+        game.bups[y][x].classList.remove("locked");
+        game.bups[y][x].classList.remove("canbuy");
+        game.bups[y][x].classList.remove("bought");
         
-        if (game.data.bups[y][x]) {
-          game.bups[y][x].class.add("bought");
-        } else if (game.boosters() >= game.bupCosts[y][x] && game.data.bups[y - 1][x]) {
-          game.bups[y][x].class.add("canbuy");
-        } else {
-          game.bups[y][x].class.add("locked");
-        }
+        game.bups[y][x].classList.add(
+          game.data.bups[y][x] ? 
+            "bought":
+            game.boosters() >= game.bupCosts[y][x] && game.data.bups[y - 1][x] ?
+              "canbuy":
+              "locked"
+        );
       }
     }
   },
@@ -970,17 +985,15 @@ var game = {
     
     game.data.lastTick = Date.now();
     
-    if (game.data.bups[1][2]) {
-      game.data.op += ms / (game.data.bups[1][0] ? 10 : 50) * (game.data.bups[3][2] && game.base() < 6 ? 666666 : 1);
+    if (game.data.bups[1][2] && game.data.op < 1.000e230) {
+      game.data.op += ms / (game.data.bups[1][0] ? 10: 50) * (game.data.bups[3][2] && game.base() < 6 ? 666666: 1);
     }
     
-    if (game.base() > 3 && game.data.op > 1.000e223) {
-      game.data.op = 1.000e223;
+    if (game.data.op > 1.000e230 && game.data.op < 2.000e230) {
+      game.data.op = 1.000e230;
     }
     
     game.dynamicFactor += ms / 100000;
-    
-    game.checkAchieve();
     
     if ((game.data.incrementAuto < 1.000e230 || game.data.maximizeAuto < 1.000e230) && (game.data.ord < 3 ** 27 || game.base() > 3)) {
       if (game.incrementSpeed() > 0) {
@@ -1025,6 +1038,8 @@ var game = {
       game.over = 0;
       game.ord = Math.max(Math.min(game.data.incrementAuto, game.data.maximizeAuto), 1.000e230);
     }
+    
+    game.checkAchieve();
     
     if (ms > 0) {
       game.render();
