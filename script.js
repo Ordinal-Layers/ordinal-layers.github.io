@@ -285,9 +285,12 @@ var game = {
       }
     }
   },
-  resetOrd: () => {
+  resetEverythingMarkupDoes: () => {
     game.data.ord = 0;
     game.data.over = 0;
+    game.data.dynamicFactor = 1;
+    game.data.pendingIncrement = 0;
+    game.data.pendingMaximize = 0;
   },
   markup: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
@@ -306,9 +309,7 @@ var game = {
           }
         }
         
-        game.resetOrd();
-        
-        game.data.dynamicFactor = 1;
+        game.resetEverythingMarkupDoes();
 
         if (!game.data.markupUnlocked) {
           game.data.markupUnlocked = true;
@@ -379,18 +380,23 @@ var game = {
       }
     }
   },
+  resetEverythingShiftDoes: () => {
+    game.resetEverythingMarkupDoes();
+    game.data.op = 0;
+    game.data.incrementAuto = 0;
+    game.data.maximizeAuto = 0;
+  },
   factorShift: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
       if (game.data.op >= game.factorShiftCosts[game.data.factorShifts]) {
-        game.data.op = 0;
-        game.data.incrementAuto = 0;
-        game.data.maximizeAuto = 0;
         for (var i = 0; i < game.data.factorShifts; i++) {
           game.data.factors[i] = 1;
         }
+        
         game.data.factorShifts++;
         game.data.factors.push(1);
-        game.resetOrd();
+        
+        game.resetEverythingMarkupDoes();
 
         if (manmade) {
           game.data.clickCooldown = 1;
@@ -439,14 +445,12 @@ var game = {
       }
     }
   },
-  resetMarkup: () => {
-    game.resetOrd();
-    game.data.op = 0;
-    game.data.incrementAuto = 0;
-    game.data.maximizeAuto = 0;
+  resetEverythingBoostDoes: () => {
+    game.resetEverythingShiftDoes();
     game.data.factorShifts = 0;
     game.data.factors = [];
-    game.data.dynamicFactor = 1;
+    game.data.pendingMaxAll = 0;
+    game.data.pendingMarkup = 0;
   },
   factorBoost: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
@@ -568,14 +572,12 @@ var game = {
   },
   achieve: {
     rowReq: [
-      () => true,
       () => game.data.op >= 100,
       () => game.data.factorShifts >= 1,
       () => game.data.factorBoosts >= 1,
       () => false
     ],
     rowName: [
-      "Ordinals",
       "Markup",
       "Factors",
       "Boosters"
@@ -696,21 +698,57 @@ var game = {
         "Reach the ordinal &psi;(1)",
         "Reach the ordinal &psi;(&Omega;<sup>&Omega;<sup>2</sup></sup>)",
         "Reach the ordinal &psi;(&Omega;<sup>&Omega;<sup>2</sup>2</sup>)",
-        "Reach the ordinal &omega;<sub>1</sub><sup>CK</sup>",
-        "Reach the ordinal &omega;<sub>1</sub><sup>CK</sup>"
+        "Reach the ordinal &psi;(way too large)",
+        "Reach the ordinal &psi;(way too large)"
+      ],
+      [
+        "Markup for the first time",
+        "Reach 1000 Ordinal Points",
+        "Reach 1.000e6 Ordinal Points",
+        "Reach 1.000e10 Ordinal Points",
+        "Reach 1.000e100 Ordinal Points",
+        "Reach g<sub>&psi;(1)</sub>(10) OP",
+        "Reach g<sub>&psi;(&Omega;<sup>&Omega;<sup>2</sup></sup>)</sub>(10) OP",
+        "Reach g<sub>&psi;(&Omega;<sup>&Omega;<sup>2</sup>2</sup>)</sub>(10) OP",
+        "Reach Too Many Ordinal Points",
+        "Reach Too Many Ordinal Points"
+      ],
+      [
+        "Perform a Factor Shift",
+        "Perform 2 Factor Shifts",
+        "Perform 3 Factor Shifts",
+        "Perform 4 Factor Shifts",
+        "Perform 5 Factor Shifts",
+        "Perform 6 Factor Shifts",
+        "Perform 7 Factor Shifts",
+        "Get a 1.000e7x multiplier from Factors",
+        "Get a 1.000e9x multiplier from Factors",
+        "Get a Too Large multiplier from Factors"
+      ],
+      [
+        "Perform a Factor Boost",
+        "Perform 5 Factor Boosts",
+        "Perform 9 Factor Boosts",
+        "Perform 15 Factor Boosts",
+        "Perform Too Many Factor Boosts",
+        "Perform Too Many Factor Boosts",
+        "Perform Too Many Factor Boosts",
+        "Perform Too Many Factor Boosts",
+        "Perform Too Many Factor Boosts",
+        "Perform Too Many Factor Boosts"
       ]
     ]
   },
   checkAchieve: function() {
     for (var y = 0; y < game.data.achievements.length; y++) {
-      if (game.achieve.rowReq[y]() && y > 0) {
+      if (game.achieve.rowReq[y]() && game.data.achievements.length <= y + 1) { 
         game.data.achievements.push(
           [false, false, false, false, false, false, false, false, false, false]
         );
         $.notify("New Achievement Row Unlocked: " + game.achieve.rowName[y], "achieve");
       }
       for (var x = 0; x < 10; x++) {
-        if (game.achieve.achieveReq[y][x]()) {
+        if (game.achieve.achieveReq[y][x]() && !game.achieve[y][x]) {
           game.data.achievements[y][x] = true;
           $.notify("New Achievement Unlocked: " + game.achieve.achieveName[y][x], "achieve");
         }
@@ -826,19 +864,19 @@ var game = {
           }
         } else {
           if (power === 0) {
-            result = `${result}+${remainOrd + over}`;
+            result += `+${remainOrd + over}`;
           } else {
             if (power === 1) {
               if (Math.floor(remainOrd / base) === 1) {
-                result = `${result}+&omega;`;
+                result += `+&omega;`;
               } else {
-                result = `${result}+&omega;${Math.floor(remainOrd / base)}`;
+                result += `+&omega;${Math.floor(remainOrd / base)}`;
               }
             } else {
               if (Math.floor(remainOrd / base ** power) === 1) {
-                result = `${result}+&omega;<sup>${game.writeOrd(power, 0)}</sup>`;
+                result += `+&omega;<sup>${game.writeOrd(power, 0)}</sup>`;
               } else {
-                result = `${result}+&omega;<sup>${game.writeOrd(power, 0)}</sup>${Math.floor(remainOrd / base ** power)}`;
+                result += `+&omega;<sup>${game.writeOrd(power, 0)}</sup>${Math.floor(remainOrd / base ** power)}`;
               }
             }
           }
@@ -949,7 +987,7 @@ var game = {
     game.factorList.style.display = game.data.factorShifts === 0 ? "none": "block";
     game.factorMultiplier.style.display = game.data.factorShifts === 0 ? "none": "inline";
     
-    game.factorMultiplier.innerHTML = `Your factors are multiplying your autoclicker speed by ${game.beautify(game.factorMult())}`;
+    game.factorMultiplier.innerHTML = `Your factors are multiplying your autoclicker speed by x${game.beautify(game.factorMult())}`;
     game.factorShiftText.innerHTML = `Factor Shift: Requires ${game.beautify(game.factorShiftCosts[game.data.factorShifts])} OP`;
     
     for (var i = 0; i < 7; i++) {
@@ -993,7 +1031,11 @@ var game = {
       game.data.op = 1.000e230;
     }
     
-    game.dynamicFactor += ms / 100000;
+    game.data.dynamicFactor += ms / 100000;
+    
+    if (game.data.dynamicFactor > 10) {
+      game.data.dynamicFactor = 10;
+    }
     
     if ((game.data.incrementAuto < 1.000e230 || game.data.maximizeAuto < 1.000e230) && (game.data.ord < 3 ** 27 || game.base() > 3)) {
       if (game.incrementSpeed() > 0) {
@@ -1018,10 +1060,7 @@ var game = {
         if (game.data.pendingMaximize >= 1) {
           game.data.over = 0;
 
-          game.data.ord += Math.min(
-            Math.floor(game.data.pendingIncrement),
-            game.base() * Math.floor(game.data.pendingMaximize),
-          );
+          game.data.ord += Math.min(Math.floor(game.data.pendingIncrement), game.base() * Math.floor(game.data.pendingMaximize));
 
           game.data.pendingIncrement %= 1;
           game.data.pendingMaximize %= 1;
@@ -1037,6 +1076,37 @@ var game = {
     } else {
       game.over = 0;
       game.ord = Math.max(Math.min(game.data.incrementAuto, game.data.maximizeAuto), 1.000e230);
+    }
+    
+    if (ms > 0) {
+      if (game.data.bups[0][1]) {
+        game.data.pendingMaxAll += ms / 1000 * game.maxAllSpeed();
+        
+        if (game.data.pendingMaxAll >= 1) {
+          game.data.pendingMaxAll -= 1;
+          if (game.data.op < game.factorShiftCosts[game.data.factorShifts]) {
+            game.maxMarkup(false);
+          }
+        }
+      }
+      if (game.data.bups[0][2]) {
+        game.data.pendingMarkup += ms / 1000 * game.markupSpeed();
+        
+        if (game.data.pendingMarkup >= 1) {
+          game.data.pendingMarkup -= 1;
+          if (game.ord >= 1.000e230)
+            game.markup(false);
+          }
+        }
+      if (game.data.pendingMaxAll >= 1 && game.data.pendingMarkup >= 1) {
+        var bupCom = Math.min(game.data.pendingMaxAll, game.data.pendingMarkup);
+        
+        game.data.pendingMaxAll %= 1;
+        game.data.pendingMarkup %= 1;
+        
+        game.data.ord += bupCom * 1.000e230;
+        game.data.op += bupCom * 1.000e230;
+      }
     }
     
     game.checkAchieve();
@@ -1110,9 +1180,11 @@ var game = {
       lastTick: Date.now(),
       pendingIncrement: 0,
       pendingMaximize: 0,
+      pendingMaxAll: 0,
+      pendingMarkup: 0,
       clickCooldown: 1,
       achievements: [
-        [false, false, false, false, false, false, false, false, false, false],
+        [false, false, false, false, false, false, false, false, false, false]
       ],
       highestLevel: 0,
       markupUnlocked: false,
@@ -1150,7 +1222,7 @@ var game = {
         game.load(loadgame);
       }
 
-      window.location.reload();
+      location.reload();
     }
   },
   exportGame: () => {
@@ -1159,11 +1231,11 @@ var game = {
 
       var file = new Blob([btoa(JSON.stringify(game.data))], {type: "text/plain"});
 
-      window.URL = window.URL || window.webkitURL;
+      URL = URL || webkitURL;
 
       var importButton = document.createElement("importButton");
 
-      importButton.href = window.URL.createObjectURL(file);
+      importButton.href = URL.createObjectURL(file);
       importButton.download = "Ordinal Markup Save.txt";
       importButton.click();
       
