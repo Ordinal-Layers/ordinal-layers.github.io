@@ -555,7 +555,7 @@ var game = {
   },
   buyBup: (x, y, manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
-      if (game.boosters() >= game.bupCosts[y][x] && game.data.bups[y - 1][x]) {
+      if (game.boosters() >= game.bupCosts[y][x] && (y === 0 || game.data.bups[Math.max(0, y - 1)][x])) {
         game.data.bups[y][x] = true;
         if (y === 2 && (x === 0 || x === 1)) {
           game.resetEverythingMarkupDoes();
@@ -1110,7 +1110,9 @@ var game = {
         game.bups[y][x].classList.remove("canbuy");
         game.bups[y][x].classList.remove("bought");
         
-        game.bups[y][x].classList.add(game.data.bups[y][x] ? "bought": game.boosters() >= game.bupCosts[y][x] && (y === 0 || game.data.bups[Math.max(0, y - 1)][x]) ? "canbuy": "locked");
+        game.bups[y][x].classList.add(
+          game.data.bups[y][x] ? "bought": game.boosters() >= game.bupCosts[y][x] && (y === 0 || game.data.bups[Math.max(0, y - 1)][x]) ? "canbuy": "locked"
+        );
       }
     }
     
