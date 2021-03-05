@@ -642,7 +642,7 @@ var game = {
   ],
   currentLevel: () => {
     var level = 0;
-    while (game.ord >= game.ordLevels[level]()) {
+    while (game.data.ord >= game.ordLevels[level]()) {
       level++;
     }
     return level - 1;
@@ -1041,8 +1041,8 @@ var game = {
     game.musicButton.innerHTML = game.data.music ? `Music: ON`: `Music: OFF`;
     
     game.currentLevelText.innerHTML = `Your current Ordinal Level is ${game.currentLevel()}`;
-    game.nextLevelText.innerHTML = `Next Ordinal Level is at ${game.writeOrd(game.ordLevels[game.currentLevel() + 1])}`;
-    game.highestLevelText.innerHTML = `Your highest Ordinal Level was ${game.data.highestlevel}`;
+    game.nextLevelText.innerHTML = `Next Ordinal Level is at ${game.writeOrd(game.ordLevels[game.currentLevel() + 1]())}`;
+    game.highestLevelText.innerHTML = `Your highest Ordinal Level was ${game.data.highestLevel}`;
     
     game.achievementCount.innerHTML = `Achievements (${game.achievementsEarned()}/${game.achieve.rowReq.length * 10})`;
     
