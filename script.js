@@ -573,7 +573,7 @@ var game = {
   },
   refundBups: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
-      if (game.data.bups[0].includes(true)) {
+      if (game.data.bups[0][0] || game.data.bups[0][1] || game.data.bups[0][2]) {
         var conf = true;
         if (manmade) {
           conf = confirm(
