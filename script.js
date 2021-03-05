@@ -1,5 +1,9 @@
 "use strict";
 
+var loop;
+
+var autoSave;
+
 var game = {
   data: {
     version: "0.2",
@@ -1272,7 +1276,18 @@ var game = {
     
     console.log(diff);
     
-    document.getElementById("loadingScreen").style.display = "none";
+    onkeypress = _ => {
+      var k = _.key.toLowerCase();
+      if (typeof game.keybinds[k] !== "undefined") {
+        game.keybinds[k]();
+      };
+    };
+    
+    loop = setInterval(() => game.loop(Date.now() - game.data.lastTick), 50);
+    
+    autoSave = setInterval(() => game.save("autosave", false), 5000);
+    
+    document.getElementById("mainMenu").style.display = "none";
     document.getElementById("game").style.display = "block";
     
     if (game.data.music) {
@@ -1364,16 +1379,3 @@ var game = {
     }
   }
 };
-
-game.load(JSON.parse(localStorage.getItem("save")));
-
-onkeypress = _ => {
-  var k = _.key.toLowerCase();
-  if (typeof game.keybinds[k] !== "undefined") {
-    game.keybinds[k]();
-  };
-};
-
-var loop = setInterval(() => game.loop(Date.now() - game.data.lastTick), 50);
-
-var autoSave = setInterval(() => game.save("autosave", false), 5000);
