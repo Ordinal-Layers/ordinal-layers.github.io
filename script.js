@@ -316,6 +316,15 @@ var game = {
       );
     }
   },
+  totalOpGain: () => 
+    game.opGain() >= 2.000e230 ?
+      game.opGain():
+      Math.min(
+        game.opGain() * 
+        (game.data.bups[1][0] ? 5: 1) * 
+        (game.data.bups[3][2] && game.base() < 6 ? 666666: 1),
+        1.000e230
+      ),
   V: x => x === 0 ? 1.000e230: (x >= 27 ? Infinity: game.V(x - 1) * game.factorBoostCosts[x - 1]),
   increment: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
@@ -367,12 +376,7 @@ var game = {
         if (game.opGain() >= 2.000e230) {
           game.data.op = game.opGain();
         } else {
-          game.data.op += Math.min(
-            game.opGain() * 
-            (game.data.op < 2.000e230 && game.data.bups[1][0] ? 5: 1) * 
-            (game.data.op < 2.000e230 && game.data.bups[3][2] && game.base() < 6 ? 666666: 1),
-            1.000e230
-          );
+          game.data.op += game.totalOpGain();
           if (game.data.op > 1.000e230) {
             game.data.op = 1.000e230;
           }
@@ -1040,7 +1044,9 @@ var game = {
     
     for (var y = 0; y < game.achieve.rowReq.length; y++) {
       game.achieveRows[y].style.display = game.data.achievements.length <= y ? "none" : "table-row";
-      
+    }
+    
+    for (var y = 0; y < game.data.achievements.length; y++) {
       for (var x = 0; x < 10; x++) {
         game.achievementTd[y][x].innerHTML = game.achieve.achieveName[y][x];
         game.achievementTd[y][x].attributes.tooltip.value = game.achieve.achieveTooltip[y][x];
@@ -1055,9 +1061,9 @@ var game = {
     game.nextRowUnlock.innerHTML = game.achieve.rowTooltip[game.data.achievements.length - 1];
     
     game.markupButton.innerHTML = 
-      game.data.ord >= game.base() ** 2 ? `Markup to gain ${game.beautify(game.opGain())} Ordinal Points (I)`: `Reach &omega;<sup>2</sup> to Markup`;
+      game.data.ord >= game.base() ** 2 ? `Markup to gain ${game.beautify(game.totalOpGain())} Ordinal Points (I)`: `Reach &omega;<sup>2</sup> to Markup`;
     game.markupButton2.innerHTML = 
-      game.data.ord >= game.base() ** 2 ? `+${game.beautify(game.opGain())} (I)`: `Reach &omega;<sup>2</sup> to Markup`;
+      game.data.ord >= game.base() ** 2 ? `+${game.beautify(game.totalOpGain())} (I)`: `Reach &omega;<sup>2</sup> to Markup`;
     
     game.markupTab.style.display = game.data.markupUnlocked ? "inline": "none";
     
@@ -1068,8 +1074,8 @@ var game = {
     game.maximizeAuto.innerHTML = 
       `You have ${game.beautify(game.data.maximizeAuto + (game.data.boosterUnlocked ? 1: 0))} maximize autoclickers, clicking the maximize button ${game.beautify(game.maximizeSpeed())} times per second`;
     
-    game.buyIncrementButton.innerHTML = `Buy Increment Autoclicker for ${game.beautify(100 * 2 ** game.data.incrementAuto)} OP`;
-    game.buyMaximizeButton.innerHTML = `Buy Maximize Autoclicker for ${game.beautify(100 * 2 ** game.data.maximizeAuto)} OP`;
+    game.buyIncrementButton.innerHTML = `Buy Increment Autoclicker for ${game.beautify(game.autoclickerCost(game.data.incrementAuto))} OP`;
+    game.buyMaximizeButton.innerHTML = `Buy Maximize Autoclicker for ${game.beautify(game.autoclickerCost(game.data.maximizeAuto))} OP`;
     
     game.noFactors.style.display = game.data.factorShifts === 0 ? "block": "none";
     game.factorList.style.display = game.data.factorShifts === 0 ? "none": "block";
