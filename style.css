@@ -58,11 +58,12 @@ body {
   z-index:5;
 }
 
-.treeButton {
+.btreeButton {
   margin: center;
   width: 200px;
   height: 100px;
   font-size: 16px;
+  border: 2px solid blue;
 }
 
 .locked {
