@@ -62,7 +62,7 @@ body {
   margin: center;
   width: 200px;
   height: 100px;
-  border: 2px solid black;
+  font-size: 16px;
 }
 
 .locked {
