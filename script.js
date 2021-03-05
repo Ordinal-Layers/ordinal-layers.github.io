@@ -767,7 +767,7 @@ var game = {
     r: () => game.refundBups(),
   },
   fghexp: (n, x) => (n === 0) ? x : game.fghexp(n - 1, x) * 2 ** game.fghexp(n - 1, x),
-  hardy: function(ord = game.data.ord, over = game.data.over, base = game.base()) {
+  hardy: (ord = game.data.ord, over = game.data.over, base = game.base()) => {
     var tempvar = Math.floor(ord / base);
     var tempvar2 = Math.floor(ord / base ** 2);
     return (ord >= base ** 3) ? Infinity: game.fghexp(tempvar2, 2 ** (tempvar % base) * (base + ord - base * (tempvar % base) - base ** 2 * tempvar2 + over));
@@ -837,7 +837,7 @@ var game = {
     if (ord === 0) {
       return `0`;
     } else if (ord === Infinity) {
-      return `&omega;<sub>1</sub><sup>CK</sup>`;
+      return `&Omega;`;
     } else if (ord < 1.000e230 || base > 3) {
       var result = ``;
       var remainOrd = ord;
@@ -992,7 +992,7 @@ var game = {
     
     for (var i = 0; i < 7; i++) {
       game.factors[i].style.display = game.data.factorShifts > i ? "list-item": "none";
-      game.factorMults[i].innerHTML = `x${game.data.factors[i]}`;
+      game.factorMults[i].innerHTML = `x${(game.data.factors[i] + (game.data.bups[2][2] ? 5: 0)) * (game.data.bups[0][0] ? 2: 1)}`;
       game.factorButtons[i].innerHTML = 
         game.data.factors[i] === 10 ? 
           `Maxed!`:
