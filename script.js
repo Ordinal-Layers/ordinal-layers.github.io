@@ -895,7 +895,7 @@ var game = {
     x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;2+2</sup>${x})`,
     x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;2+${x}</sup>)`,
     x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;${x}</sup>)`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2<sup>${x}</sup>)`,
+    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>${x}</sup>)`,
     x => `&psi;(&Omega;<sup>&Omega;<sup>${x}</sup></sup>)`,
     x => `&psi;(&Omega;&uarr;&uarr;${x})`
   ],
