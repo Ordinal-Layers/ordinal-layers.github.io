@@ -481,7 +481,7 @@ var game = {
       if (game.boosters() >= game.bupCosts[y][x] && game.data.bups[y - 1][x]) {
         game.data.bups[y][x] = true;
         if (y === 2 && (x === 0 || x === 1)) {
-          game.resetOrd();
+          game.resetEverythingMarkupDoes();
         }
       }
       
@@ -580,7 +580,8 @@ var game = {
     rowName: [
       "Markup",
       "Factors",
-      "Boosters"
+      "Boosters",
+      "Challenges"
     ],
     rowTooltip: [
       "Perform a Markup to unlock the next row of achievements",
@@ -643,7 +644,7 @@ var game = {
         "You gotta start somewhere",
         "Maximizable",
         "Markupable",
-        "able",
+        "Unnamed Achievement",
         "Hyperdimensional",
         "Ordinal Collapsing Functions",
         "Ackermann Ordinal",
@@ -654,12 +655,12 @@ var game = {
       [
         "Markup!",
         "Shiftable",
-        "Quadruple Shiftable",
-        "Quintuple Shiftable",
-        "Septuple Shiftable",
+        "Unnamed Achievement",
+        "Unnamed Achievement",
+        "Unnamed Achievement",
         "Boostable",
-        "Nonuple Boostable",
-        "Octendecuple Boostable",
+        "Unnamed Achievement",
+        "Unnamed Achievement",
         "Way too much",
         "Way too much"
       ],
@@ -677,9 +678,9 @@ var game = {
       ],
       [
         "Boost!",
-        "Quintuple Boost",
-        "Nonuple Boost",
-        "Quindecuple Boost",
+        "Booster Pack",
+        "Unnamed Achievement",
+        "Super Boost",
         "Way too much",
         "Way too much",
         "Way too much",
