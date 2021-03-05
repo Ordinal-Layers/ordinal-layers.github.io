@@ -827,7 +827,7 @@ var game = {
         $.notify("New Achievement Row Unlocked: " + game.achieve.rowName[y], "achieve");
       }
       for (var x = 0; x < 10; x++) {
-        if (game.achieve.achieveReq[y][x]() && !game.achieve[y][x]) {
+        if (game.achieve.achieveReq[y][x]() && !game.data.achievements[y][x]) {
           game.data.achievements[y][x] = true;
           $.notify("New Achievement Unlocked: " + game.achieve.achieveName[y][x], "achieve");
         }
