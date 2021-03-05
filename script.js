@@ -1113,12 +1113,12 @@ var game = {
       }
     }
     
-    game.bups[1][1].innerHTML = `Boosters boost Tier 1 and 2 speed by x${Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2}<br /><br />6 Boosters`;
+    game.bups[1][1].innerHTML = `Boosters boost Tier 1 and 2 speed by x${game.beautify(Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2)}<br /><br />6 Boosters`;
     
     game.maxAllAuto.innerHTML =
-      `Your Max All Autobuyer is ${game.data.bups[0][1] ? `clicking the Max All button ${game.maxAllSpeed()} times per second, but only if you can't Factor Shift`: `locked`}`;
+      `Your Max All Autobuyer is ${game.data.bups[0][1] ? `clicking the Max All button ${game.beautify(game.maxAllSpeed())} times per second, but only if you can't Factor Shift`: `locked`}`;
     game.markupAuto.innerHTML =
-      `Your Markup Autobuyer is ${game.data.bups[0][2] ? `clicking the Markup button ${game.markupSpeed()} times per second, but only if you're past &psi;(1)`: `locked`}`;
+      `Your Markup Autobuyer is ${game.data.bups[0][2] ? `clicking the Markup button ${game.beautify(game.markupSpeed())} times per second, but only if you're past &psi;(1)`: `locked`}`;
   },
   loop: (unadjusted, off = false) => {
     var ms = Math.max(0, unadjusted);
