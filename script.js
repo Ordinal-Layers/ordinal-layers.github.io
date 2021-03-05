@@ -477,7 +477,7 @@ var game = {
         game.data.factorShifts++;
         game.data.factors.push(1);
         
-        game.resetEverythingMarkupDoes();
+        game.resetEverythingShiftDoes();
 
         if (manmade) {
           game.data.clickCooldown = 1;
