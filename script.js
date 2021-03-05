@@ -1105,7 +1105,7 @@ var game = {
         game.bups[y][x].classList.remove("canbuy");
         game.bups[y][x].classList.remove("bought");
         
-        game.bups[y][x].classList.add(game.data.bups[y][x] ? "bought": game.boosters() >= game.bupCosts[y][x] && game.data.bups[y - 1][x] ? "canbuy": "locked");
+        game.bups[y][x].classList.add(game.data.bups[y][x] ? "bought": game.boosters() >= game.bupCosts[y][x] && (y === 0 || game.data.bups[Math.max(0, y - 1)][x]) ? "canbuy": "locked");
       }
     }
     
