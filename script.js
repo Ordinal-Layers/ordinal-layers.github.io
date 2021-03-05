@@ -99,6 +99,8 @@ var game = {
   ],
   nextRowUnlock: document.getElementById("nextRowUnlock"),
   markupTab: document.getElementById("markupTabButton"),
+  extraFactorSubtabButton: document.getElementById("extraFactorSubTabButton"),
+  boosterTab: document.getElementById("boosterTabButton"),
   markupButton: document.getElementById("markupButton"),
   markupButton2: document.getElementById("markupButton2"),
   opText: document.getElementById("opText"),
@@ -139,6 +141,7 @@ var game = {
   ],
   factorBoostText: document.getElementById("factorBoost"),
   factorBoostButton: document.getElementById("factorBoostButton"),
+  
   dynamicMult: document.getElementById("dynamicMult"),
   bups: [
     [
@@ -1066,6 +1069,8 @@ var game = {
       game.data.ord >= game.base() ** 2 ? `+${game.beautify(game.totalOpGain())} (I)`: `Reach &omega;<sup>2</sup> to Markup`;
     
     game.markupTab.style.display = game.data.markupUnlocked ? "inline": "none";
+    game.extraFactorSubtabButton.style.display = game.data.boosterUnlocked ? "inline": "none";
+    game.boosterTab.style.display = game.data.boosterUnlocked ? "inline": "none";
     
     game.opText.innerHTML = `You have ${game.beautify(game.data.op)} Ordinal Points`;
     
@@ -1093,6 +1098,8 @@ var game = {
     game.factorBoostText.innerHTML = `Factor Boost: Requires ${game.beautify(game.V(game.data.factorBoosts + 1) + 1.000e230)} OP`;
     game.factorBoostButton.innerHTML = `Gain ${game.data.factorBoosts + 1} Boosters (B)`;
     
+    game.dynamicMult.innerHTML = `Your Dynamic Factor is x${game.beautify(game.data.dynamicFactor)}`;
+    
     for (var y = 0; y < 4; y++) {
       for (var x = 0; x < 4; x++) {
         game.bups[y][x].classList.remove("locked");
@@ -1102,6 +1109,11 @@ var game = {
         game.bups[y][x].classList.add(game.data.bups[y][x] ? "bought": game.boosters() >= game.bupCosts[y][x] && game.data.bups[y - 1][x] ? "canbuy": "locked");
       }
     }
+    
+    game.maxAllAuto.innerHTML =
+      `Your Max All Autobuyer is ${game.data.bups[0][1] ? `clicking the Max All button ${game.maxAllSpeed()} times per second, but only if you can't Factor Shift`: `locked`}`;
+    game.markupAuto.innerHTML =
+      `Your Markup Autobuyer is ${game.data.bups[0][2] ? `clicking the Markup button ${game.markupSpeed()} times per second, but only if you're past &psi;(1)`: `locked`}`;
   },
   loop: (unadjusted, off = false) => {
     var ms = Math.max(0, unadjusted);
