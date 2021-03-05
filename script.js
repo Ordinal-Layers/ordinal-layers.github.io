@@ -540,7 +540,7 @@ var game = {
         }
         if (conf) {
           game.factorBoosts++;
-          game.resetMarkup();
+          game.resetEverythingBoostDoes();
           
           if (!game.data.boosterUnlocked) {
             game.data.boosterUnlocked = true;
@@ -582,6 +582,8 @@ var game = {
           );
         }
         if (conf) {
+          game.resetEverythingBoostDoes();
+          
           var rightrow = [];
           for (var i = 0; i < 4; i++) {
             rightrow.push(game.data.bups[i][3]);
