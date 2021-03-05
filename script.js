@@ -40,6 +40,64 @@ var game = {
   currentLevelText: document.getElementById("currentLevel"),
   nextLevelText: document.getElementById("nextLevel"),
   highestLevelText: document.getElementById("highestLevel"),
+  achievementCount: document.getElementById("achievementCount"),
+  achieveRows: [
+    document.getElementById("achieveRow0"),
+    document.getElementById("achieveRow1"),
+    document.getElementById("achieveRow2"),
+    document.getElementById("achieveRow3")
+  ],
+  achievementTd: [
+    [
+      document.getElementById("achievement00"),
+      document.getElementById("achievement01"),
+      document.getElementById("achievement02"),
+      document.getElementById("achievement03"),
+      document.getElementById("achievement04"),
+      document.getElementById("achievement05"),
+      document.getElementById("achievement06"),
+      document.getElementById("achievement07"),
+      document.getElementById("achievement08"),
+      document.getElementById("achievement09")
+    ],
+    [
+      document.getElementById("achievement10"),
+      document.getElementById("achievement11"),
+      document.getElementById("achievement12"),
+      document.getElementById("achievement13"),
+      document.getElementById("achievement14"),
+      document.getElementById("achievement15"),
+      document.getElementById("achievement16"),
+      document.getElementById("achievement17"),
+      document.getElementById("achievement18"),
+      document.getElementById("achievement19")
+    ],
+    [
+      document.getElementById("achievement20"),
+      document.getElementById("achievement21"),
+      document.getElementById("achievement22"),
+      document.getElementById("achievement23"),
+      document.getElementById("achievement24"),
+      document.getElementById("achievement25"),
+      document.getElementById("achievement26"),
+      document.getElementById("achievement27"),
+      document.getElementById("achievement28"),
+      document.getElementById("achievement29")
+    ],
+    [
+      document.getElementById("achievement30"),
+      document.getElementById("achievement31"),
+      document.getElementById("achievement32"),
+      document.getElementById("achievement33"),
+      document.getElementById("achievement34"),
+      document.getElementById("achievement35"),
+      document.getElementById("achievement36"),
+      document.getElementById("achievement37"),
+      document.getElementById("achievement38"),
+      document.getElementById("achievement39")
+    ]
+  ],
+  nextRowUnlock: document.getElementById("nextRowUnlock"),
   markupTab: document.getElementById("markupTabButton"),
   markupButton: document.getElementById("markupButton"),
   markupButton2: document.getElementById("markupButton2"),
@@ -175,6 +233,17 @@ var game = {
     [66, 66, 21, 120],
     [55, 78, 66, 378]
   ],
+  achievementsEarned: () => {
+    var achieveCount = 0;
+    for (var y = 0; y < game.data.achievements.length; y++) {
+      for (var x = 0; x < 10; x++) {
+        if (game.data.achievements[y][x]) {
+          achieveCount++;
+        }
+      }
+    }
+    return achieveCount;
+  },
   boosters: () => {
     var boost = game.data.factorBoosts * (game.data.factorBoosts + 1) / 2;
     for (var y = 0; y < 4; y++) {
@@ -963,9 +1032,27 @@ var game = {
     
     game.musicButton.innerHTML = game.data.music ? `Music: ON`: `Music: OFF`;
     
-    game.currentLevelText = `Your current Ordinal Level is ${game.currentLevel()}`;
-    game.nextLevelText = `Next Ordinal Level is at ${game.writeOrd(game.ordLevels[game.currentLevel() + 1])}`;
-    game.highestLevelText = `Your highest Ordinal Level was ${game.data.highestlevel}`;
+    game.currentLevelText.innerHTML = `Your current Ordinal Level is ${game.currentLevel()}`;
+    game.nextLevelText.innerHTML = `Next Ordinal Level is at ${game.writeOrd(game.ordLevels[game.currentLevel() + 1])}`;
+    game.highestLevelText.innerHTML = `Your highest Ordinal Level was ${game.data.highestlevel}`;
+    
+    game.achievementCount.innerHTML = `Achievements (${game.achievementsEarned()}/${game.achieve.rowReq.length * 10})`;
+    
+    for (var y = 0; y < game.achieve.rowReq.length; y++) {
+      game.achieveRows[y].style.display = game.data.achievements.length <= y ? "none" : "table-row";
+      
+      for (var x = 0; x < 10; x++) {
+        game.achievementTd[y][x].innerHTML = game.achieve.achieveName[y][x];
+        game.achievementTd[y][x].tooltip = game.achieve.achieveTooltip[y][x];
+        
+        game.achievementTd[y][x].classList.remove("achievement");
+        game.achievementTd[y][x].classList.remove("earned");
+        
+        game.achievementTd[y][x].classList.add(game.data.achievements[y][x] ? "earned" : "achievement");
+      }
+    }
+    
+    game.nextRowUnlock.innerHTML = game.achieve.rowTooltip[game.data.achievements.length - 1];
     
     game.markupButton.innerHTML = 
       game.data.ord >= game.base() ** 2 ? `Markup to gain ${game.beautify(game.opGain())} Ordinal Points (I)`: `Reach &omega;<sup>2</sup> to Markup`;
@@ -994,10 +1081,7 @@ var game = {
     for (var i = 0; i < 7; i++) {
       game.factors[i].style.display = game.data.factorShifts > i ? "list-item": "none";
       game.factorMults[i].innerHTML = `x${(game.data.factors[i] + (game.data.bups[2][2] ? 5: 0)) * (game.data.bups[0][0] ? 2: 1)}`;
-      game.factorButtons[i].innerHTML = 
-        game.data.factors[i] === 10 ? 
-          `Maxed!`:
-          `Increase Factor ${(i + 1)} for ${game.beautify(10 ** ((i + 1) * game.data.factors[i]))} OP`;
+      game.factorButtons[i].innerHTML = game.data.factors[i] === 10 ? `Maxed!`: `Increase Factor ${(i + 1)} for ${game.beautify(10 ** ((i + 1) * game.data.factors[i]))} OP`;
     }
     
     game.factorBoostText.innerHTML = `Factor Boost: Requires ${game.beautify(game.V(game.data.factorBoosts + 1) + 1.000e230)} OP`;
@@ -1009,13 +1093,7 @@ var game = {
         game.bups[y][x].classList.remove("canbuy");
         game.bups[y][x].classList.remove("bought");
         
-        game.bups[y][x].classList.add(
-          game.data.bups[y][x] ? 
-            "bought":
-            game.boosters() >= game.bupCosts[y][x] && game.data.bups[y - 1][x] ?
-              "canbuy":
-              "locked"
-        );
+        game.bups[y][x].classList.add(game.data.bups[y][x] ? "bought": game.boosters() >= game.bupCosts[y][x] && game.data.bups[y - 1][x] ? "canbuy": "locked");
       }
     }
   },
