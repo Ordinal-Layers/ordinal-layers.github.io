@@ -1007,7 +1007,7 @@ var game = {
                 x.toFixed(3):
           x.toFixed(0):
         `${(x / 10 ** Math.floor(Math.log10(x) + 0.001)).toFixed(3)}e${Math.floor(Math.log10(x) + 0.001)}`,
-  ordColor: (ord = game.data.ord, over = game.data.over, base = game.data.base) => 
+  ordColor: (ord = game.data.ord, over = game.data.over, base = game.base()) => 
     ord === 0 || ord === Infinity ?
       0:
       ord < 1.000e230 ?
@@ -1101,8 +1101,8 @@ var game = {
       game.factorButtons[i].innerHTML = game.data.factors[i] === 10 ? `Maxed!`: `Increase Factor ${(i + 1)} for ${game.beautify(10 ** ((i + 1) * game.data.factors[i]))} OP`;
     }
     
-    game.factorBoostText.style.display = game.data.boosterUnlocked || game.data.ord >= 1.000e230 ? "inline" : "none";
-    game.factorBoostButton.style.display = game.data.boosterUnlocked || game.data.ord >= 1.000e230 ? "inline" : "none";
+    game.factorBoostText.style.display = game.data.boosterUnlocked || game.data.ord >= 1.000e230 ? "inline": "none";
+    game.factorBoostButton.style.display = game.data.boosterUnlocked || game.data.ord >= 1.000e230 ? "inline": "none";
     
     game.factorBoostText.innerHTML = `Factor Boost: Requires ${game.beautify(game.V(game.data.factorBoosts + 1) + 1.000e230)} OP`;
     game.factorBoostButton.innerHTML = `Gain ${game.data.factorBoosts + 1} Boosters (B)`;
