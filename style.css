@@ -63,6 +63,7 @@ body {
   width: 200px;
   height: 100px;
   font-size: 16px;
+  color: #8080FF;
   border: 2px solid blue;
 }
 
@@ -73,12 +74,10 @@ body {
 }
 
 .canbuy {
-  color: white;
   background-color: black;
 }
 
 .canbuy:hover {
-  color: black;
   background-color: #008000;
 }
 
