@@ -9,6 +9,10 @@ body {
   text-align: center;
 }
 
+.long {
+  width: 100%;
+}
+
 .achievement {
   width: 125px;
   height: 125px;
