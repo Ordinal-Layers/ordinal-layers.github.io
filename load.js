@@ -1,12 +1,7 @@
 var real = false;
 var sPath = location.origin;
-var realSites = [
-  "https://ordinal-layers.github.io",
-  "https://ordinal-layers.github.io/index.html",
-  "https://ordinal-layers.github.io/index"
-];
 
-if (realSites.includes(sPath)) {
+if (sPath === "https://ordinal-layers.github.io" || sPath === "https://ordinal-layers.github.io/index.html" || sPath === "https://ordinal-layers.github.io/index") {
   real = true;
 }
 
