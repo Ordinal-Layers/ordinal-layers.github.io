@@ -439,14 +439,14 @@ var game = {
         game.buyMaximizeAuto(false);
         
         bulk = Math.floor(
-          Math.log(1 + game.data.op / (100 * 2 ** game.data.incrementAuto)) / Math.log(2)
+          Math.log(1 + game.data.op / (100 * 2 ** game.data.incrementAuto)) / Math.log(2) + 0.001
         );
         
         game.data.op -= (2 ** bulk - 1) * (100 * 2 ** game.data.incrementAuto);
         game.data.incrementAuto += bulk;
         
         bulk = Math.floor(
-          Math.log(1 + game.data.op / (100 * 2 ** game.data.maximizeAuto)) / Math.log(2)
+          Math.log(1 + game.data.op / (100 * 2 ** game.data.maximizeAuto)) / Math.log(2) + 0.001
         );
         
         game.data.op -= (2 ** bulk - 1) * (100 * 2 ** game.data.maximizeAuto);
