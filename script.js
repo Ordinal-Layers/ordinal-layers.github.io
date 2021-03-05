@@ -1109,6 +1109,8 @@ var game = {
       }
     }
     
+    game.bups[1][1].innerHTML = `Boosters boost Tier 1 and 2 speed by x${Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2}<br /><br />6 Boosters`;
+    
     game.maxAllAuto.innerHTML =
       `Your Max All Autobuyer is ${game.data.bups[0][1] ? `clicking the Max All button ${game.maxAllSpeed()} times per second, but only if you can't Factor Shift`: `locked`}`;
     game.markupAuto.innerHTML =
