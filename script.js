@@ -313,9 +313,9 @@ var game = {
     } else if (ord >= base ** (base ** base)) {
       return 1.000e230;
     } else {
-      var tempvar = Math.floor(Math.log(ord) / Math.log(base));
+      var tempvar = Math.floor(Math.log(ord) / Math.log(base) + 0.001);
       var tempvar2 = base ** tempvar;
-      var tempvar3 = Math.floor(ord / tempvar2);
+      var tempvar3 = Math.floor(ord / tempvar2 + 0.001);
       
       return Math.min(
         1.000e230,
@@ -354,7 +354,7 @@ var game = {
         game.data.over += game.base() - 1;
         
         do {
-          game.data.over -= Math.ceil((game.data.over + game.base()) / 2);
+          game.data.over -= Math.ceil((game.data.over + game.base()) / 2 - 0.001);
           game.data.ord += game.base();
         }
         while (game.data.over + game.base() >= game.base() * 2 && game.data.ord % game.base() ** 2 !== 0);
@@ -922,7 +922,7 @@ var game = {
       var remainOrd = ord;
       
       while (remainOrd > 0) {
-        var power = Math.floor(Math.log(remainOrd) / Math.log(base));
+        var power = Math.floor(Math.log(remainOrd) / Math.log(base) + 0.001);
         if (result === ``) {
           if (power === 0) {
             result = remainOrd + over;
@@ -970,7 +970,7 @@ var game = {
       var remainOrd = ord;
       
       while (remainOrd > 0) {
-        var power = Math.min(41, Math.floor(Math.log(remainOrd / 1.000e230) / Math.log(3)));
+        var power = Math.min(41, Math.floor(Math.log(remainOrd / 1.000e230) / Math.log(3) + 0.001));
                              
         if (result = ``) {
           if (power === 0) {
@@ -1002,7 +1002,7 @@ var game = {
                 x.toFixed(2):
                 x.toFixed(3):
           x.toFixed(0):
-        `${(x / 10 ** Math.floor(Math.log10(x))).toFixed(3)}e${Math.floor(Math.log10(x))}`,
+        `${(x / 10 ** Math.floor(Math.log10(x) + 0.001)).toFixed(3)}e${Math.floor(Math.log10(x) + 0.001)}`,
   ordColor: (ord = game.data.ord, over = game.data.over, base = game.data.base) => 
     ord === 0 || ord === Infinity ?
       0:
