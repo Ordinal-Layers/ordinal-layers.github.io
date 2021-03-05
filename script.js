@@ -1255,6 +1255,9 @@ var game = {
     
     console.log(diff);
     
+    document.getElementById("loadingScreen").style.display = "none";
+    document.getElementById("game").style.display = "block";
+    
     if (game.data.music) {
       game.music.play();
     }
