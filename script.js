@@ -99,7 +99,7 @@ var game = {
   ],
   nextRowUnlock: document.getElementById("nextRowUnlock"),
   markupTab: document.getElementById("markupTabButton"),
-  extraFactorSubtabButton: document.getElementById("extraFactorSubTabButton"),
+  extraFactorSubtabButton: document.getElementById("extraFactorSubtabButton"),
   boosterTab: document.getElementById("boosterTabButton"),
   markupButton: document.getElementById("markupButton"),
   markupButton2: document.getElementById("markupButton2"),
@@ -141,7 +141,6 @@ var game = {
   ],
   factorBoostText: document.getElementById("factorBoost"),
   factorBoostButton: document.getElementById("factorBoostButton"),
-  
   dynamicMult: document.getElementById("dynamicMult"),
   bups: [
     [
