@@ -1039,7 +1039,7 @@ var game = {
   },
   render: () => { 
     game.header.innerHTML = 
-      `${game.data.colors ? `<span style="color:hsl(${game.ordColor()}, 100%, 50%)">`: ``}H<sub>${game.writeOrd()}</sub>(${game.base()})${game.hardy() === Infinity ? ``: `=${game.hardy()}`}${game.data.colors ? `</span>`: ``}`;
+      `${game.data.colors ? `<span style="color:hsl(${game.ordColor() * 360}, 100%, 50%)">`: ``}H<sub>${game.writeOrd()}</sub>(${game.base()})${game.hardy() === Infinity ? ``: `=${game.hardy()}`}${game.data.colors ? `</span>`: ``}`;
     
     game.colorButton.innerHTML = game.data.colors ? `Colors: ON`: `Colors: OFF`;
     
