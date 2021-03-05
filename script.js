@@ -1043,7 +1043,7 @@ var game = {
       
       for (var x = 0; x < 10; x++) {
         game.achievementTd[y][x].innerHTML = game.achieve.achieveName[y][x];
-        game.achievementTd[y][x].tooltip = game.achieve.achieveTooltip[y][x];
+        game.achievementTd[y][x].attributes.tooltip.value = game.achieve.achieveTooltip[y][x];
         
         game.achievementTd[y][x].classList.remove("achievement");
         game.achievementTd[y][x].classList.remove("earned");
