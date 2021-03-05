@@ -41,54 +41,56 @@
           <h1 id="achievementCount">Achievements (0/40)</h1>
           <p>Progress in the game to earn achievements! They don't give any boost and are purely for bragging</p>
           <table id="achievementTable">
-            <tr id="achieveRow0">
-              <td class="achievement" id="achievement00" tooltip=""></td>
-              <td class="achievement" id="achievement01" tooltip=""></td>
-              <td class="achievement" id="achievement02" tooltip=""></td>
-              <td class="achievement" id="achievement03" tooltip=""></td>
-              <td class="achievement" id="achievement04" tooltip=""></td>
-              <td class="achievement" id="achievement05" tooltip=""></td>
-              <td class="achievement" id="achievement06" tooltip=""></td>
-              <td class="achievement" id="achievement07" tooltip=""></td>
-              <td class="achievement" id="achievement08" tooltip=""></td>
-              <td class="achievement" id="achievement09" tooltip=""></td>
-            </tr>
-            <tr id="achieveRow1" style="display:none">
-              <td class="achievement" id="achievement10" tooltip=""></td>
-              <td class="achievement" id="achievement11" tooltip=""></td>
-              <td class="achievement" id="achievement12" tooltip=""></td>
-              <td class="achievement" id="achievement13" tooltip=""></td>
-              <td class="achievement" id="achievement14" tooltip=""></td>
-              <td class="achievement" id="achievement15" tooltip=""></td>
-              <td class="achievement" id="achievement16" tooltip=""></td>
-              <td class="achievement" id="achievement17" tooltip=""></td>
-              <td class="achievement" id="achievement18" tooltip=""></td>
-              <td class="achievement" id="achievement19" tooltip=""></td>
-            </tr>
-            <tr id="achieveRow2" style="display:none">
-              <td class="achievement" id="achievement20" tooltip=""></td>
-              <td class="achievement" id="achievement21" tooltip=""></td>
-              <td class="achievement" id="achievement22" tooltip=""></td>
-              <td class="achievement" id="achievement23" tooltip=""></td>
-              <td class="achievement" id="achievement24" tooltip=""></td>
-              <td class="achievement" id="achievement25" tooltip=""></td>
-              <td class="achievement" id="achievement26" tooltip=""></td>
-              <td class="achievement" id="achievement27" tooltip=""></td>
-              <td class="achievement" id="achievement28" tooltip=""></td>
-              <td class="achievement" id="achievement29" tooltip=""></td>
-            </tr>
-            <tr id="achieveRow3" style="display:none">
-              <td class="achievement" id="achievement30" tooltip=""></td>
-              <td class="achievement" id="achievement31" tooltip=""></td>
-              <td class="achievement" id="achievement32" tooltip=""></td>
-              <td class="achievement" id="achievement33" tooltip=""></td>
-              <td class="achievement" id="achievement34" tooltip=""></td>
-              <td class="achievement" id="achievement35" tooltip=""></td>
-              <td class="achievement" id="achievement36" tooltip=""></td>
-              <td class="achievement" id="achievement37" tooltip=""></td>
-              <td class="achievement" id="achievement38" tooltip=""></td>
-              <td class="achievement" id="achievement39" tooltip=""></td>
-            </tr>
+            <tbody>
+              <tr id="achieveRow0">
+                <td class="achievement" id="achievement00" tooltip=""></td>
+                <td class="achievement" id="achievement01" tooltip=""></td>
+                <td class="achievement" id="achievement02" tooltip=""></td>
+                <td class="achievement" id="achievement03" tooltip=""></td>
+                <td class="achievement" id="achievement04" tooltip=""></td>
+                <td class="achievement" id="achievement05" tooltip=""></td>
+                <td class="achievement" id="achievement06" tooltip=""></td>
+                <td class="achievement" id="achievement07" tooltip=""></td>
+                <td class="achievement" id="achievement08" tooltip=""></td>
+                <td class="achievement" id="achievement09" tooltip=""></td>
+              </tr>
+              <tr id="achieveRow1" style="display:none">
+                <td class="achievement" id="achievement10" tooltip=""></td>
+                <td class="achievement" id="achievement11" tooltip=""></td>
+                <td class="achievement" id="achievement12" tooltip=""></td>
+                <td class="achievement" id="achievement13" tooltip=""></td>
+                <td class="achievement" id="achievement14" tooltip=""></td>
+                <td class="achievement" id="achievement15" tooltip=""></td>
+                <td class="achievement" id="achievement16" tooltip=""></td>
+                <td class="achievement" id="achievement17" tooltip=""></td>
+                <td class="achievement" id="achievement18" tooltip=""></td>
+                <td class="achievement" id="achievement19" tooltip=""></td>
+              </tr>
+              <tr id="achieveRow2" style="display:none">
+                <td class="achievement" id="achievement20" tooltip=""></td>
+                <td class="achievement" id="achievement21" tooltip=""></td>
+                <td class="achievement" id="achievement22" tooltip=""></td>
+                <td class="achievement" id="achievement23" tooltip=""></td>
+                <td class="achievement" id="achievement24" tooltip=""></td>
+                <td class="achievement" id="achievement25" tooltip=""></td>
+                <td class="achievement" id="achievement26" tooltip=""></td>
+                <td class="achievement" id="achievement27" tooltip=""></td>
+                <td class="achievement" id="achievement28" tooltip=""></td>
+                <td class="achievement" id="achievement29" tooltip=""></td>
+              </tr>
+              <tr id="achieveRow3" style="display:none">
+                <td class="achievement" id="achievement30" tooltip=""></td>
+                <td class="achievement" id="achievement31" tooltip=""></td>
+                <td class="achievement" id="achievement32" tooltip=""></td>
+                <td class="achievement" id="achievement33" tooltip=""></td>
+                <td class="achievement" id="achievement34" tooltip=""></td>
+                <td class="achievement" id="achievement35" tooltip=""></td>
+                <td class="achievement" id="achievement36" tooltip=""></td>
+                <td class="achievement" id="achievement37" tooltip=""></td>
+                <td class="achievement" id="achievement38" tooltip=""></td>
+                <td class="achievement" id="achievement39" tooltip=""></td>
+              </tr>
+            </tbody>
           </table>
           <p id="nextRowUnlock">Perform a Markup to unlock the next row of achievements</p>
         </div>
@@ -196,9 +198,9 @@
       <p>Please go to <a href="https://ordinal-layers.github.io">https://ordinal-layers.github.io</a>.</p>
       <p><i style="font-size:12px">You saw this message because you found a fake replica of Ordinal Layers. These games are not trusted by Adesdae's Incremental Games (AIG), developer of Ordinal Layers, and may contain malware/errors.</i></p>
     </div>
-    <div id="loadingScreen">
+    <div id="loadingScreen" style="display:none">
       <h1>Loading...</h1>
-      <p><i>If you see this message for more than five seconds, your browser might not be supported. Please read the <a href="howtoplay.html">browser requirements</a>.</i></p>
+      <p><i style="font-size:12px">If you see this message for more than five seconds, your browser might not be supported. Please read the <a href="howtoplay.html">browser requirements</a>.</i></p>
     </div>
     <script src="load.js"></script>
   </body>
