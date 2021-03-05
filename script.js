@@ -643,8 +643,12 @@ var game = {
   ],
   currentLevel: () => {
     var level = 0;
-    while (game.data.ord >= game.ordLevels[level]()) {
-      level++;
+    if (game.data.ord === Infinity) {
+      level = 38;
+    } else {
+      while (game.data.ord >= game.ordLevels[level]()) {
+        level++;
+      }
     }
     return level - 1;
   },
@@ -1332,6 +1336,8 @@ var game = {
     };
     
     game.save("reset", false);
+    
+    game.music.play();
   },
   importGame: () => {
     if (game.data.clickCooldown === 0) {
