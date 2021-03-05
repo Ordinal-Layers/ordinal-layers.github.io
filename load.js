@@ -12,11 +12,7 @@ if (realSites.includes(sPath)) {
 
 if (real) {
   document.getElementById("fake").style.display = "none";
-  
-  var loadingScreen = document.createElement("div");
-  loadingScreen.id = "loadingScreen";
-  loadingScreen.innerHTML = '<h1>Loading...</h1>';
-  document.body.appendChild(loadingScreen);
+  document.getElementById("loadingScreen").style.display = "block";
   
   function script1() {
     var extend1 = document.createElement("script");
