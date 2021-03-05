@@ -917,7 +917,7 @@ var game = {
       return `0`;
     } else if (ord === Infinity) {
       return `&Omega;`;
-    } else if (ord < 1.000e230 || base > 3) {
+    } else if (ord < 1.000e230) {
       var result = ``;
       var remainOrd = ord;
       
