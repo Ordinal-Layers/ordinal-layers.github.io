@@ -713,7 +713,7 @@ var game = {
         "You gotta start somewhere",
         "Maximizable",
         "Markupable",
-        "Unnamed Achievement",
+        "Unnamed achievement",
         "Hyperdimensional",
         "Ordinal Collapsing Functions",
         "Ackermann Ordinal",
@@ -724,12 +724,12 @@ var game = {
       [
         "Markup!",
         "Shiftable",
-        "Unnamed Achievement",
-        "Unnamed Achievement",
-        "Unnamed Achievement",
+        "Unnamed achievement",
+        "Unnamed achievement",
+        "Unnamed achievement",
         "Boostable",
-        "Unnamed Achievement",
-        "Unnamed Achievement",
+        "Unnamed achievement",
+        "Unnamed achievement",
         "Way too much",
         "Way too much"
       ],
@@ -748,7 +748,7 @@ var game = {
       [
         "Boost!",
         "Booster Pack",
-        "Unnamed Achievement",
+        "Unnamed achievement",
         "Super Boost",
         "Way too much",
         "Way too much",
@@ -761,15 +761,15 @@ var game = {
     achieveTooltip: [
       [
         "Click the successor button",
-        "Reach the ordinal &omega;",
-        "Reach the ordinal &omega;<sup>2</sup>",
-        "Reach the ordinal &omega;<sup>3</sup>",
-        "Reach the ordinal &omega;<sup>&omega;</sup>",
-        "Reach the ordinal &psi;(1)",
-        "Reach the ordinal &psi;(&Omega;<sup>&Omega;<sup>2</sup></sup>)",
-        "Reach the ordinal &psi;(&Omega;<sup>&Omega;<sup>2</sup>2</sup>)",
-        "Reach the ordinal &psi;(way too large)",
-        "Reach the ordinal &psi;(way too large)"
+        "Reach the ordinal ω",
+        "Reach the ordinal ω^2",
+        "Reach the ordinal ω^3",
+        "Reach the ordinal ω^ω",
+        "Reach the ordinal ψ(1)",
+        "Reach the ordinal ψ(Ω^Ω^2)",
+        "Reach the ordinal ψ(Ω^(Ω^2*2))",
+        "Reach the ordinal ψ(way too large)",
+        "Reach the ordinal ψ(way too large)"
       ],
       [
         "Markup for the first time",
@@ -777,9 +777,9 @@ var game = {
         "Reach 1.000e6 Ordinal Points",
         "Reach 1.000e10 Ordinal Points",
         "Reach 1.000e100 Ordinal Points",
-        "Reach g<sub>&psi;(1)</sub>(10) OP",
-        "Reach g<sub>&psi;(&Omega;<sup>&Omega;<sup>2</sup></sup>)</sub>(10) OP",
-        "Reach g<sub>&psi;(&Omega;<sup>&Omega;<sup>2</sup>2</sup>)</sub>(10) OP",
+        "Reach g(ψ(1))(10) OP",
+        "Reach g(ψ(Ω^Ω^2))(10) OP",
+        "Reach g(ψ(Ω^(Ω^2*2))(10) OP",
         "Reach Too Many Ordinal Points",
         "Reach Too Many Ordinal Points"
       ],
