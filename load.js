@@ -34,13 +34,13 @@ if (real) {
   
   function script4() {
     script2();
-    setTimeout(script3, 50);
+    setTimeout(script3, 100);
   }
   
   function script() {
     script1();
-    setTimeout(script4, 50);
+    setTimeout(script4, 100);
   }
   
-  setTimeout(script, 50);
+  setTimeout(script, 100);
 }
