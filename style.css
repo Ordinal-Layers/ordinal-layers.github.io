@@ -78,6 +78,7 @@ body {
 }
 
 .canbuy:hover {
+  color: black;
   background-color: #008000;
 }
 
