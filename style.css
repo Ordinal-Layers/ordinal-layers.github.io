@@ -73,10 +73,12 @@ body {
 }
 
 .canbuy {
-  background-color: #000000;
+  color: white;
+  background-color: black;
 }
 
 .canbuy:hover {
+  color: black;
   background-color: #008000;
 }
 
