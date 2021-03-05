@@ -638,7 +638,7 @@ var game = {
   ],
   currentLevel: () => {
     var level = 0;
-    while (game.ord >= game.ordLevels[level]) {
+    while (game.ord >= game.ordLevels[level]()) {
       level++;
     }
     return level - 1;
