@@ -142,6 +142,8 @@ var game = {
   factorBoostText: document.getElementById("factorBoost"),
   factorBoostButton: document.getElementById("factorBoostButton"),
   dynamicMult: document.getElementById("dynamicMult"),
+  boosterText: document.getElementById("boosterText"),
+  refundButton: document.getElementById("refundButton"),
   bups: [
     [
       document.getElementById("bup00"),
@@ -1098,6 +1100,9 @@ var game = {
     game.factorBoostButton.innerHTML = `Gain ${game.data.factorBoosts + 1} Boosters (B)`;
     
     game.dynamicMult.innerHTML = `Your Dynamic Factor is x${game.beautify(game.data.dynamicFactor)}`;
+    
+    game.boosterText.innerHTML = `You have ${game.boosters()} boosters`;
+    game.refundButton.innerHTML = `Refund back ${game.data.factorBoosts * (game.data.factorBoosts + 1) / 2 - game.boosters()} boosters, but reset this Factor Boost (R)`;
     
     for (var y = 0; y < 4; y++) {
       for (var x = 0; x < 4; x++) {
