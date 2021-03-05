@@ -569,12 +569,7 @@ var game = {
   },
   refundBups: (manmade = true) => {
     if (!manmade || game.data.clickCooldown === 0) {
-      if (game.data.bups !== [
-        [false, false, false, false],
-        [false, false, false, false],
-        [false, false, false, false],
-        [false, false, false, false]
-      ]) {
+      if (!game.data.bups[0].includes(true)) {
         var conf = true;
         if (manmade) {
           conf = confirm(
