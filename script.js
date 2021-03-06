@@ -229,7 +229,7 @@ var game = {
     10000,
     100000,
     1.000e6,
-    1.000e10,
+    1.000e12,
     1.000e20,
     1.000e100,
     Infinity
@@ -688,7 +688,7 @@ var game = {
         () => game.data.op >= 100,
         () => game.data.op >= 1000,
         () => game.data.op >= 1.000e6,
-        () => game.data.op >= 1.000e10,
+        () => game.data.op >= 1.000e12,
         () => game.data.op >= 1.000e100,
         () => game.data.op >= 1.000e230,
         () => game.data.op >= game.V(9),
