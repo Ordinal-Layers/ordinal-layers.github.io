@@ -973,21 +973,28 @@ var game = {
       var result = ``;
       var remainOrd = ord;
       
+      var powerList = [];
+      
       while (remainOrd > 0) {
         var power = Math.min(41, Math.floor(Math.log(remainOrd / 1.000e230) / Math.log(3) + 0.001));
-                             
+        
+        powerList.push(power);
+        
+        remainOrd -= 1.000e230 * 3 ** power;
+      }
+      
+      var length = powerList.length;
+      
+      for (var i = 0; i < length; i++) {
         if (result === ``) {
-          if (power === 0) {
+          if (powerList[length - i - 1] === 0) {
             result = `1`;
           }
-          if (game.ordPowers.includes(power)) {
+          if (game.ordPowers.includes(powerList[length - i - 1])) {
             result = `&omega;`;
           }
         }
-        
-        result = game.ordMarks[power](result);
-        
-        remainOrd -= 1.000e230 * 3 ** power;
+        result = game.ordMarks[powerList[length - i - 1]](result);
       }
       
       return result;
