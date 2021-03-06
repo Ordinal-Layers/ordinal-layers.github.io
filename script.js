@@ -1286,9 +1286,11 @@ var game = {
     game.save("load", false);
     
     game.loop(diff, true);
-    game.data.lastTick = Date.now();
     
     console.log(diff);
+    
+    document.getElementById("mainMenu").style.display = "none";
+    document.getElementById("game").style.display = "block";
     
     onkeypress = _ => {
       var k = _.key.toLowerCase();
@@ -1300,9 +1302,6 @@ var game = {
     loop = setInterval(() => game.loop(Date.now() - game.data.lastTick), 50);
     
     autoSave = setInterval(() => game.save("autosave", false), 5000);
-    
-    document.getElementById("mainMenu").style.display = "none";
-    document.getElementById("game").style.display = "block";
     
     if (game.data.music) {
       game.music.play();
@@ -1364,13 +1363,13 @@ var game = {
   exportGame: () => {
     if (game.data.clickCooldown === 0) {
       game.save("export", false);
-
+      
       var file = new Blob([btoa(JSON.stringify(game.data))], {type: "text/plain"});
-
+      
       URL = URL || webkitURL;
-
+      
       var importButton = document.createElement("importButton");
-
+      
       importButton.href = URL.createObjectURL(file);
       importButton.download = "Ordinal Markup Save.txt";
       importButton.click();
