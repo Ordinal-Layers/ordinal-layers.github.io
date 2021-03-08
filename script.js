@@ -600,6 +600,11 @@ var game = {
       }
     }
   },
+  debug: () => {
+    game.data.markupUnlocked = true;
+    game.data.boosterUnlocked = true;
+    game.data.factorBoosts = 27;
+  },
   ordLevels: [
     () => 0,
     () => 1,
