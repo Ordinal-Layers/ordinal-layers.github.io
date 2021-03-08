@@ -2,12 +2,11 @@
 
 var loop;
 
-var autoSave;
-
 var game = {
   data: {
     version: "0.2",
     lastTick: Date.now(),
+    autosaveInterval: 0,
     pendingIncrement: 0,
     pendingMaximize: 0,
     pendingMaxAll: 0,
@@ -1138,9 +1137,7 @@ var game = {
     game.markupAuto.innerHTML =
       `Your Markup Autobuyer is ${game.data.bups[0][2] ? `clicking the Markup button ${game.beautify(game.markupSpeed())} times per second, but only if you're past &psi;(1)`: `locked`}`;
   },
-  loop: (unadjusted, off = false) => {
-    var ms = Math.max(0, unadjusted);
-    
+  loop: (ms, off = false) => {
     game.data.lastTick = Date.now();
     
     if (game.data.bups[1][2] && game.data.op < 1.000e230) {
@@ -1198,58 +1195,65 @@ var game = {
       game.ord = Math.max(Math.min(game.data.incrementAuto, game.data.maximizeAuto), 1.000e230);
     }
     
-    if (ms > 0) {
-      if (game.data.bups[0][1]) {
-        game.data.pendingMaxAll += ms / 1000 * game.maxAllSpeed();
-        
-        if (game.data.pendingMaxAll >= 1) {
-          game.data.pendingMaxAll -= 1;
-          if (game.data.op < game.factorShiftCosts[game.data.factorShifts]) {
-            game.maxMarkup(false);
-          }
+    if (game.data.bups[0][1]) {
+      game.data.pendingMaxAll += ms / 1000 * game.maxAllSpeed();
+      
+      if (game.data.pendingMaxAll >= 1) {
+        game.data.pendingMaxAll -= 1;
+        if (game.data.op < game.factorShiftCosts[game.data.factorShifts]) {
+          game.maxMarkup(false);
         }
       }
-      if (game.data.bups[0][2]) {
-        game.data.pendingMarkup += ms / 1000 * game.markupSpeed();
-        
-        if (game.data.pendingMarkup >= 1) {
-          game.data.pendingMarkup -= 1;
-          if (game.ord >= 1.000e230)
-            game.markup(false);
-          }
+    }
+    if (game.data.bups[0][2]) {
+      game.data.pendingMarkup += ms / 1000 * game.markupSpeed();
+      
+      if (game.data.pendingMarkup >= 1) {
+        game.data.pendingMarkup -= 1;
+        if (game.ord >= 1.000e230)
+          game.markup(false);
         }
-      if (game.data.pendingMaxAll >= 1 && game.data.pendingMarkup >= 1) {
-        var bupCom = Math.min(game.data.pendingMaxAll, game.data.pendingMarkup);
-        
-        game.data.pendingMaxAll %= 1;
-        game.data.pendingMarkup %= 1;
-        
-        game.data.ord += bupCom * 1.000e230;
-        game.data.op += bupCom * 1.000e230;
       }
+    if (game.data.pendingMaxAll >= 1 && game.data.pendingMarkup >= 1) {
+      var bupCom = Math.min(game.data.pendingMaxAll, game.data.pendingMarkup);
+      
+      game.data.pendingMaxAll %= 1;
+      game.data.pendingMarkup %= 1;
+      
+      game.data.ord += bupCom * 1.000e230;
+      game.data.op += bupCom * 1.000e230;
     }
     
     game.checkAchieve();
     
-    if (ms > 0) {
-      game.render();
-    }
+    game.render();
     
     if (game.data.clickCooldown > 0) {
       game.data.clickCooldown--;
     }
+    
+    game.data.autosaveInterval += ms;
+    
+    if (game.data.autosaveInterval >= 5000) {
+      game.data.autosaveInterval = 0;
+      game.save("autosave", false);
+    }
   },
   handleOldVersions: loadgame => {
+    game.data.version = "0.2";
+    
     if (loadgame.version === "0.1") {
       game.data.clickCooldown = 1;
       game.data.factorShifts = 0;
       game.data.factors = [];
     }
+    
     if (loadgame.version === "0.1" || loadgame.version === "0.1.1") {
+      game.data.autosaveInterval = 0;
       game.data.factorBoosts = 0;
       game.data.dynamicFactor = 1;
       game.data.achievements = [
-        [false, false, false, false, false, false, false, false, false, false],
+        [false, false, false, false, false, false, false, false, false, false]
       ];
       game.data.bups = [
         [false, false, false, false],
@@ -1274,16 +1278,12 @@ var game = {
     }
   },
   load: loadgame => {
-    game.data = loadgame;
-    
-    game.data.version = "0.2";
-    game.data.clickCooldown = 1;
+    if (loadgame !== null) {
+      game.data = loadgame;
+      game.handleOldVersions(loadgame);
+    }
     
     var diff = Date.now() - game.data.lastTick;
-    
-    game.handleOldVersions(loadgame);
-    
-    game.save("load", false);
     
     game.loop(diff, true);
     
@@ -1301,8 +1301,6 @@ var game = {
     
     loop = setInterval(() => game.loop(Date.now() - game.data.lastTick), 50);
     
-    autoSave = setInterval(() => game.save("autosave", false), 5000);
-    
     if (game.data.music) {
       game.music.play();
     }
@@ -1311,6 +1309,7 @@ var game = {
     game.data = {
       version: "0.2",
       lastTick: Date.now(),
+      autosaveInterval: 0,
       pendingIncrement: 0,
       pendingMaximize: 0,
       pendingMaxAll: 0,
@@ -1348,16 +1347,21 @@ var game = {
   importGame: () => {
     if (game.data.clickCooldown === 0) {
       var loadgame = "";
-
+      
       reader.readAsText(document.getElementById("importButton").files[0]);
-
-      loadgame = JSON.parse(atob(reader.result));
-
-      if (loadgame !== "") {
-        game.load(loadgame);
-      }
-
-      location.reload();
+      
+      setTimeout(
+        () => {
+          loadgame = JSON.parse(atob(reader.result));
+          if (loadgame !== "") {
+            game.load(loadgame);
+            $.notify("Import Successful!", "success");
+          }
+        },
+        100
+      );
+      
+      setTimeout(() => location.reload(), 200);
     }
   },
   exportGame: () => {
@@ -1368,11 +1372,11 @@ var game = {
       
       URL = URL || webkitURL;
       
-      var importButton = document.createElement("importButton");
+      var a = document.createElement("a");
       
-      importButton.href = URL.createObjectURL(file);
-      importButton.download = "Ordinal Markup Save.txt";
-      importButton.click();
+      a.href = URL.createObjectURL(file);
+      a.download = "Ordinal Markup Save.txt";
+      a.click();
       
       game.data.clickCooldown = 1;
     }
