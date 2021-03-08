@@ -1346,8 +1346,6 @@ var game = {
     };
     
     game.save("reset", false);
-    
-    game.music.play();
   },
   importGame: () => {
     if (game.data.clickCooldown === 0) {
