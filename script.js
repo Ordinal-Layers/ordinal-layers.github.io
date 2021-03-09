@@ -244,9 +244,7 @@ var game = {
     var achieveCount = 0;
     for (var y = 0; y < game.data.achievements.length; y++) {
       for (var x = 0; x < 10; x++) {
-        if (game.data.achievements[y][x]) {
-          achieveCount++;
-        }
+        achieveCount += Number(game.data.achievements[y][x]);
       }
     }
     return achieveCount;
@@ -859,49 +857,101 @@ var game = {
     var tempvar2 = Math.floor(ord / base ** 2);
     return (ord >= base ** 3) ? Infinity: game.fghexp(tempvar2, 2 ** (tempvar % base) * (base + ord - base * (tempvar % base) - base ** 2 * tempvar2 + over));
   },
+  ordColor: (ord = game.data.ord, over = game.data.over, base = game.base()) => 
+    ord === 0 || ord === Infinity ?
+      0:
+      ord < 1.000e230 ?
+        Math.log(ord + over) / (Math.log(3) * 27):
+        Math.log(ord / 1.000e230) / (Math.log(3) * 42),
   ordMarks: [
-    x => `&psi;(${x})`,
-    x => `&psi;(&Omega;${x})`,
-    x => `&psi;(&Omega;<sup>2</sup>${x})`,
-    x => `&psi;(&Omega;<sup>${x}</sup>)`,
-    x => `&psi;(&Omega;<sup>&Omega;</sup>${x})`,
-    x => `&psi;(&Omega;<sup>&Omega;+1</sup>${x})`,
-    x => `&psi;(&Omega;<sup>&Omega;+2</sup>${x})`,
-    x => `&psi;(&Omega;<sup>&Omega;+${x}</sup>)`,
-    x => `&psi;(&Omega;<sup>&Omega;2</sup>${x})`,
-    x => `&psi;(&Omega;<sup>&Omega;2+1</sup>${x})`,
-    x => `&psi;(&Omega;<sup>&Omega;2+2</sup>${x})`,
-    x => `&psi;(&Omega;<sup>&Omega;2+${x}</sup>)`,
-    x => `&psi;(&Omega;<sup>&Omega;${x}</sup>)`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup></sup>${x})`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+1</sup>${x})`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+2</sup>${x})`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+${x}</sup>)`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;</sup>${x})`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;+1</sup>${x})`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;+2</sup>${x})`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;+${x}</sup>)`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;2</sup>${x})`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;2+1</sup>${x})`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;2+2</sup>${x})`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;2+${x}</sup>)`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;${x}</sup>)`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2</sup>${x})`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+1</sup>${x})`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+2</sup>${x})`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+${x}</sup>)`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;</sup>${x})`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;+1</sup>${x})`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;+2</sup>${x})`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;+${x}</sup>)`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;2</sup>${x})`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;2+1</sup>${x})`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;2+2</sup>${x})`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;2+${x}</sup>)`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;${x}</sup>)`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>${x}</sup>)`,
-    x => `&psi;(&Omega;<sup>&Omega;<sup>${x}</sup></sup>)`,
-    x => `&psi;(&Omega;&uarr;&uarr;${x})`
+    [
+      x => `&psi;(${x})`,
+      x => `&psi;(&Omega;${x})`,
+      x => `&psi;(&Omega;<sup>2</sup>${x})`,
+      x => `&psi;(&Omega;<sup>${x}</sup>)`,
+      x => `&psi;(&Omega;<sup>&Omega;</sup>${x})`,
+      x => `&psi;(&Omega;<sup>&Omega;+1</sup>${x})`,
+      x => `&psi;(&Omega;<sup>&Omega;+2</sup>${x})`,
+      x => `&psi;(&Omega;<sup>&Omega;+${x}</sup>)`,
+      x => `&psi;(&Omega;<sup>&Omega;2</sup>${x})`,
+      x => `&psi;(&Omega;<sup>&Omega;2+1</sup>${x})`,
+      x => `&psi;(&Omega;<sup>&Omega;2+2</sup>${x})`,
+      x => `&psi;(&Omega;<sup>&Omega;2+${x}</sup>)`,
+      x => `&psi;(&Omega;<sup>&Omega;${x}</sup>)`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup></sup>${x})`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+1</sup>${x})`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+2</sup>${x})`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+${x}</sup>)`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;</sup>${x})`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;+1</sup>${x})`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;+2</sup>${x})`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;+${x}</sup>)`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;2</sup>${x})`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;2+1</sup>${x})`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;2+2</sup>${x})`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;2+${x}</sup>)`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;${x}</sup>)`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2</sup>${x})`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+1</sup>${x})`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+2</sup>${x})`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+${x}</sup>)`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;</sup>${x})`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;+1</sup>${x})`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;+2</sup>${x})`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;+${x}</sup>)`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;2</sup>${x})`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;2+1</sup>${x})`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;2+2</sup>${x})`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;2+${x}</sup>)`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;${x}</sup>)`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>2</sup>${x}</sup>)`,
+      x => `&psi;(&Omega;<sup>&Omega;<sup>${x}</sup></sup>)`,
+      x => `&psi;(&Omega;&uarr;&uarr;${x})`
+    ],
+    [
+      x => `<span style="color:hsl(0, 100%, 50%)">&psi;(${x})</span>`,
+      x => `<span style="color:hsl(${60 / 7}, 100%, 50%)">&psi;(&Omega;${x})</span>`,
+      x => `<span style="color:hsl(${120 / 7}, 100%, 50%)">&psi;(&Omega;<sup>2</sup>${x})</span>`,
+      x => `<span style="color:hsl(${180 / 7}, 100%, 50%)">&psi;(&Omega;<sup>${x}</sup>)</span>`,
+      x => `<span style="color:hsl(${240 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;</sup>${x})</span>`,
+      x => `<span style="color:hsl(${300 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;+1</sup>${x})</span>`,
+      x => `<span style="color:hsl(${360 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;+2</sup>${x})</span>`,
+      x => `<span style="color:hsl(60, 100%, 50%)">&psi;(&Omega;<sup>&Omega;+${x}</sup>)</span>`,
+      x => `<span style="color:hsl(${480 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;2</sup>${x})</span>`,
+      x => `<span style="color:hsl(${540 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;2+1</sup>${x})</span>`,
+      x => `<span style="color:hsl(${600 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;2+2</sup>${x}</span>`,
+      x => `<span style="color:hsl(${660 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;2+${x}</sup>)</span>`,
+      x => `<span style="color:hsl(${720 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;${x}</sup>)</span>`,
+      x => `<span style="color:hsl(${780 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup></sup>${x})</span>`,
+      x => `<span style="color:hsl(120, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>+1</sup>${x})</span>`,
+      x => `<span style="color:hsl(${900 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>+2</sup>${x})</span>`,
+      x => `<span style="color:hsl(${960 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>+${x}</sup>)</span>`,
+      x => `<span style="color:hsl(${1020 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;</sup>${x})</span>`,
+      x => `<span style="color:hsl(${1080 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;+1</sup>${x})</span>`,
+      x => `<span style="color:hsl(${1140 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;+2</sup>${x})</span>`,
+      x => `<span style="color:hsl(${1200 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;+${x}</sup>)</span>`,
+      x => `<span style="color:hsl(180, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;2</sup>${x})</span>`,
+      x => `<span style="color:hsl(${1320 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;2+1</sup>${x})</span>`,
+      x => `<span style="color:hsl(${1380 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;2+2</sup>${x})</span>`,
+      x => `<span style="color:hsl(${1440 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;2+${x}</sup>)</span>`,
+      x => `<span style="color:hsl(${1500 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>+&Omega;${x}</sup>)</span>`,
+      x => `<span style="color:hsl(${1560 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>2</sup>${x})</span>`,
+      x => `<span style="color:hsl(${1620 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+1</sup>${x})</span>`,
+      x => `<span style="color:hsl(240, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+2</sup>${x})</span>`,
+      x => `<span style="color:hsl(${1740 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+${x}</sup>)</span>`,
+      x => `<span style="color:hsl(${1800 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;</sup>${x})</span>`,
+      x => `<span style="color:hsl(${1860 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;+1</sup>${x})</span>`,
+      x => `<span style="color:hsl(${1920 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;+2</sup>${x})</span>`,
+      x => `<span style="color:hsl(${1980 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;+${x}</sup>)</span>`,
+      x => `<span style="color:hsl(${2040 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;2</sup>${x})</span>`,
+      x => `<span style="color:hsl(300, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;2+1</sup>${x})</span>`,
+      x => `<span style="color:hsl(${2160 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;2+2</sup>${x})</span>`,
+      x => `<span style="color:hsl(${2220 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;2+${x}</sup>)</span>`,
+      x => `<span style="color:hsl(${2280 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>2+&Omega;${x}</sup>)</span>`,
+      x => `<span style="color:hsl(${2340 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup>${x}</sup>)</span>`,
+      x => `<span style="color:hsl(${2400 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>${x}</sup></sup>)</span>`,
+      x => `<span style="color:hsl(${2460 / 7}, 100%, 50%)">&psi;(&Omega;&uarr;&uarr;${x})</span>`
+    ]
   ],
   ordPowers: [
     3,
@@ -920,56 +970,62 @@ var game = {
     40,
     41
   ],
-  writeOrd: (ord = game.data.ord, over = game.data.over, base = game.base()) => {
+  writeOrd: (ord = game.data.ord, over = game.data.over, base = game.base(), color = game.data.colors) => {
     if (ord === 0) {
-      return `0`;
+      return `${color ? `<span style="color:hsl(0, 100%, 50%)">`: ``}0${color ? `</span>`: ``}`;
     } else if (ord === Infinity) {
-      return `&Omega;`;
+      return `${color ? `<span style="color:hsl(0, 100%, 50%)">`: ``}&Omega;${color ? `</span>`: ``}`;
     } else if (ord < 1.000e230) {
       var result = ``;
       var remainOrd = ord;
+      var terms = 0;
       
-      while (remainOrd > 0) {
+      while (remainOrd > 0 && terms < 5) {
         var power = Math.floor(Math.log(remainOrd) / Math.log(base) + 0.001);
         if (result === ``) {
           if (power === 0) {
-            result = remainOrd + over;
+            result = `${color ? `<span style="color:hsl(0, 100%, 50%)">`: ``}${remainOrd + over}${color ? `</span>`: ``}`;
           } else {
             if (power === 1) {
               if (Math.floor(remainOrd / base) === 1) {
-                result = `&omega;`;
+                result = `${color ? `<span style="color:hsl(${game.ordColor(base) * 360}, 100%, 50%)">`: ``}&omega;${color ? `</span>`: ``}`;
               } else {
-                result = `&omega;${Math.floor(remainOrd / base)}`;
+                result = `${color ? `<span style="color:hsl(${game.ordColor(base) * 360}, 100%, 50%)">`: ``}&omega;${Math.floor(remainOrd / base)}${color ? `</span>`: ``}`;
               }
             } else {
               if (Math.floor(remainOrd / base ** power) === 1) {
-                result = `&omega;<sup>${game.writeOrd(power, 0)}</sup>`;
+                result = `${color ? `<span style="color:hsl(${game.ordColor(base ** power) * 360}, 100%, 50%)">`: ``}&omega;<sup>${game.writeOrd(power, 0, base, color)}</sup>${color ? `</span>`: ``}`;
               } else {
-                result = `&omega;<sup>${game.writeOrd(power, 0)}</sup>${Math.floor(remainOrd / base ** power)}`;
+                result = `${color ? `<span style="color:hsl(${game.ordColor(base ** power) * 360}, 100%, 50%)">`: ``}&omega;<sup>${game.writeOrd(power, 0, base, color)}</sup>${Math.floor(remainOrd / base ** power)}${color ? `</span>`: ``}`;
               }
             }
           }
         } else {
           if (power === 0) {
-            result += `+${remainOrd + over}`;
+            result += `${color ? `<span style="color:hsl(0, 100%, 50%)">`: ``}+${remainOrd + over}${color ? `</span>`: ``}`;
           } else {
             if (power === 1) {
               if (Math.floor(remainOrd / base) === 1) {
-                result += `+&omega;`;
+                result += `${color ? `<span style="color:hsl(${game.ordColor(base) * 360}, 100%, 50%)">`: ``}+&omega;${color ? `</span>`: ``}`;
               } else {
-                result += `+&omega;${Math.floor(remainOrd / base)}`;
+                result += `${color ? `<span style="color:hsl(${game.ordColor(base) * 360}, 100%, 50%)">`: ``}+&omega;${Math.floor(remainOrd / base)}${color ? `</span>`: ``}`;
               }
             } else {
               if (Math.floor(remainOrd / base ** power) === 1) {
-                result += `+&omega;<sup>${game.writeOrd(power, 0)}</sup>`;
+                result += `${color ? `<span style="color:hsl(${game.ordColor(base ** power) * 360}, 100%, 50%)">`: ``}+&omega;<sup>${game.writeOrd(power, 0)}</sup>${color ? `</span>`: ``}`;
               } else {
-                result += `+&omega;<sup>${game.writeOrd(power, 0)}</sup>${Math.floor(remainOrd / base ** power)}`;
+                result += `${color ? `<span style="color:hsl(${game.ordColor(base ** power) * 360}, 100%, 50%)">`: ``}+&omega;<sup>${game.writeOrd(power, 0)}</sup>${Math.floor(remainOrd / base ** power)}${color ? `</span>`: ``}`;
               }
             }
           }
         }
         
         remainOrd -= base ** power * Math.floor(remainOrd / base ** power);
+        terms++;
+      }
+      
+      if (remainOrd > 0) {
+        result += `${color ? `<span style="color:hsl(${game.ordColor(remainOrd, over) * 360}, 100%, 50%)">`: ``}+...${color ? `</span>`: ``}`
       }
       
       return result;
@@ -989,16 +1045,24 @@ var game = {
       
       var length = powerList.length;
       
-      for (var i = 0; i < length; i++) {
-        if (result === ``) {
-          if (powerList[length - i - 1] === 0) {
-            result = `1`;
-          }
-          if (game.ordPowers.includes(powerList[length - i - 1])) {
-            result = `&omega;`;
-          }
+      if (powerList[length - 1] === 0) {
+        result = `1`;
+      }
+      
+      if (game.ordPowers.includes(powerList[length - 1])) {
+        result = `&omega;`;
+      }
+      
+      if (length > 7) {
+        result = `...`;
+        for (var i = 0; i < length - 7; i++) {
+          powerList.pop();
         }
-        result = game.ordMarks[powerList[length - i - 1]](result);
+        length = 7;
+      }
+      
+      for (var i = 0; i < length; i++) {
+        result = game.ordMarks[Number(color)][powerList[length - 1 - i]](result);
       }
       
       return result;
@@ -1018,12 +1082,6 @@ var game = {
                 x.toFixed(3):
           x.toFixed(0):
         `${(x / 10 ** Math.floor(Math.log10(x) + 0.001)).toFixed(3)}e${Math.floor(Math.log10(x) + 0.001)}`,
-  ordColor: (ord = game.data.ord, over = game.data.over, base = game.base()) => 
-    ord === 0 || ord === Infinity ?
-      0:
-      ord < 1.000e230 ?
-        Math.log(ord + over) / (Math.log(3) * 27):
-        Math.log(ord / 1.000e230) / (Math.log(3) * 42),
   toggleColor: () => {
     if (game.data.clickCooldown === 0) {
       game.data.colors = !game.data.colors;
@@ -1074,7 +1132,7 @@ var game = {
         game.achievementTd[y][x].classList.remove("achievement");
         game.achievementTd[y][x].classList.remove("earned");
         
-        game.achievementTd[y][x].classList.add(game.data.achievements[y][x] ? "earned" : "achievement");
+        game.achievementTd[y][x].classList.add(game.data.achievements[y][x] ? "earned": "achievement");
       }
     }
     
@@ -1182,13 +1240,13 @@ var game = {
         if (game.data.pendingMaximize >= 1) {
           game.data.over = 0;
 
-          game.data.ord += Math.min(Math.floor(game.data.pendingIncrement), game.base() * Math.floor(game.data.pendingMaximize));
+          game.data.ord += Math.min(Math.floor(game.data.pendingIncrement + 0.001), game.base() * Math.floor(game.data.pendingMaximize + 0.001));
 
           game.data.pendingIncrement %= 1;
           game.data.pendingMaximize %= 1;
-        } else if (Math.floor(game.data.pendingIncrement) >= game.base() - (game.data.ord % game.base())) {
+        } else if (Math.floor(game.data.pendingIncrement + 0.001) >= game.base() - (game.data.ord % game.base())) {
           game.ord += game.base() - (game.data.ord % game.base()) - 1;
-          game.over += Math.floor(game.data.pendingIncrement) - game.base() + (game.data.ord % game.base()) + 1;
+          game.over += Math.floor(game.data.pendingIncrement + 0.001) - game.base() + (game.data.ord % game.base()) + 1;
           game.data.pendingIncrement %= 1;
         } else {
           game.ord += Math.floor(game.data.pendingIncrement);
@@ -1225,8 +1283,8 @@ var game = {
       game.data.pendingMaxAll %= 1;
       game.data.pendingMarkup %= 1;
       
-      game.data.ord += bupCom * 1.000e230;
-      game.data.op += bupCom * 1.000e230;
+      game.data.ord += Math.floor(bupCom + 0.001) * 1.000e230;
+      game.data.op += Math.floor(bupCom + 0.001) * 1.000e230;
     }
     
     game.checkAchieve();
@@ -1240,7 +1298,7 @@ var game = {
     game.data.autosaveInterval += ms;
     
     if (game.data.autosaveInterval >= 5000) {
-      game.data.autosaveInterval = 0;
+      game.data.autosaveInterval %= 5000;
       game.save("autosave", false);
     }
   },
