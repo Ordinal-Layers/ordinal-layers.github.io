@@ -975,7 +975,7 @@ var game = {
     40,
     41
   ],
-  writeOrd: (ord = game.data.ord, over = game.data.over, base = game.base(), color = game.data.colors) => {
+  writeOrd: (color = false, ord = game.data.ord, over = game.data.over, base = game.base()) => {
     if (ord === 0) {
       return `${color ? `<span style="color:hsl(0, 100%, 50%)">`: ``}0${color ? `</span>`: ``}`;
     } else if (ord === Infinity) {
@@ -999,9 +999,9 @@ var game = {
               }
             } else {
               if (Math.floor(remainOrd / base ** power) === 1) {
-                result = `${color ? `<span style="color:hsl(${game.ordColor(base ** power) * 360}, 100%, 50%)">`: ``}&omega;<sup>${game.writeOrd(power, 0, base, color)}</sup>${color ? `</span>`: ``}`;
+                result = `${color ? `<span style="color:hsl(${game.ordColor(base ** power) * 360}, 100%, 50%)">`: ``}&omega;<sup>${game.writeOrd(power, 0)}</sup>${color ? `</span>`: ``}`;
               } else {
-                result = `${color ? `<span style="color:hsl(${game.ordColor(base ** power) * 360}, 100%, 50%)">`: ``}&omega;<sup>${game.writeOrd(power, 0, base, color)}</sup>${Math.floor(remainOrd / base ** power)}${color ? `</span>`: ``}`;
+                result = `${color ? `<span style="color:hsl(${game.ordColor(base ** power) * 360}, 100%, 50%)">`: ``}&omega;<sup>${game.writeOrd(power, 0)}</sup>${Math.floor(remainOrd / base ** power)}${color ? `</span>`: ``}`;
               }
             }
           }
@@ -1077,7 +1077,7 @@ var game = {
     (x === Infinity) ?
       `Infinity`:
       (x >= 2.000e230) ?
-        `g<sub>${game.writeOrd(x - 1.000e230, 0, game.base(), false)}</sub>(10)`:
+        `g<sub>${game.writeOrd(x - 1.000e230, 0)}</sub>(10)`:
         (x < 1.000e6) ?
           (x < 1000 && x % 1 !== 0) ?
             (x * 10 % 1 === 0) ?
@@ -1113,7 +1113,7 @@ var game = {
   },
   render: () => { 
     game.header.innerHTML = 
-      `${game.data.colors ? `<span style="color:hsl(${game.ordColor() * 360}, 100%, 50%)">`: ``}H<sub>${game.writeOrd()}</sub>(${game.base()})${game.hardy() === Infinity ? ``: `=${game.hardy()}`}${game.data.colors ? `</span>`: ``}`;
+      `${game.data.colors ? `<span style="color:hsl(${game.ordColor() * 360}, 100%, 50%)">`: ``}H<sub>${game.writeOrd(game.data.colors)}</sub>(${game.base()})${game.hardy() === Infinity ? ``: `=${game.hardy()}`}${game.data.colors ? `</span>`: ``}`;
     
     game.colorButton.innerHTML = game.data.colors ? `Colors: ON`: `Colors: OFF`;
     
