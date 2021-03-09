@@ -1282,6 +1282,7 @@ var game = {
           game.markup(false);
         }
       }
+    }
     if (game.data.pendingMaxAll >= 1 && game.data.pendingMarkup >= 1) {
       var bupCom = Math.min(game.data.pendingMaxAll, game.data.pendingMarkup);
       
