@@ -1089,16 +1089,16 @@ var game = {
           x.toFixed(0):
         `${(x / 10 ** Math.floor(Math.log10(x) + 0.001)).toFixed(3)}e${Math.floor(Math.log10(x) + 0.001)}`,
   toggleColor: () => {
-    if (game.data.clickCooldown === 0) {
+    if (game.clickCooldown === 0) {
       game.data.colors = !game.data.colors;
       
       game.save("toggleColor", false);
       
-      game.data.clickCooldown = 1;
+      game.clickCooldown = 1;
     }
   },
   toggleMusic: () => {
-    if (game.data.clickCooldown === 0) {
+    if (game.clickCooldown === 0) {
       game.data.music = !game.data.music;
       
       if (game.data.music) {
@@ -1109,7 +1109,7 @@ var game = {
       
       game.save("toggleMusic", false);
       
-      game.data.clickCooldown = 1;
+      game.clickCooldown = 1;
     }
   },
   render: () => { 
@@ -1453,11 +1453,11 @@ var game = {
       var a = document.createElement("a");
       
       a.href = URL.createObjectURL(file);
-      a.download = "Ordinal Markup Save.txt";
+      a.download = inPublicTesting() ? "Ordinal Layers Public Testimg Save.txt": "Ordinal Layers Save.txt";
       a.click();
       
       if (inPublicTesting()) {
-        $.notify("Warning! This is a Public testing save. You will not be able to import this save into the base game", "warn");
+        $.notify("Warning! This is a Public Testing save. You will not be able to import this save into the base game", "warn");
       }
       
       game.clickCooldown = 1;
