@@ -1116,6 +1116,12 @@ var game = {
     game.header.innerHTML = 
       `${game.data.colors ? `<span style="color:hsl(${game.ordColor() * 360}, 100%, 50%)">`: ``}H<sub>${game.writeOrd(game.data.colors)}</sub>(${game.base()})${game.hardy() === Infinity ? ``: `=${game.hardy()}`}${game.data.colors ? `</span>`: ``}`;
     
+    if (game.data.music) {
+      game.music.play();
+    } else {
+      game.music.pause();
+    }
+    
     game.colorButton.innerHTML = game.data.colors ? `Colors: ON`: `Colors: OFF`;
     
     game.musicButton.innerHTML = game.data.music ? `Music: ON`: `Music: OFF`;
