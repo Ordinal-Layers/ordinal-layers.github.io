@@ -600,6 +600,8 @@ var game = {
   },
   debug: () => {
     game.data.markupUnlocked = true;
+    game.data.factorShifts = 7;
+    game.data.factors = [1, 1, 1, 1, 1, 1, 1];
     game.data.boosterUnlocked = true;
     game.data.factorBoosts = 27;
   },
@@ -656,9 +658,9 @@ var game = {
   },
   achieve: {
     rowReq: [
-      () => game.data.op >= 100,
+      () => game.data.markupUnlocked,
       () => game.data.factorShifts >= 1,
-      () => game.data.factorBoosts >= 1,
+      () => game.data.boosterUnlocked,
       () => false
     ],
     rowName: [
