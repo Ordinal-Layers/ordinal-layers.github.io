@@ -1077,7 +1077,7 @@ var game = {
     (x === Infinity) ?
       `Infinity`:
       (x >= 2.000e230) ?
-        `g<sub>${game.writeOrd(x - 1.000e230, 0)}</sub>(10)`:
+        `g<sub>${game.writeOrd(false, x - 1.000e230, 0)}</sub>(10)`:
         (x < 1.000e6) ?
           (x < 1000 && x % 1 !== 0) ?
             (x * 10 % 1 === 0) ?
