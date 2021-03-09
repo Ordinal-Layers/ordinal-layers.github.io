@@ -599,7 +599,10 @@ var game = {
     }
   },
   debug: () => {
+    game.data.ord = 1.000e230;
+    game.data.over = 0;
     game.data.markupUnlocked = true;
+    game.data.op = 2.000e230;
     game.data.factorShifts = 7;
     game.data.factors = [1, 1, 1, 1, 1, 1, 1];
     game.data.boosterUnlocked = true;
