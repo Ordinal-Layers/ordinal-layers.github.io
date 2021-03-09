@@ -1250,17 +1250,17 @@ var game = {
           game.data.pendingIncrement %= 1;
           game.data.pendingMaximize %= 1;
         } else if (Math.floor(game.data.pendingIncrement + 0.001) >= game.base() - (game.data.ord % game.base())) {
-          game.ord += game.base() - (game.data.ord % game.base()) - 1;
-          game.over += Math.floor(game.data.pendingIncrement + 0.001) - game.base() + (game.data.ord % game.base()) + 1;
+          game.data.ord += game.base() - (game.data.ord % game.base()) - 1;
+          game.data.over += Math.floor(game.data.pendingIncrement + 0.001) - game.base() + (game.data.ord % game.base()) + 1;
           game.data.pendingIncrement %= 1;
         } else {
-          game.ord += Math.floor(game.data.pendingIncrement);
+          game.data.ord += Math.floor(game.data.pendingIncrement);
           game.data.pendingIncrement %= 1;
         }
       }
     } else {
-      game.over = 0;
-      game.ord = Math.max(Math.min(game.data.incrementAuto, game.data.maximizeAuto), 1.000e230);
+      game.data.over = 0;
+      game.data.ord = Math.max(Math.min(game.data.incrementAuto, game.data.maximizeAuto), 1.000e230);
     }
     
     if (game.data.bups[0][1]) {
@@ -1278,7 +1278,7 @@ var game = {
       
       if (game.data.pendingMarkup >= 1) {
         game.data.pendingMarkup -= 1;
-        if (game.ord >= 1.000e230)
+        if (game.data.ord >= 1.000e230) {
           game.markup(false);
         }
       }
