@@ -975,7 +975,7 @@ var game = {
     40,
     41
   ],
-  writeOrd: (color = false, ord = game.data.ord, over = game.data.over, base = game.base()) => {
+  writeOrd: (color, ord = game.data.ord, over = game.data.over, base = game.base()) => {
     if (ord === 0) {
       return `${color ? `<span style="color:hsl(0, 100%, 50%)">`: ``}0${color ? `</span>`: ``}`;
     } else if (ord === Infinity) {
@@ -999,9 +999,9 @@ var game = {
               }
             } else {
               if (Math.floor(remainOrd / base ** power) === 1) {
-                result = `${color ? `<span style="color:hsl(${game.ordColor(base ** power) * 360}, 100%, 50%)">`: ``}&omega;<sup>${game.writeOrd(power, 0)}</sup>${color ? `</span>`: ``}`;
+                result = `${color ? `<span style="color:hsl(${game.ordColor(base ** power) * 360}, 100%, 50%)">`: ``}&omega;<sup>${game.writeOrd(false, power, 0)}</sup>${color ? `</span>`: ``}`;
               } else {
-                result = `${color ? `<span style="color:hsl(${game.ordColor(base ** power) * 360}, 100%, 50%)">`: ``}&omega;<sup>${game.writeOrd(power, 0)}</sup>${Math.floor(remainOrd / base ** power)}${color ? `</span>`: ``}`;
+                result = `${color ? `<span style="color:hsl(${game.ordColor(base ** power) * 360}, 100%, 50%)">`: ``}&omega;<sup>${game.writeOrd(false, power, 0)}</sup>${Math.floor(remainOrd / base ** power)}${color ? `</span>`: ``}`;
               }
             }
           }
@@ -1017,9 +1017,9 @@ var game = {
               }
             } else {
               if (Math.floor(remainOrd / base ** power) === 1) {
-                result += `${color ? `<span style="color:hsl(${game.ordColor(base ** power) * 360}, 100%, 50%)">`: ``}+&omega;<sup>${game.writeOrd(power, 0)}</sup>${color ? `</span>`: ``}`;
+                result += `${color ? `<span style="color:hsl(${game.ordColor(base ** power) * 360}, 100%, 50%)">`: ``}+&omega;<sup>${game.writeOrd(false, power, 0)}</sup>${color ? `</span>`: ``}`;
               } else {
-                result += `${color ? `<span style="color:hsl(${game.ordColor(base ** power) * 360}, 100%, 50%)">`: ``}+&omega;<sup>${game.writeOrd(power, 0)}</sup>${Math.floor(remainOrd / base ** power)}${color ? `</span>`: ``}`;
+                result += `${color ? `<span style="color:hsl(${game.ordColor(base ** power) * 360}, 100%, 50%)">`: ``}+&omega;<sup>${game.writeOrd(false, power, 0)}</sup>${Math.floor(remainOrd / base ** power)}${color ? `</span>`: ``}`;
               }
             }
           }
@@ -1120,8 +1120,10 @@ var game = {
     game.musicButton.innerHTML = game.data.music ? `Music: ON`: `Music: OFF`;
     
     game.currentLevelText.innerHTML = `Your current Ordinal Level is ${game.currentLevel()}`;
-    game.nextLevelText.innerHTML = `Next Ordinal Level is at ${game.currentLevel() === 37 ? `&Omega;`: game.currentLevel() === 36 ? `&psi;(way too large)`: game.writeOrd(game.ordLevels[game.currentLevel() + 1](), 0, game.base(), false)}`;
+    game.nextLevelText.innerHTML = `Next Ordinal Level is at ${game.currentLevel() === 37 ? `&Omega;`: game.currentLevel() === 36 ? `&psi;(way too large)`: game.writeOrd(false, game.ordLevels[game.currentLevel() + 1]())}`;
     game.highestLevelText.innerHTML = `Your highest Ordinal Level was ${game.data.highestLevel}`;
+    
+    game.checkAchieve();
     
     game.achievementCount.innerHTML = `Achievements (${game.achievementsEarned()}/${game.achieve.rowReq.length * 10})`;
     
@@ -1292,8 +1294,6 @@ var game = {
       game.data.ord += Math.floor(bupCom + 0.001) * 1.000e230;
       game.data.op += Math.floor(bupCom + 0.001) * 1.000e230;
     }
-    
-    game.checkAchieve();
     
     game.render();
     
