@@ -1091,9 +1091,9 @@ var game = {
     if (game.data.clickCooldown === 0) {
       game.data.colors = !game.data.colors;
       
-      game.data.clickCooldown = 1;
-      
       game.save("toggleColor", false);
+      
+      game.data.clickCooldown = 1;
     }
   },
   toggleMusic: () => {
@@ -1106,9 +1106,9 @@ var game = {
         game.music.pause();
       }
       
-      game.data.clickCooldown = 1;
-
       game.save("toggleMusic", false);
+      
+      game.data.clickCooldown = 1;
     }
   },
   render: () => { 
@@ -1339,7 +1339,7 @@ var game = {
       }
       
       localStorage.clear()
-      localStorage.setItem("save", JSON.stringify(game.data));
+      localStorage.setItem("ordinalLayersSave", JSON.stringify(game.data));
       
       if (manmade) {
         $.notify("Game Saved!", "success");
