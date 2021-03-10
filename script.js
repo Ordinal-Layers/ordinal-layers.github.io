@@ -1465,6 +1465,8 @@ var game = {
       a.download = inPublicTesting() ? "Ordinal Layers Public Testing Save.txt": "Ordinal Layers Save.txt";
       a.click();
       
+      $.notify("File Export Successful!", "success");
+      
       if (inPublicTesting()) {
         $.notify("Warning! This is a Public Testing save. You will not be able to import this save into the base game", "warn");
       }
