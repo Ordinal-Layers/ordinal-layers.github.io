@@ -236,10 +236,10 @@ var game = {
   ],
   factorBoostCosts: [3, 3, 9, 3, 3, 9, 3, 3, 27, 3, 3, 9, 3, 3, 9, 3, 3, 27, 3, 3, 9, 3, 3, 9, 3, 3, 729],
   bupCosts: [
-    [1, 1, 1, 15],
-    [6, 6, 10, 45],
-    [66, 66, 21, 120],
-    [55, 78, 66, 378]
+    [1, 1, 1, Infinity],
+    [6, 6, 10, Infinity],
+    [66, 66, 21, Infinity],
+    [55, 78, 66, Infinity]
   ],
   achievementsEarned: () => {
     var achieveCount = 0;
