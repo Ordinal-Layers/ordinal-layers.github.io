@@ -1436,6 +1436,8 @@ var game = {
     if (game.clickCooldown === 0) {
       var loadgame = "";
       
+      var reader = new FileReader();
+      
       reader.readAsText(document.getElementById("importButton").files[0]);
       
       setTimeout(
