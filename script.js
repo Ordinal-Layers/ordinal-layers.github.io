@@ -1344,7 +1344,7 @@ var game = {
   },
   save: (action, manmade = true) => {
     if (!manmade || game.clickCooldown === 0) {
-      localStorage.setItem(inPublicTesting() ? "ordinalLayersPublicTestingSave": "ordinalLayersSave", JSON.stringify(game.data));
+      localStorage.setItem(inPublicTesting() ? "ordinalLayersPublicTestingSave": "ordinalLayersSave", btoa(JSON.stringify(game.data)));
       
       if (manmade) {
         game.clickCooldown = 1;
@@ -1353,7 +1353,7 @@ var game = {
     }
   },
   load: loadgame => {
-    var tempgame = JSON.stringify(game.data);
+    var tempgame = btoa(JSON.stringify(game.data));
     var newLoadgame = loadgame;
     var error = false;
     
@@ -1368,7 +1368,7 @@ var game = {
     }
     
     if (game.data.publicTesting && !inPublicTesting()) {
-      game.data = JSON.parse(tempgame);
+      game.data = JSON.parse(atob(tempgame));
       error = true;
       $.notify("Import Failed: Attempted to import public testing version into the main game", "error");
     }
