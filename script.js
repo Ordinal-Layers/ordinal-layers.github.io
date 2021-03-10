@@ -1323,6 +1323,10 @@ var game = {
     }
     
     if (loadgame.version === "0.1" || loadgame.version === "0.1.1") {
+      localStorage.setItem(
+        inPublicTesting() ? "ordinalLayersPublicTestingSave": "ordinalLayersSave", 
+        btoa(localStorage.getItem(inPublicTesting() ? "ordinalLayersPublicTestingSave": "ordinalLayersSave"))
+      );
       delete game.data.clickCooldown;
       game.data.publicTesting = false;
       game.data.autosaveInterval = 0;
