@@ -1462,7 +1462,7 @@ var game = {
       var a = document.createElement("a");
       
       a.href = URL.createObjectURL(file);
-      a.download = inPublicTesting() ? "Ordinal Layers Public Testimg Save.txt": "Ordinal Layers Save.txt";
+      a.download = inPublicTesting() ? "Ordinal Layers Public Testing Save.txt": "Ordinal Layers Save.txt";
       a.click();
       
       if (inPublicTesting()) {
