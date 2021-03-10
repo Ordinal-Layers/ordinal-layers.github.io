@@ -1175,7 +1175,7 @@ var game = {
     game.factorList.style.display = game.data.factorShifts === 0 ? "none": "block";
     game.factorMultiplier.style.display = game.data.factorShifts === 0 ? "none": "inline";
     
-    game.factorMultiplier.innerHTML = `Your factors are multiplying your autoclicker speed by x${game.beautify(game.factorMult())}`;
+    game.factorMultiplier.innerHTML = `Your factors are multiplying Tier 1 automation by x${game.beautify(game.factorMult())}`;
     game.factorShiftText.innerHTML = `Factor Shift: Requires ${game.beautify(game.factorShiftCosts[game.data.factorShifts])} OP`;
     
     for (var i = 0; i < 7; i++) {
@@ -1207,12 +1207,12 @@ var game = {
       }
     }
     
-    game.bups[1][1].innerHTML = `Boosters boost Tier 1 and 2 speed by x${game.beautify(Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2)}<br /><br />6 Boosters`;
+    game.bups[1][1].innerHTML = `Boosters boost Tier 1 and 2 automation by x${game.beautify(Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2)}<br /><br />6 Boosters`;
     
     game.maxAllAuto.innerHTML =
-      `Your Max All Autobuyer is ${game.data.bups[0][1] ? `clicking the Max All button ${game.beautify(game.maxAllSpeed())} times per second, but only if you can't Factor Shift`: `locked`}`;
+      `Your Max All Autobuyer is ${game.data.bups[0][1] ? `clicking the Max All button ${game.beautify(game.maxAllSpeed())} times per second, but only if you can't Factor Shift`: `locked. Purchase the relevant Booster Upgrade to unlock!`}`;
     game.markupAuto.innerHTML =
-      `Your Markup Autobuyer is ${game.data.bups[0][2] ? `clicking the Markup button ${game.beautify(game.markupSpeed())} times per second, but only if you're past &psi;(1)`: `locked`}`;
+      `Your Markup Autobuyer is ${game.data.bups[0][2] ? `clicking the Markup button ${game.beautify(game.markupSpeed())} times per second, but only if you're past &psi;(1)`: `locked. Purchase the relevant Booster Upgrade to unlock!`}`;
   },
   loop: (ms, off = false) => {
     game.data.lastTick = Date.now();
