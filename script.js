@@ -1355,6 +1355,7 @@ var game = {
   load: loadgame => {
     var tempgame = JSON.stringify(game.data);
     var newLoadgame = loadgame;
+    var error = false;
     
     if (loadgame === null) {
       newLoadgame = game.data;
@@ -1368,6 +1369,7 @@ var game = {
     
     if (game.data.publicTesting && !inPublicTesting()) {
       game.data = JSON.parse(tempgame);
+      error = true;
       $.notify("Import Failed: Attempted to import public testing version into the main game", "error");
     }
     
@@ -1394,6 +1396,8 @@ var game = {
     if (game.data.music) {
       game.music.play();
     }
+    
+    return error;
   },
   reset: () => {
     game.data = {
@@ -1444,10 +1448,11 @@ var game = {
         () => {
           loadgame = JSON.parse(atob(reader.result));
           if (loadgame !== "") {
-            game.load(loadgame);
-            $.notify("Import Successful!", "success");
+            var error = game.load(loadgame);
+            if (!error) {
+              $.notify("Import Successful!", "success");
+            }
           }
-          setTimeout(() => location.reload(), 200);
         },
         100
       );
