@@ -311,9 +311,9 @@ var game = {
     } else if (ord >= base ** (base ** base)) {
       return 1.000e230;
     } else {
-      var tempvar = Math.floor(Math.log(ord) / Math.log(base) + 0.001);
+      var tempvar = Math.floor(Math.log(ord) / Math.log(base) + 1e-10);
       var tempvar2 = base ** tempvar;
-      var tempvar3 = Math.floor(ord / tempvar2 + 0.001);
+      var tempvar3 = Math.floor(ord / tempvar2 + 1e-10);
       
       return Math.min(
         1.000e230,
@@ -352,7 +352,7 @@ var game = {
         game.data.over += game.base() - 1;
         
         do {
-          game.data.over -= Math.ceil((game.data.over + game.base()) / 2 - 0.001);
+          game.data.over -= Math.ceil((game.data.over + game.base()) / 2 - 1e-10);
           game.data.ord += game.base();
         }
         while (game.data.over + game.base() >= game.base() * 2 && game.data.ord % game.base() ** 2 !== 0);
@@ -859,8 +859,8 @@ var game = {
   },
   fghexp: (n, x) => (n === 0) ? x : game.fghexp(n - 1, x) * 2 ** game.fghexp(n - 1, x),
   hardy: (ord = game.data.ord, over = game.data.over, base = game.base()) => {
-    var tempvar = Math.floor(ord / base);
-    var tempvar2 = Math.floor(ord / base ** 2);
+    var tempvar = Math.floor(ord / base + 1e-10);
+    var tempvar2 = Math.floor(ord / base ** 2 + 1e-10);
     return (ord >= base ** 3) ? Infinity: game.fghexp(tempvar2, 2 ** (tempvar % base) * (base + ord - base * (tempvar % base) - base ** 2 * tempvar2 + over));
   },
   ordColor: (ord = game.data.ord, over = game.data.over, base = game.base()) => 
@@ -987,7 +987,7 @@ var game = {
       var terms = 0;
       
       while (remainOrd > 0 && terms < 5) {
-        var power = Math.floor(Math.log(remainOrd) / Math.log(base) + 0.001);
+        var power = Math.floor(Math.log(remainOrd) / Math.log(base) + 1e-10);
         if (result === ``) {
           if (power === 0) {
             result = `${color ? `<span style="color:hsl(0, 100%, 50%)">`: ``}${remainOrd + over}${color ? `</span>`: ``}`;
@@ -996,13 +996,13 @@ var game = {
               if (Math.floor(remainOrd / base) === 1) {
                 result = `${color ? `<span style="color:hsl(${game.ordColor(base, 0) * 360}, 100%, 50%)">`: ``}&omega;${color ? `</span>`: ``}`;
               } else {
-                result = `${color ? `<span style="color:hsl(${game.ordColor(base, 0) * 360}, 100%, 50%)">`: ``}&omega;${Math.floor(remainOrd / base)}${color ? `</span>`: ``}`;
+                result = `${color ? `<span style="color:hsl(${game.ordColor(base, 0) * 360}, 100%, 50%)">`: ``}&omega;${Math.floor(remainOrd / base + 1e-10)}${color ? `</span>`: ``}`;
               }
             } else {
               if (Math.floor(remainOrd / base ** power) === 1) {
                 result = `${color ? `<span style="color:hsl(${game.ordColor(base ** power, 0) * 360}, 100%, 50%)">`: ``}&omega;<sup>${game.writeOrd(false, power, 0)}</sup>${color ? `</span>`: ``}`;
               } else {
-                result = `${color ? `<span style="color:hsl(${game.ordColor(base ** power, 0) * 360}, 100%, 50%)">`: ``}&omega;<sup>${game.writeOrd(false, power, 0)}</sup>${Math.floor(remainOrd / base ** power)}${color ? `</span>`: ``}`;
+                result = `${color ? `<span style="color:hsl(${game.ordColor(base ** power, 0) * 360}, 100%, 50%)">`: ``}&omega;<sup>${game.writeOrd(false, power, 0)}</sup>${Math.floor(remainOrd / base ** power + 1e-10)}${color ? `</span>`: ``}`;
               }
             }
           }
@@ -1014,7 +1014,7 @@ var game = {
               if (Math.floor(remainOrd / base) === 1) {
                 result += `${color ? `<span style="color:hsl(${game.ordColor(base, 0) * 360}, 100%, 50%)">`: ``}+&omega;${color ? `</span>`: ``}`;
               } else {
-                result += `${color ? `<span style="color:hsl(${game.ordColor(base, 0) * 360}, 100%, 50%)">`: ``}+&omega;${Math.floor(remainOrd / base)}${color ? `</span>`: ``}`;
+                result += `${color ? `<span style="color:hsl(${game.ordColor(base, 0) * 360}, 100%, 50%)">`: ``}+&omega;${Math.floor(remainOrd / base + 1e-10)}${color ? `</span>`: ``}`;
               }
             } else {
               if (Math.floor(remainOrd / base ** power) === 1) {
@@ -1042,7 +1042,7 @@ var game = {
       var powerList = [];
       
       while (remainOrd > 0) {
-        var power = Math.min(41, Math.floor(Math.log(remainOrd / 1.000e230) / Math.log(3) + 0.001));
+        var power = Math.min(41, Math.floor(Math.log(remainOrd / 1.000e230) / Math.log(3) + 1e-10));
         
         powerList.push(power);
         
@@ -1087,7 +1087,7 @@ var game = {
                 x.toFixed(2):
                 x.toFixed(3):
           x.toFixed(0):
-        `${(x / 10 ** Math.floor(Math.log10(x) + 0.001)).toFixed(3)}e${Math.floor(Math.log10(x) + 0.001)}`,
+        `${(x / 10 ** Math.floor(Math.log10(x) + 1e-10)).toFixed(3)}e${Math.floor(Math.log10(x) + 1e-10)}`,
   toggleColor: () => {
     if (game.clickCooldown === 0) {
       game.data.colors = !game.data.colors;
@@ -1254,13 +1254,13 @@ var game = {
         if (game.data.pendingMaximize >= 1) {
           game.data.over = 0;
 
-          game.data.ord += Math.min(Math.floor(game.data.pendingIncrement + 0.001), game.base() * Math.floor(game.data.pendingMaximize + 0.001));
+          game.data.ord += Math.min(Math.floor(game.data.pendingIncrement + 0.001), game.base() * Math.floor(game.data.pendingMaximize + 1e-10));
 
           game.data.pendingIncrement %= 1;
           game.data.pendingMaximize %= 1;
-        } else if (Math.floor(game.data.pendingIncrement + 0.001) >= game.base() - (game.data.ord % game.base())) {
+        } else if (Math.floor(game.data.pendingIncrement + 1e-10) >= game.base() - (game.data.ord % game.base())) {
           game.data.ord += game.base() - (game.data.ord % game.base()) - 1;
-          game.data.over += Math.floor(game.data.pendingIncrement + 0.001) - game.base() + (game.data.ord % game.base()) + 1;
+          game.data.over += Math.floor(game.data.pendingIncrement + 1e-10) - game.base() + (game.data.ord % game.base()) + 1;
           game.data.pendingIncrement %= 1;
         } else {
           game.data.ord += Math.floor(game.data.pendingIncrement);
@@ -1298,8 +1298,8 @@ var game = {
       game.data.pendingMaxAll %= 1;
       game.data.pendingMarkup %= 1;
       
-      game.data.ord += Math.floor(bupCom + 0.001) * 1.000e230;
-      game.data.op += Math.floor(bupCom + 0.001) * 1.000e230;
+      game.data.ord += Math.floor(bupCom + 1e-10) * 1.000e230;
+      game.data.op += Math.floor(bupCom + 1e-10) * 1.000e230;
     }
     
     game.render();
@@ -1326,6 +1326,7 @@ var game = {
       delete game.data.clickCooldown;
       game.data.publicTesting = false;
       game.data.autosaveInterval = 0;
+      game.data.boosterUnlocked = false;
       game.data.factorBoosts = 0;
       game.data.dynamicFactor = 1;
       game.data.achievements = [
