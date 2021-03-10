@@ -1114,7 +1114,7 @@ var game = {
   },
   render: () => { 
     game.header.innerHTML = 
-      `${game.data.colors ? `<span style="color:hsl(${game.ordColor() * 360}, 100%, 50%)">`: ``}H<sub>${game.writeOrd(game.data.colors)}</sub>(${game.base()})${game.hardy() === Infinity ? ``: `=${game.hardy()}`}${game.data.colors ? `</span>`: ``}`;
+      `${game.data.colors ? `<span style="color:hsl(${game.ordColor() * 360}, 100%, 50%)">`: ``}H<sub>${game.writeOrd(game.data.colors)}</sub>(${game.base()})${game.hardy() === Infinity ? ``: `=${game.beautify(game.hardy())}`}${game.data.colors ? `</span>`: ``}`;
     
     if (game.data.music) {
       game.music.play();
