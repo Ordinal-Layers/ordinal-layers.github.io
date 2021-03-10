@@ -1317,12 +1317,14 @@ var game = {
   },
   handleOldVersions: loadgame => {
     if (loadgame.version === "0.1") {
+      game.data.clickCooldown = 1;
       game.data.factorShifts = 0;
       game.data.factors = [];
     }
     
     if (loadgame.version === "0.1" || loadgame.version === "0.1.1") {
       delete game.data.clickCooldown;
+      game.data.publicTesting = false;
       game.data.autosaveInterval = 0;
       game.data.factorBoosts = 0;
       game.data.dynamicFactor = 1;
@@ -1395,13 +1397,13 @@ var game = {
   reset: () => {
     game.data = {
       version: "0.2",
+      publicTesting: false,
       lastTick: Date.now(),
       autosaveInterval: 0,
       pendingIncrement: 0,
       pendingMaximize: 0,
       pendingMaxAll: 0,
       pendingMarkup: 0,
-      clickCooldown: 1,
       achievements: [
         [false, false, false, false, false, false, false, false, false, false]
       ],
