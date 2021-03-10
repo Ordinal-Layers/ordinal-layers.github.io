@@ -994,15 +994,15 @@ var game = {
           } else {
             if (power === 1) {
               if (Math.floor(remainOrd / base) === 1) {
-                result = `${color ? `<span style="color:hsl(${game.ordColor(base) * 360}, 100%, 50%)">`: ``}&omega;${color ? `</span>`: ``}`;
+                result = `${color ? `<span style="color:hsl(${game.ordColor(base, 0) * 360}, 100%, 50%)">`: ``}&omega;${color ? `</span>`: ``}`;
               } else {
-                result = `${color ? `<span style="color:hsl(${game.ordColor(base) * 360}, 100%, 50%)">`: ``}&omega;${Math.floor(remainOrd / base)}${color ? `</span>`: ``}`;
+                result = `${color ? `<span style="color:hsl(${game.ordColor(base, 0) * 360}, 100%, 50%)">`: ``}&omega;${Math.floor(remainOrd / base)}${color ? `</span>`: ``}`;
               }
             } else {
               if (Math.floor(remainOrd / base ** power) === 1) {
-                result = `${color ? `<span style="color:hsl(${game.ordColor(base ** power) * 360}, 100%, 50%)">`: ``}&omega;<sup>${game.writeOrd(false, power, 0)}</sup>${color ? `</span>`: ``}`;
+                result = `${color ? `<span style="color:hsl(${game.ordColor(base ** power, 0) * 360}, 100%, 50%)">`: ``}&omega;<sup>${game.writeOrd(false, power, 0)}</sup>${color ? `</span>`: ``}`;
               } else {
-                result = `${color ? `<span style="color:hsl(${game.ordColor(base ** power) * 360}, 100%, 50%)">`: ``}&omega;<sup>${game.writeOrd(false, power, 0)}</sup>${Math.floor(remainOrd / base ** power)}${color ? `</span>`: ``}`;
+                result = `${color ? `<span style="color:hsl(${game.ordColor(base ** power, 0) * 360}, 100%, 50%)">`: ``}&omega;<sup>${game.writeOrd(false, power, 0)}</sup>${Math.floor(remainOrd / base ** power)}${color ? `</span>`: ``}`;
               }
             }
           }
@@ -1012,15 +1012,15 @@ var game = {
           } else {
             if (power === 1) {
               if (Math.floor(remainOrd / base) === 1) {
-                result += `${color ? `<span style="color:hsl(${game.ordColor(base) * 360}, 100%, 50%)">`: ``}+&omega;${color ? `</span>`: ``}`;
+                result += `${color ? `<span style="color:hsl(${game.ordColor(base, 0) * 360}, 100%, 50%)">`: ``}+&omega;${color ? `</span>`: ``}`;
               } else {
-                result += `${color ? `<span style="color:hsl(${game.ordColor(base) * 360}, 100%, 50%)">`: ``}+&omega;${Math.floor(remainOrd / base)}${color ? `</span>`: ``}`;
+                result += `${color ? `<span style="color:hsl(${game.ordColor(base, 0) * 360}, 100%, 50%)">`: ``}+&omega;${Math.floor(remainOrd / base)}${color ? `</span>`: ``}`;
               }
             } else {
               if (Math.floor(remainOrd / base ** power) === 1) {
-                result += `${color ? `<span style="color:hsl(${game.ordColor(base ** power) * 360}, 100%, 50%)">`: ``}+&omega;<sup>${game.writeOrd(false, power, 0)}</sup>${color ? `</span>`: ``}`;
+                result += `${color ? `<span style="color:hsl(${game.ordColor(base ** power, 0) * 360}, 100%, 50%)">`: ``}+&omega;<sup>${game.writeOrd(false, power, 0)}</sup>${color ? `</span>`: ``}`;
               } else {
-                result += `${color ? `<span style="color:hsl(${game.ordColor(base ** power) * 360}, 100%, 50%)">`: ``}+&omega;<sup>${game.writeOrd(false, power, 0)}</sup>${Math.floor(remainOrd / base ** power)}${color ? `</span>`: ``}`;
+                result += `${color ? `<span style="color:hsl(${game.ordColor(base ** power, 0) * 360}, 100%, 50%)">`: ``}+&omega;<sup>${game.writeOrd(false, power, 0)}</sup>${Math.floor(remainOrd / base ** power)}${color ? `</span>`: ``}`;
               }
             }
           }
