@@ -142,9 +142,12 @@ var game = {
     document.getElementById("factor6Button"),
     document.getElementById("factor7Button")
   ],
+  factorBoostContainer: document.getElementById("factorBoostContainer"),
   factorBoostText: document.getElementById("factorBoost"),
   factorBoostButton: document.getElementById("factorBoostButton"),
   bulkText: document.getElementById("bulking"),
+  nextBulk: document.getElementById("nextBulk"),
+  factorBoostProg: document.getElementById("factorBoostProg"),
   dynamicMult: document.getElementById("dynamicMult"),
   boosterText: document.getElementById("boosterText"),
   refundButton: document.getElementById("refundButton"),
@@ -335,11 +338,19 @@ var game = {
   V: x => x === 0 ? 1.000e230: (x >= 27 ? Infinity: game.V(x - 1) * game.factorBoostCosts[x - 1]),
   calcBulk: (op = game.data.op, boost = game.data.factorBoosts) => {
     var bulk = 0;
-    while (op >= game.V(bulk + 1) + 1.000e230) {
+    while (op >= game.V(bulk + boost + 1) + 1.000e230) {
       bulk++;
     }
-    bulk -= boost;
-    return Math.max(0, bulk);
+    return bulk;
+  },
+  calcBoosters: (op = game.data.op, boost = game.data.factorBoosts) => {
+    var booster = 0;
+    for (var i = 0; i < game.calcBulk(op, boost); i++) {
+      booster += boost + i + 1;
+    }
+  },
+  calcBulkTime: (maxAll = game.maxAllSpeed(), markup = game.markupSpeed(), op = game.data.op, boost = game.data.factorBoosts + game.calcBulk()) => {
+    return (game.V(boost + 1) - Math.max(0, op - 1.000e230)) / (1.000e230 * Math.min(maxAll, markup)); 
   },
   increment: (manmade = true) => {
     if (!manmade || game.clickCooldown === 0) {
@@ -1094,6 +1105,20 @@ var game = {
                 x.toFixed(3):
           x.toFixed(0):
         `${(x / 10 ** Math.floor(Math.log10(x))).toFixed(3)}e${Math.floor(Math.log10(x))}`,
+  time: x =>
+    (x === Infinity) ?
+      `forever`:
+      (x < 1.000e230) ?
+        (x < 86400) ?
+          (x < 3600) ?
+            (x < 60) ?
+              (x < 1) ?
+                `<1 seconds`:
+                `${game.beautify(x)} seconds`:
+              `${game.beautify(Math.floor(x / 60))}m ${game.beautify(x % 60)}s`:
+            `${game.beautify(Math.floor(x / 3600))}h ${game.beautify(Math.floor(x / 60) % 60)}m ${game.beautify(x % 60)}s`:
+          `${game.beautify(Math.floor(x / 86400))}d ${game.beautify(Math.floor(x / 3600) % 24)}h ${game.beautify(Math.floor(x / 60) % 60)}m ${game.beautify(x % 60)}s`:
+        `a very long time`,
   toggleColor: () => {
     if (game.clickCooldown === 0) {
       game.data.colors = !game.data.colors;
@@ -1190,11 +1215,19 @@ var game = {
       game.factorButtons[i].innerHTML = game.data.factors[i] === 10 ? `Maxed!`: `Increase Factor ${(i + 1)} for ${game.beautify(10 ** ((i + 1) * game.data.factors[i]))} OP`;
     }
     
-    game.factorBoostText.style.display = game.data.boosterUnlocked || game.data.ord >= 1.000e230 ? "inline": "none";
-    game.factorBoostButton.style.display = game.data.boosterUnlocked || game.data.ord >= 1.000e230 ? "inline": "none";
+    game.factorBoostContainer.style.display = game.data.boosterUnlocked || game.data.ord >= 1.000e230 ? "inline": "none";
     
     game.factorBoostText.innerHTML = `Factor Boost: Requires ${game.beautify(game.V(game.data.factorBoosts + 1) + 1.000e230)} OP`;
-    game.factorBoostButton.innerHTML = `Gain ${game.data.factorBoosts + 1} Boosters (B)`;
+    game.factorBoostButton.innerHTML = `Gain ${game.calcBoosters()} Boosters (B)`;
+    
+    game.bulkText.innerHTML = `You are currently bulking in a set of ${game.calcBulk()}`;
+    game.nextBulk.innerHTML = 
+      game.data.ord >= 1.000e230 ?
+        `Next boost in bulk will take ${game.data.bups[0][1] && game.data.bups[0][2] ? game.time(game.calcBulkTime()): `${game.beautify(game.V(game.data.factorBoosts + game.calcBulk() + 1) / Math.max(0, game.data.op - 1.000e230))} click cycles`}`:
+        `Reach &psi;(1) to see when you can boost!`;
+    
+    game.factorBoostProg.innerHTML = `${game.beautify(Math.max(0, game.data.op - 1.000e230) / game.V(game.data.factorBoosts + game.calcBulk() + 1))}`;
+    game.factorBoostProg.style.width = `${Math.max(0, game.data.op - 1.000e230) / game.V(game.data.factorBoosts + game.calcBulk() + 1) * 100}%`;
     
     game.dynamicMult.innerHTML = `Your Dynamic Factor is x${game.beautify(game.data.dynamicFactor)}`;
     
