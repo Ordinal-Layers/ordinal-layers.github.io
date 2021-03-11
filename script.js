@@ -752,7 +752,7 @@ var game = {
         "Maximizable",
         "Markupable",
         "Unnamed achievement",
-        "Hyperdimensional",
+        "Hyper dimensional",
         "Ordinal Collapsing Functions",
         "Ackermann Ordinal",
         "Double Ackermann Ordinal",
