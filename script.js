@@ -411,9 +411,8 @@ var game = {
           if (game.data.op > 1.000e230) {
             game.data.op = 1.000e230;
           }
+          game.resetEverythingMarkupDoes();
         }
-        
-        game.resetEverythingMarkupDoes();
 
         if (!game.data.markupUnlocked) {
           game.data.markupUnlocked = true;
