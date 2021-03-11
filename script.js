@@ -946,7 +946,7 @@ var game = {
       x => `<span style="color:hsl(60, 100%, 50%)">&psi;(&Omega;<sup>&Omega;+${x}</sup>)</span>`,
       x => `<span style="color:hsl(${480 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;2</sup>${x})</span>`,
       x => `<span style="color:hsl(${540 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;2+1</sup>${x})</span>`,
-      x => `<span style="color:hsl(${600 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;2+2</sup>${x}</span>`,
+      x => `<span style="color:hsl(${600 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;2+2</sup>${x})</span>`,
       x => `<span style="color:hsl(${660 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;2+${x}</sup>)</span>`,
       x => `<span style="color:hsl(${720 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;${x}</sup>)</span>`,
       x => `<span style="color:hsl(${780 / 7}, 100%, 50%)">&psi;(&Omega;<sup>&Omega;<sup>2</sup></sup>${x})</span>`,
