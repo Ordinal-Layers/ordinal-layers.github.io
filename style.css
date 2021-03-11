@@ -119,6 +119,7 @@ body {
   background-color: white;
   font-weight: bold;
   border: 2px solid red;
+  border-radius: 2px;
 }
 
 #resetButton:hover {
