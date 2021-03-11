@@ -122,6 +122,7 @@ body {
   color: red;
   background-color: white;
   font-weight: bold;
+  transition-duration: 0.1s;
   border: 2px solid red;
   border-radius: 2px;
 }
