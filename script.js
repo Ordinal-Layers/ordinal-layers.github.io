@@ -177,6 +177,7 @@ var game = {
       document.getElementById("bup33")
     ]
   ],
+  boosterMult: document.getElementById("bosoterMult"),
   maxAllAuto: document.getElementById("maxAllAuto"),
   markupAuto: document.getElementById("markupAuto"),
   tabs: [
@@ -1250,7 +1251,7 @@ var game = {
       }
     }
     
-    game.bups[1][1].innerHTML = `Boosters boost Tier 1 and 2 automation by x${game.beautify(Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2)}<br /><br />6 Boosters`;
+    game.boosterMult.innerHTML = `x${game.beautify(Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2)}`;
     
     game.maxAllAuto.innerHTML =
       `Your Max All Autobuyer is ${game.data.bups[0][1] ? `clicking the Max All button ${game.beautify(game.maxAllSpeed())} times per second, but only if you can't Factor Shift`: `locked. Purchase the relevant Booster Upgrade to unlock it!`}`;
