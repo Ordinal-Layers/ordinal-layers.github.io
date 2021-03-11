@@ -80,6 +80,7 @@ body {
 
 #factorBoostProg {
   height: 100%;
+  line-height: 100%;
   color: black;
   background-color: lime;
   text-align: center;
