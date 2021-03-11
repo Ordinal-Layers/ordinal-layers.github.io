@@ -177,7 +177,7 @@ var game = {
       document.getElementById("bup33")
     ]
   ],
-  boosterMult: document.getElementById("bosoterMult"),
+  boosterMult: document.getElementById("boosterMult"),
   maxAllAuto: document.getElementById("maxAllAuto"),
   markupAuto: document.getElementById("markupAuto"),
   tabs: [
