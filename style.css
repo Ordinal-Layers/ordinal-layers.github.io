@@ -60,6 +60,7 @@ body {
   z-index: 4;
   text-align: center;
   left: calc(50%);
+  border-radius: 2px;
   -ms-transform: translate(-50%);
   transform: translate(-50%);
 }
