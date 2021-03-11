@@ -285,16 +285,20 @@ var game = {
     
     return mult;
   },
-  incrementSpeed: () => 
-    game.data.incrementAuto *
-    game.factorMult() *
-    (game.data.boosterUnlocked ? game.data.dynamicFactor * 5: 1) *
-    (game.data.bups[1][1] ? Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2: 1),
-  maximizeSpeed: () => 
-    (game.data.maximizeAuto + (game.data.boosterUnlocked ? 1: 0)) *
-    game.factorMult() *
-    (game.data.boosterUnlocked ? game.data.dynamicFactor * 5: 1) *
-    (game.data.bups[1][1] ? Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2: 1),
+  incrementSpeed: () =>
+    game.data.incrementAuto >= 2.000e230 ?
+      game.data.incrementAuto:
+      game.data.incrementAuto *
+      game.factorMult() *
+      (game.data.boosterUnlocked ? game.data.dynamicFactor * 5: 1) *
+      (game.data.bups[1][1] ? Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2: 1),
+  maximizeSpeed: () =>
+    game.data.maximizeAuto >= 2.000e230 ?
+      game.data.maximizeAuto:
+      (game.data.maximizeAuto + (game.data.boosterUnlocked ? 1: 0)) *
+      game.factorMult() *
+      (game.data.boosterUnlocked ? game.data.dynamicFactor * 5: 1) *
+      (game.data.bups[1][1] ? Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2: 1),
   maxAllSpeed: () =>
     game.data.bups[0][1] ?
       game.data.bups[1][1] ?
