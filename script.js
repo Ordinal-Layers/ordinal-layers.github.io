@@ -1344,8 +1344,10 @@ var game = {
       game.data.pendingMaxAll %= 1;
       game.data.pendingMarkup %= 1;
       
-      game.data.ord += Math.floor(bupCom) * 1.000e230;
-      game.data.op += Math.floor(bupCom) * 1.000e230;
+      if (game.data.ord >= 1.000e230) {
+        game.data.ord += Math.floor(bupCom) * 1.000e230;
+        game.data.op += Math.floor(bupCom) * 1.000e230;
+      }
     }
     
     game.render();
