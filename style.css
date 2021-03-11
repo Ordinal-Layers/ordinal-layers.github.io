@@ -2,6 +2,7 @@ body {
   color: white;
   background-color: black;
   font-family: sans-serif;
+  margin: 32px;
 }
 
 .center {
@@ -26,12 +27,14 @@ body {
   width: 128px;
   height: 128px;
   background-color: grey;
+  border-radius: 5px;
 }
 
 .earned {
   width: 128px;
   height: 128px;
   background-color: green;
+  border-radius: 5px;
 }
 
 [tooltip] {
@@ -182,6 +185,7 @@ body {
   padding-right: 16px;
   padding-left: 16px;
   border: 2px solid black;
+  border-radius: 5px;
 }
 
 .tabButton:hover {
