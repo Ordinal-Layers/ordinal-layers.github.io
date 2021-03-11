@@ -352,6 +352,7 @@ var game = {
     for (var i = 0; i < game.calcBulk(op, boost); i++) {
       booster += boost + i + 1;
     }
+    return booster;
   },
   calcBulkTime: (maxAll = game.maxAllSpeed(), markup = game.markupSpeed(), op = game.data.op, boost = game.data.factorBoosts + game.calcBulk()) => {
     return (game.V(boost + 1) - Math.max(0, op - 1.000e230)) / (1.000e230 * Math.min(maxAll, markup)); 
