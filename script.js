@@ -1231,7 +1231,7 @@ var game = {
         `Next boost in bulk will take ${game.data.bups[0][1] && game.data.bups[0][2] ? game.time(game.calcBulkTime()): `${game.beautify(game.V(game.data.factorBoosts + game.calcBulk() + 1) / Math.max(0, game.data.op - 1.000e230))} click cycles`}`:
         `Reach &psi;(1) to see when you can boost!`;
     
-    game.factorBoostProg.innerHTML = `${game.beautify(Math.max(0, game.data.op - 1.000e230) / game.V(game.data.factorBoosts + game.calcBulk() + 1)) * 100}%`;
+    game.factorBoostProg.innerHTML = `${game.beautify(Math.max(0, game.data.op - 1.000e230) / game.V(game.data.factorBoosts + game.calcBulk() + 1) * 100)}%`;
     game.factorBoostProg.style.width = `${Math.max(0, game.data.op - 1.000e230) / game.V(game.data.factorBoosts + game.calcBulk() + 1) * 100}%`;
     
     game.dynamicMult.innerHTML = `Your Dynamic Factor is x${game.beautify(game.data.dynamicFactor)}`;
