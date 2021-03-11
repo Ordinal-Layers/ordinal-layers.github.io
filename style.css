@@ -60,7 +60,7 @@ body {
   z-index: 4;
   text-align: center;
   left: calc(50%);
-  transition-duration: 0.1s;
+  transition-duration: 0.2s;
   border-radius: 5px;
   -ms-transform: translate(-50%);
   transform: translate(-50%);
