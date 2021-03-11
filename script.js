@@ -1119,10 +1119,10 @@ var game = {
             (x < 60) ?
               (x < 1) ?
                 `<1 seconds`:
-                `${game.beautify(x)} seconds`:
-              `${game.beautify(Math.floor(x / 60))}m ${game.beautify(x % 60)}s`:
-            `${game.beautify(Math.floor(x / 3600))}h ${game.beautify(Math.floor(x / 60) % 60)}m ${game.beautify(x % 60)}s`:
-          `${game.beautify(Math.floor(x / 86400))}d ${game.beautify(Math.floor(x / 3600) % 24)}h ${game.beautify(Math.floor(x / 60) % 60)}m ${game.beautify(x % 60)}s`:
+                `${game.beautify(Math.floor(x))} seconds`:
+              `${game.beautify(Math.floor(x / 60))}m ${game.beautify(Math.floor(x) % 60)}s`:
+            `${game.beautify(Math.floor(x / 3600))}h ${game.beautify(Math.floor(x / 60) % 60)}m ${game.beautify(Math.floor(x) % 60)}s`:
+          `${game.beautify(Math.floor(x / 86400))}d ${game.beautify(Math.floor(x / 3600) % 24)}h ${game.beautify(Math.floor(x / 60) % 60)}m ${game.beautify(Math.floor(x) % 60)}s`:
         `a very long time`,
   toggleColor: () => {
     if (game.clickCooldown === 0) {
