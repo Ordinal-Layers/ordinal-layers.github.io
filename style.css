@@ -153,6 +153,7 @@ body {
 
 .tabButton {
   background-color: white;
+  padding: 16px;
   border: 2px solid black;
 }
 
