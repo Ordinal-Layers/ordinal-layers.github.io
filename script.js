@@ -144,6 +144,7 @@ var game = {
   ],
   factorBoostText: document.getElementById("factorBoost"),
   factorBoostButton: document.getElementById("factorBoostButton"),
+  bulkText: document.getElementById("bulking"),
   dynamicMult: document.getElementById("dynamicMult"),
   boosterText: document.getElementById("boosterText"),
   refundButton: document.getElementById("refundButton"),
@@ -332,6 +333,14 @@ var game = {
         1.000e230
       ),
   V: x => x === 0 ? 1.000e230: (x >= 27 ? Infinity: game.V(x - 1) * game.factorBoostCosts[x - 1]),
+  calcBulk: (op = game.data.op, boost = game.data.factorBoosts) => {
+    var bulk = 0;
+    while (op >= game.V(bulk + 1) + 1.000e230) {
+      bulk++;
+    }
+    bulk -= boost;
+    return Math.max(0, bulk);
+  },
   increment: (manmade = true) => {
     if (!manmade || game.clickCooldown === 0) {
       if (game.data.ord % game.base() === game.base() - 1) {
@@ -531,7 +540,7 @@ var game = {
   },
   factorBoost: (manmade = true) => {
     if (!manmade || game.clickCooldown === 0) {
-      if (game.data.op >= game.V(game.data.factorBoosts + 1) + 1.000e230) {
+      if (game.calcBulk() > 0) {
         var conf = true;
         if (manmade) {
           conf = confirm(
@@ -540,7 +549,7 @@ var game = {
         }
         if (conf) {
           game.resetEverythingBoostDoes();
-          game.factorBoosts++;
+          game.factorBoosts += game.calcBulk();
           
           if (!game.data.boosterUnlocked) {
             game.data.boosterUnlocked = true;
