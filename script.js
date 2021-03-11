@@ -238,8 +238,8 @@ var game = {
   bupCosts: [
     [1, 1, 1, Infinity],
     [6, 6, 10, Infinity],
-    [66, 66, 21, Infinity],
-    [55, 78, 66, Infinity]
+    [66, Infinity, 21, Infinity],
+    [Infinity, Infinity, 66, Infinity]
   ],
   achievementsEarned: () => {
     var achieveCount = 0;
@@ -464,18 +464,16 @@ var game = {
     game.data.op = 0;
     game.data.incrementAuto = 0;
     game.data.maximizeAuto = 0;
+    for (var i = 0; i < game.data.factorShifts; i++) {
+      game.data.factors[i] = 1;
+    }
   },
   factorShift: (manmade = true) => {
     if (!manmade || game.clickCooldown === 0) {
       if (game.data.op >= game.factorShiftCosts[game.data.factorShifts]) {
-        for (var i = 0; i < game.data.factorShifts; i++) {
-          game.data.factors[i] = 1;
-        }
-        
-        game.data.factorShifts++;
-        game.data.factors.push(1);
-        
         game.resetEverythingShiftDoes();
+        game.data.factorShifts++;
+        game.data.factors.push(1); 
 
         if (manmade) {
           game.clickCooldown = 1;
@@ -541,8 +539,8 @@ var game = {
           );
         }
         if (conf) {
-          game.factorBoosts++;
           game.resetEverythingBoostDoes();
+          game.factorBoosts++;
           
           if (!game.data.boosterUnlocked) {
             game.data.boosterUnlocked = true;
@@ -558,10 +556,10 @@ var game = {
   buyBup: (x, y, manmade = true) => {
     if (!manmade || game.clickCooldown === 0) {
       if (!game.data.bups[y][x] && game.boosters() >= game.bupCosts[y][x] && (y === 0 || game.data.bups[Math.max(0, y - 1)][x])) {
-        game.data.bups[y][x] = true;
         if (y === 2 && (x === 0 || x === 1)) {
           game.resetEverythingMarkupDoes();
         }
+        game.data.bups[y][x] = true;
       }
       
       if (manmade) {
@@ -600,13 +598,12 @@ var game = {
     }
   },
   debug: () => {
-    game.data.ord = 1.000e230;
-    game.data.over = 0;
+    game.resetEverythingMarkupDoes();
     game.data.markupUnlocked = true;
-    game.data.op = 2.000e230;
-    game.data.factorShifts = 7;
-    game.data.factors = [1, 1, 1, 1, 1, 1, 1];
+    
+    game.resetEverythingBoostDoes();
     game.data.boosterUnlocked = true;
+    
     game.data.factorBoosts = 27;
   },
   ordLevels: [
@@ -671,7 +668,7 @@ var game = {
       "Markup",
       "Factors",
       "Boosters",
-      "Challenges"
+      "???"
     ],
     rowTooltip: [
       "Perform a Markup to unlock the next row of achievements",
@@ -1210,11 +1207,13 @@ var game = {
     game.bups[1][1].innerHTML = `Boosters boost Tier 1 and 2 automation by x${game.beautify(Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2)}<br /><br />6 Boosters`;
     
     game.maxAllAuto.innerHTML =
-      `Your Max All Autobuyer is ${game.data.bups[0][1] ? `clicking the Max All button ${game.beautify(game.maxAllSpeed())} times per second, but only if you can't Factor Shift`: `locked. Purchase the relevant Booster Upgrade to unlock!`}`;
+      `Your Max All Autobuyer is ${game.data.bups[0][1] ? `clicking the Max All button ${game.beautify(game.maxAllSpeed())} times per second, but only if you can't Factor Shift`: `locked. Purchase the relevant Booster Upgrade to unlock it!`}`;
     game.markupAuto.innerHTML =
-      `Your Markup Autobuyer is ${game.data.bups[0][2] ? `clicking the Markup button ${game.beautify(game.markupSpeed())} times per second, but only if you're past &psi;(1)`: `locked. Purchase the relevant Booster Upgrade to unlock!`}`;
+      `Your Markup Autobuyer is ${game.data.bups[0][2] ? `clicking the Markup button ${game.beautify(game.markupSpeed())} times per second, but only if you're past &psi;(1)`: `locked. Purchase the relevant Booster Upgrade to unlock it!`}`;
   },
-  loop: (ms, off = false) => {
+  loop: (unadjusted, off = false) => {
+    var ms = unadjusted;
+    
     game.data.lastTick = Date.now();
     
     if (game.data.bups[1][2] && game.data.op < 1.000e230) {
@@ -1298,7 +1297,7 @@ var game = {
       game.data.pendingMaxAll %= 1;
       game.data.pendingMarkup %= 1;
       
-      game.data.ord += Math.floor(bupCom ) * 1.000e230;
+      game.data.ord += Math.floor(bupCom) * 1.000e230;
       game.data.op += Math.floor(bupCom) * 1.000e230;
     }
     
@@ -1323,10 +1322,7 @@ var game = {
     }
     
     if (loadgame.version === "0.1" || loadgame.version === "0.1.1") {
-      localStorage.setItem(
-        inPublicTesting() ? "ordinalLayersPublicTestingSave": "ordinalLayersSave", 
-        btoa(localStorage.getItem(inPublicTesting() ? "ordinalLayersPublicTestingSave": "ordinalLayersSave"))
-      );
+      localStorage.setItem("ordinalLayersSave", btoa(localStorage.getItem("ordinalLayersSave")));
       delete game.data.clickCooldown;
       game.data.publicTesting = false;
       game.data.autosaveInterval = 0;
@@ -1351,21 +1347,19 @@ var game = {
       localStorage.setItem(inPublicTesting() ? "ordinalLayersPublicTestingSave": "ordinalLayersSave", btoa(JSON.stringify(game.data)));
       
       if (manmade) {
-        game.clickCooldown = 1;
         $.notify("Game Saved!", "success");
+        game.clickCooldown = 1;
       }
     }
   },
   load: loadgame => {
     var tempgame = btoa(JSON.stringify(game.data));
-    var newLoadgame = loadgame;
+    var newLoadgame = loadgame === null ? game.data: loadgame;
     var error = false;
     
-    if (loadgame === null) {
-      newLoadgame = game.data;
+    if (loadgame !== null) {
+      game.data = newLoadgame;
     }
-    
-    game.data = newLoadgame;
     
     if (inPublicTesting()) {
       game.data.publicTesting = true;
