@@ -1314,7 +1314,7 @@ var game = {
       }
     } else {
       game.data.over = 0;
-      game.data.ord = Math.max(Math.min(game.data.incrementAuto, game.data.maximizeAuto), 1.000e230);
+      game.data.ord = Math.max(Math.min(game.data.incrementAuto, game.data.maximizeAuto), game.data.ord, 1.000e230);
     }
     
     if (game.data.bups[0][1]) {
