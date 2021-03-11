@@ -17,6 +17,7 @@
         <button onclick="game.tab(4)" class="tabButton" id="boosterTabButton" style="display:none"><h2 style="display:inline">Boosters</h2></button>
       </div>
       <div id="tab0">
+        <br />
         <button onclick="game.save()" class="normalButton">Save your game</button>
         <button onclick="game.exportGame()" class="normalButton">Export your game save via file</button>
         <p><input type="file" id="importButton" class="normalButton" oninput="game.importGame()" /> Import your game save via file (will overwrite save)</p>
@@ -151,6 +152,7 @@
         </div>
       </div>
       <div id="tab4" style="display:none">
+        <br />
         <div id="subtab4Menu">
           <button onclick="game.subtab(4, 0)" class="boosterButton" id="upgradeSubtabButton">Upgrades</button>
           <button onclick="game.subtab(4, 1)" class="boosterButton" id="autobuyerSubtabButton">Autobuyers</button>
