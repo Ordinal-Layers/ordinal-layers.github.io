@@ -16,7 +16,6 @@
         <button onclick="game.tab(3)" class="tabButton" id="markupTabButton" style="display:none"><h2 style="display:inline">Markup</h2></button>
         <button onclick="game.tab(4)" class="tabButton" id="boosterTabButton" style="display:none"><h2 style="display:inline">Boosters</h2></button>
       </div>
-      <br />
       <div id="tab0">
         <button onclick="game.save()" class="normalButton">Save your game</button>
         <button onclick="game.exportGame()" class="normalButton">Export your game save via file</button>
@@ -96,14 +95,12 @@
         </div>
       </div>
       <div id="tab2" style="display:none">
-        <button onclick="game.increment()" class="normalButton" id="incrementButton">Increase ordinal by 1</button>
-        <button onclick="game.maximize()" class="normalButton" id="maximizeButton">Maximize ordinal, but number does not increase</button>
-        <br /><br />
-        <button onclick="game.markup()" class="markupButton" id="markupButton">Reach &omega;<sup>2</sup> to Markup</button>
+        <p><button onclick="game.increment()" class="normalButton" id="incrementButton">Increase ordinal by 1</button>
+        <button onclick="game.maximize()" class="normalButton" id="maximizeButton">Maximize ordinal, but number does not increase</button></p>
+        <p><button onclick="game.markup()" class="markupButton" id="markupButton">Reach &omega;<sup>2</sup> to Markup</button></p>
       </div>
       <div id="tab3" style="display:none">
-        <span id="opText">You have 0 Ordinal Points</span> <button onclick="game.markup()" class="markupButton" id="markupButton2">Reach &omega;<sup>2</sup> to Markup</button>
-        <br /><br />
+        <p><span id="opText">You have 0 Ordinal Points</span> <button onclick="game.markup()" class="markupButton" id="markupButton2">Reach &omega;<sup>2</sup> to Markup</button></p>
         <div id="subtab3Menu">
           <button onclick="game.subtab(3, 0)" class="markupButton" id="autoclickerSubtabButton">Autoclickers</button>
           <button onclick="game.subtab(3, 1)" class="markupButton" id="factorSubtabButton">Factors</button>
