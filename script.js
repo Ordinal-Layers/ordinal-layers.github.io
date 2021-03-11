@@ -565,7 +565,7 @@ var game = {
         }
         if (conf) {
           game.resetEverythingBoostDoes();
-          game.factorBoosts += game.calcBulk();
+          game.data.factorBoosts += game.calcBulk();
           
           if (!game.data.boosterUnlocked) {
             game.data.boosterUnlocked = true;
