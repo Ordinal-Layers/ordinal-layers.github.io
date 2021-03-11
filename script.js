@@ -1058,7 +1058,7 @@ var game = {
       
       var powerList = [];
       
-      while (remainOrd > 0) {
+      while (remainOrd >= 1.000e230) {
         var power = Math.min(41, Math.floor(Math.log(remainOrd / 1.000e230) / Math.log(3)));
         
         powerList.push(power);
