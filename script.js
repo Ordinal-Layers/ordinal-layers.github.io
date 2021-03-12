@@ -1374,6 +1374,7 @@ var game = {
     }
     
     if (newGame.version === "0.1.1") {
+      localStorage.setItem("ordinalLayersSave", JSON.stringify(newGame));
       localStorage.setItem("ordinalLayersSave", btoa(localStorage.getItem("ordinalLayersSave")));
       delete newGame.clickCooldown;
       newGame.publicTesting = false;
