@@ -1368,6 +1368,7 @@ var game = {
       game.data.clickCooldown = 1;
       game.data.factorShifts = 0;
       game.data.factors = [];
+      game.data.version = "0.1.1";
     }
     
     if (loadgame.version === "0.1" || loadgame.version === "0.1.1") {
@@ -1387,9 +1388,8 @@ var game = {
         [false, false, false, false],
         [false, false, false, false]
       ];
+      game.data.version = "0.2";
     }
-    
-    game.data.version = "0.2";
   },
   save: (action, manmade = true) => {
     if (!manmade || game.clickCooldown === 0) {
