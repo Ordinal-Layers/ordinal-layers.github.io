@@ -1364,32 +1364,36 @@ var game = {
     }
   },
   handleOldVersions: loadgame => {
-    if (loadgame.version === "0.1") {
-      game.data.clickCooldown = 1;
-      game.data.factorShifts = 0;
-      game.data.factors = [];
-      game.data.version = "0.1.1";
+    var newGame = loadgame;
+    
+    if (newGame.version === "0.1") {
+      newGame.clickCooldown = 1;
+      newGame.factorShifts = 0;
+      newGame.factors = [];
+      newGame.version = "0.1.1";
     }
     
-    if (loadgame.version === "0.1" || loadgame.version === "0.1.1") {
+    if (newGame.version === "0.1.1") {
       localStorage.setItem("ordinalLayersSave", btoa(localStorage.getItem("ordinalLayersSave")));
-      delete game.data.clickCooldown;
-      game.data.publicTesting = false;
-      game.data.autosaveInterval = 0;
-      game.data.boosterUnlocked = false;
-      game.data.factorBoosts = 0;
-      game.data.dynamicFactor = 1;
-      game.data.achievements = [
+      delete newGame.clickCooldown;
+      newGame.publicTesting = false;
+      newGame.autosaveInterval = 0;
+      newGame.boosterUnlocked = false;
+      newGame.factorBoosts = 0;
+      newGame.dynamicFactor = 1;
+      newGame.achievements = [
         [false, false, false, false, false, false, false, false, false, false]
       ];
-      game.data.bups = [
+      newGame.bups = [
         [false, false, false, false],
         [false, false, false, false],
         [false, false, false, false],
         [false, false, false, false]
       ];
-      game.data.version = "0.2";
+      newGame.version = "0.2";
     }
+    
+    return newGame;
   },
   save: (action, manmade = true) => {
     if (!manmade || game.clickCooldown === 0) {
@@ -1424,7 +1428,7 @@ var game = {
     
     console.log(diff);
     
-    game.handleOldVersions(newLoadgame);
+    game.data = game.handleOldVersions(newLoadgame);
     
     game.loop(diff, true);
     
