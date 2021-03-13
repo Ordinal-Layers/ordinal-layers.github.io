@@ -32,7 +32,7 @@ if (real) {
   
   function script3() {
     var script = document.createElement("script");
-    script.src = "script.js";
+    script.src = inBetaTesting() ? "betascript.js": "script.js";
     document.body.appendChild(script);
   }
   
