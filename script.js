@@ -624,13 +624,15 @@ var game = {
     }
   },
   debug: () => {
-    game.resetEverythingMarkupDoes();
-    game.data.markupUnlocked = true;
-    
-    game.resetEverythingBoostDoes();
-    game.data.boosterUnlocked = true;
-    
-    game.data.factorBoosts = 27;
+    if (inPublicTesting() || inBetaTesting()) {
+      game.resetEverythingMarkupDoes();
+      game.data.markupUnlocked = true;
+
+      game.resetEverythingBoostDoes();
+      game.data.boosterUnlocked = true;
+
+      game.data.factorBoosts = 27;
+    }
   },
   ordLevels: [
     () => 0,
