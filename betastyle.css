@@ -118,6 +118,21 @@ body {
   border: 2px solid black;
 }
 
+.bChallenge {
+  margin: center;
+  width: 300px;
+  height: 150px;
+  color: #8080FF;
+  transition-duration: 0.1s;
+  border: 2px solid blue;
+  border-radius: 5px;
+}
+
+.notInChal:hover {
+  color: #000080;
+  background-color: white;
+}
+
 #resetButton {
   color: red;
   background-color: white;
