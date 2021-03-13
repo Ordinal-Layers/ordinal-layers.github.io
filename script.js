@@ -1559,7 +1559,9 @@ var game = {
   }
 };
 
-game.reset();
+if (localStorage.getItem(inBetaTesting() ? "ordinalLayersBetaTestingSave": (inPublicTesting() ? "ordinalLayersPublicTestingSave": "ordinalLayersSave")) === null) {
+  game.reset();
+}
 
 document.getElementById("loadingScreen").style.display = "none";
 document.getElementById("mainMenu").style.display = "block";
