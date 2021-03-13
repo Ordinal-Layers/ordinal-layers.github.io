@@ -1,8 +1,8 @@
 var real = false;
-var sPath = location.origin;
 var inPublicTesting;
+var inBetaTesting;
 
-if (sPath === "https://ordinal-layers.github.io") {
+if (location.origin === "https://ordinal-layers.github.io") {
   real = true;
 }
 
@@ -13,6 +13,10 @@ if (real) {
   inPublicTesting = function() {
     return location.href.split("/")[3] === "public.html" || location.href.split("/")[3] === "public";
   };
+  
+  inBetaTesting = function() {
+    return location.href.split("/")[3] === "beta.html" || location.href.split("/")[3] === "beta";
+  }
   
   function script1() {
     var extend1 = document.createElement("script");
