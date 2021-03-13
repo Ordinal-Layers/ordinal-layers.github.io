@@ -7,11 +7,6 @@ if (location.origin === "https://ordinal-layers.github.io") {
 }
 
 if (real) {
-  document.getElementById("stylesheet").href = inBetaTesting() ? "betastyle.css": "style.css";
-  
-  document.getElementById("fake").style.display = "none";
-  document.getElementById("loadingScreen").style.display = "block";
-  
   inPublicTesting = function() {
     return location.href.split("/")[3] === "public.html" || location.href.split("/")[3] === "public";
   };
@@ -19,6 +14,11 @@ if (real) {
   inBetaTesting = function() {
     return location.href.split("/")[3] === "beta.html" || location.href.split("/")[3] === "beta";
   }
+  
+  document.getElementById("stylesheet").href = inBetaTesting() ? "betastyle.css": "style.css";
+  
+  document.getElementById("fake").style.display = "none";
+  document.getElementById("loadingScreen").style.display = "block";
   
   function script1() {
     var extend1 = document.createElement("script");
