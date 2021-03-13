@@ -8,6 +8,7 @@
   <body>
     <div id="game" style="display:none">
       <audio src="https://cdn.glitch.com/03a4b67b-6f18-4f6d-8d37-50a18fb615c8%2FHypnothis.mp3?v=1584285594822" id="music" loop></audio>
+      <b id="decrementyText" style="display:none">
       <h1 id="header"><span style="color:hsl(0, 100%, 50%)">H<sub>0</sub>(10)=10</span></h1>
       <div id="tabMenu">
         <button onclick="game.tab(0)" class="tabButton" id="optionsTabButton"><h2 style="display:inline">Options</h2></button>
@@ -163,7 +164,7 @@
         <div id="subtab32" style="display:none">
           <p id="dynamicMult">Your Dynamic Factor is x1</p>
           <p id="dynamicCap">It is increasing by 0.01 per second and caps at 10</p>
-          <p id="dynamicDecrease">It is also decreasing by 1.000e301 per second</p>
+          <p id="dynamicDecrease" style="display:none">It is also decreasing by 1.000e301 per second</p>
           <p>Dynamic Factor resets on Markups</p>
           <br />
           <p id="quintupler">Your Quintupler is x5</p>
@@ -174,6 +175,7 @@
         <div id="subtab4Menu">
           <button onclick="game.subtab(4, 0)" class="boosterButton" id="upgradeSubtabButton">Upgrades</button>
           <button onclick="game.subtab(4, 1)" class="boosterButton" id="autobuyerSubtabButton">Autobuyers</button>
+          <button onclick="game.subtab(4, 2)" class="boosterButton" id="challengeSubtabButton">Challenges</button>
         </div>
         <div id="subtab40">
           <div class="center" id="boosterContainer">
@@ -213,7 +215,81 @@
         <div id="subtab41" style="display:none">
           <p><b>Tier 2 Automation</b></p>
           <p id="maxAllAuto">Your Max All Autobuyer is locked. Purchase the relevant Booster Upgrade to unlock it!</p>
-          <p id="markupAuto">Your Markup Autobuyer is locked. Purchase the relevent Booster Upgrade to unlock it!</p>
+          <p id="markupAuto">Your Markup Autobuyer is locked. Purchase the relevant Booster Upgrade to unlock it!</p>
+        </div>
+        <div id="subtab42" style="display:none">
+          <p>Challenges can be completed up to 3 times, each one giving a bigger reward.</p>
+          <p id="chalMult">Your 0 challenge completions have multiplied Tier 1 and 2 automation by x1</p>
+          <p id="chalRun">You're currently not in a challenge</p>
+          <button class="boosterButton" id="exitChalButton" onclick="game.exitChal()">Exit Challenge</button>
+          <table id="challengeTable">
+            <tbody>
+              <tr>
+                <td><button class="bChallenge notInChal" id="chal1" onclick="game.enterChal(1)">
+                  Challenge 1<br />
+                  Autoclicker costs scale a lot worse, and you gain 200x OP if you have the 5x OP upgrade<br /><br />
+                  Goal: <span id="chal1Goal">1.000e30</span> OP<br />
+                  Reward: Factor 1 boosts Tier 1 and 2<br />
+                  Currently: <span id="chal1Mult">x1</span> (<span id="chal1Comp">0</span>/3)
+                </button></td>
+                <td><button class="bChallenge notInChal" id="chal2" onclick="game.enterChal(2)">
+                  Challenge 2<br />
+                  You can't buy factors<br /><br />
+                  Goal: <span id="chal2Goal">g<sub>&psi;(1)</sub>(10)</span> OP<br />
+                  Reward: Factor 2 boosts Tier 1 and 2<br />
+                  Currently: <span id="chal2Mult">x1</span> (<span id="chal2Comp">0</span>/3)
+                </button></td>
+              </tr>
+              <tr>
+                <td><button class="bChallenge notInChal" id="chal3" onclick="game.enterChal(3)">
+                  Challenge 3<br />
+                  The base is 5 higher, all free factors are doubled<br /><br />
+                  Goal: <span id="chal3Goal">1.000e200</span> OP<br />
+                  Reward: Factor 3 boosts Tier 1 and 2<br />
+                  Currently: <span id="chal3Mult">x1</span> (<span id="chal3Comp">0</span>/3)
+                </button></td>
+                <td><button class="bChallenge notInChal" id="chal4" onclick="game.enterChal(4)">
+                  Challenge 4<br />
+                  Factor Shifts don't reduce the base<br /><br />
+                  Goal: <span id="chal4Goal"1.000e30</span> OP<br />
+                  Reward: Factor 4 boosts Tier 1 and 2<br />
+                  Currently: <span id="chal4Mult">x1</span> (<span id="chal4Comp">0</span>/3)
+                </button></td>
+              </tr>
+              <tr>
+                <td><button class="bChallenge notInChal" id="chal5" onclick="game.enterChal(5)">
+                  Challenge 5<br />
+                  You can do a maximum of 2 factor shifts<br /><br />
+                  Goal: <span id="chal5Goal">1.000e100</span> OP<br />
+                  Reward: Factor 5 boosts Tier 1 and 2<br />
+                  Currently: <span id="chal5Mult">x1</span> (<span id="chal5Comp">0</span>/3)
+                </button></td>
+                <td><button class="bChallenge notInChal" id="chal6" onclick="game.enterChal(6)">
+                  Challenge 6<br />
+                  Dynamic drops by 1.000e301 per second, keep no OP on Markup, you can do a maximum of 1000 manual successor clicks per Markup, Quintupler is disabled<br /><br />
+                  Goal: <span id="chal6Goal"1.000e30</span> OP<br />
+                  Reward: Factor 6 boosts Tier 1 and 2<br />
+                  Currently: <span id="chal6Mult">x1</span> (<span id="chal6Comp">0</span>/3)
+                </button></td>
+              </tr>
+              <tr>
+                <td><button class="bChallenge notInChal" id="chal7" onclick="game.enterChal(7)">
+                  Challenge 7<br />
+                  <b>ALL PREVIOUS CHALLENGES AT ONCE,</b> and Challenge 6 completions boost OP gain<br /><br />
+                  Goal: <span id="chal7Goal">1.000e12</span> OP<br />
+                  Reward: Factor 7 boosts Tier 1 and 2<br />
+                  Currently: <span id="chal7Mult">x1</span> (<span id="chal7Comp">0</span>/3)
+                </button></td>
+                <td><button class="bChallenge notInChal" id="chal8" onclick="game.enterChal(8)">
+                  Challenge 8<br />
+                  There's exponentially rising decrementy dividing Tier 1 production, immediately Refund if you have any Booster Upgrades, all challenge effects are disabled, Challenge 7 completions bosot OP, keep no OP on Markup, you can do a maximum of 1000 manual successor clicks per Markup, Quintupler is disabled<br /><br />
+                  Goal: <span id="chal8Goal">1.000e10</span> OP<br />
+                  Reward: Dynamic Factor Cap boosts Tier 1 and 2<br />
+                  Currently: <span id="chal8Mult">x1</span> (<span id="chal8Comp">0</span>/3)
+                </button></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
