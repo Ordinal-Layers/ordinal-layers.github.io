@@ -6,6 +6,7 @@ var game = {
   data: {
     version: "0.2",
     publicTesting: false,
+    betaTesting: false,
     lastTick: Date.now(),
     autosaveInterval: 0,
     pendingIncrement: 0,
@@ -1378,6 +1379,7 @@ var game = {
       localStorage.setItem("ordinalLayersSave", btoa(localStorage.getItem("ordinalLayersSave")));
       delete newGame.clickCooldown;
       newGame.publicTesting = false;
+      newGame.betaTesting = false;
       newGame.autosaveInterval = 0;
       newGame.boosterUnlocked = false;
       newGame.factorBoosts = 0;
@@ -1398,7 +1400,7 @@ var game = {
   },
   save: (action, manmade = true) => {
     if (!manmade || game.clickCooldown === 0) {
-      localStorage.setItem(inPublicTesting() ? "ordinalLayersPublicTestingSave": "ordinalLayersSave", btoa(JSON.stringify(game.data)));
+      localStorage.setItem(inBetaTesting() ? "ordinalLayersBetaTestingSave": (inPublicTesting() ? "ordinalLayersPublicTestingSave": "ordinalLayersSave"), btoa(JSON.stringify(game.data)));
       
       if (manmade) {
         $.notify("Game Saved!", "success");
@@ -1419,10 +1421,14 @@ var game = {
       game.data.publicTesting = true;
     }
     
-    if (game.data.publicTesting && !inPublicTesting()) {
+    if (inBetaTesting()) {
+      game.data.betaTesting = true;
+    }
+    
+    if ((game.data.publicTesting && !inPublicTesting()) || (game.data.betaTesting && !inBetaTesting())) {
       game.data = JSON.parse(atob(tempgame));
       error = true;
-      $.notify("Import Failed: Attempted to import public testing version into the main game", "error");
+      $.notify("Import Failed: Attempted to import " + (game.data.betaTesting ? "beta": "public") + " testing version into the main game", "error");
     }
     
     var diff = Date.now() - game.data.lastTick;
@@ -1521,13 +1527,13 @@ var game = {
       var a = document.createElement("a");
       
       a.href = URL.createObjectURL(file);
-      a.download = inPublicTesting() ? "Ordinal Layers Public Testing Save.txt": "Ordinal Layers Save.txt";
+      a.download = inBetaTesting() ? "Ordinal Layers Beta Testing Save.txt": (inPublicTesting() ? "Ordinal Layers Public Testing Save.txt": "Ordinal Layers Save.txt");
       a.click();
       
       $.notify("File Export Successful!", "success");
       
-      if (inPublicTesting()) {
-        $.notify("Warning! This is a Public Testing save. You will not be able to import this save into the base game", "warn");
+      if (inPublicTesting() || inBetaTesting()) {
+        $.notify("Warning! This is a " + (inBetaTesting ? "Beta": "Public") + " Testing save. You will not be able to import this save into the base game", "warn");
       }
       
       game.clickCooldown = 1;
