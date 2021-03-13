@@ -35,7 +35,11 @@ var game = {
       [false, false, false, false],
       [false, false, false, false],
       [false, false, false, false]
-    ]
+    ],
+    challenge: 0,
+    chalComp: [0, 0, 0, 0, 0, 0, 0, 0],
+    manualClicksLeft: Infinity,
+    decrementy: 0
   },
   music: document.getElementById("music"),
   header: document.getElementById("header"),
@@ -804,6 +808,18 @@ var game = {
         "Way too much",
         "Way too much",
         "Way too much"
+      ],
+      [
+        "Easy",
+        "Medium",
+        "Hard",
+        "Difficult",
+        "Challenging",
+        "Brutal",
+        "The Challenging Day",
+        "Way too much",
+        "Way too much",
+        "Way too much"
       ]
     ],
     achieveTooltip: [
@@ -854,6 +870,18 @@ var game = {
         "Perform Too Many Factor Boosts",
         "Perform Too Many Factor Boosts",
         "Perform Too Many Factor Boosts"
+      ],
+      [
+        "Complete Challenge 1 once",
+        "Complete Challenge 2 once",
+        "Complete Challenge 3 twice",
+        "Complete Challenge 4 twice",
+        "Complete Challenge 5 three times",
+        "Complete Challenge 6 three times",
+        "Complete 24 challenges in total",
+        "Complete Too Many challenges in total",
+        "Complete Too Many challenges in total",
+        "Complete Too Many challenges in total"
       ]
     ]
   },
