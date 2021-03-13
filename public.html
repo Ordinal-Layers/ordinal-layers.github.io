@@ -216,7 +216,7 @@
     <div id="mainMenu" style="display:none">
       <h1>Ordinal Layers</h1>
       <h2>An Incremental Game which involves making an ordinal grow bigger and bigger</h2>
-      <p><button onclick='game.load(JSON.parse(atob(localStorage.getItem(inPublicTesting() ? "ordinalLayersPublicTestingSave": "ordinalLayersSave"))))' class="normalButton">Play game</button></p>
+      <p><button onclick='game.load(JSON.parse(atob(localStorage.getItem(inBetaTesting() ? "ordinalLayersBetaTestingSave": (inPublicTesting() ? "ordinalLayersPublicTestingSave": "ordinalLayersSave")))))' class="normalButton">Play game</button></p>
       <p style="font-size:12px">&copy; 2021 Adesdae's Incremental Games, v0.2</p>
     </div>
     <script src="load.js"></script>
