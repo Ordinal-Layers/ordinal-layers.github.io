@@ -128,6 +128,10 @@ body {
   border-radius: 5px;
 }
 
+.notInChal {
+  background-color: black;
+}
+
 .notInChal:hover {
   color: #000080;
   background-color: white;
