@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Ordinal Layers</title>
+    <meta charset="utf-8" />
+    <link id="stylesheet" rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="game" style="display:none">
+      <audio src="https://cdn.glitch.com/03a4b67b-6f18-4f6d-8d37-50a18fb615c8%2FHypnothis.mp3?v=1584285594822" id="music" loop></audio>
+      <h1 id="header"><span style="color:hsl(0, 100%, 50%)">H<sub>0</sub>(10)=10</span></h1>
+      <div id="tabMenu">
+        <button onclick="game.tab(0)" class="tabButton" id="optionsTabButton"><h2 style="display:inline">Options</h2></button>
+        <span style="visibility:hidden">0</span>
+        <button onclick="game.tab(1)" class="tabButton" id="achievementsTabButton"><h2 style="display:inline">Achievements</h2></button>
+        <span style="visibility:hidden">0</span>
+        <button onclick="game.tab(2)" class="tabButton" id="ordinalTabButton"><h2 style="display:inline">Ordinals</h2></button>
+        <span style="visibility:hidden">0</span>
+        <button onclick="game.tab(3)" class="tabButton" id="markupTabButton" style="display:none"><h2 style="display:inline">Markup</h2></button>
+        <span style="visibility:hidden">0</span>
+        <button onclick="game.tab(4)" class="tabButton" id="boosterTabButton" style="display:none"><h2 style="display:inline">Boosters</h2></button>
+        <span style="visibility:hidden">0</span>
+      </div>
+      <div id="tab0">
+        <br />
+        <button onclick="game.save()" class="normalButton">Save your game</button>
+        <button onclick="game.exportGame()" class="normalButton">Export your game save via file</button>
+        <p><input type="file" id="importButton" class="normalButton" oninput="game.importGame()" /> Import your game save via file (will overwrite save)</p>
+        <button onclick="game.resetConf()" id="resetButton">RESET YOUR GAME</button>
+        <br /><br />
+        <button onclick="game.toggleColor()" class="normalButton" id="colorButton">Colors: ON</button>
+        <button onclick="game.toggleMusic()" class="normalButton" id="musicButton">Music: ON</button>
+        <p><a href="howtoplay.html">How to play</a> | <a href="changelog.html">Changelog</a> | Game autosaves every five seconds</p>
+        <p><i>This work is licensed under the <a href="https://opensource.org/licenses/MIT">MIT License</a></i></p>
+        <br />
+        <p>If you want a greater understanding of how the ordinals work, you might want to read this <a href="https://en.wikipedia.org/wiki/Ordinal_number">Wikipedia page</a>.</p>
+        <p>This game was inspired by Patcail's <a href="https://patcailmemer.github.io/Ordinal-Markup">Ordinal Markup</a>.</p>
+        <p>v0.2</p>
+        <p>Click the Ordinals tab to start the game</p>
+      </div>
+      <div id="tab1" style="display:none">
+        <p id="currentLevel">Your current Ordinal Level is 0</p>
+        <p id="nextLevel">Next Ordinal Level is at 1</p>
+        <p id="highestLevel">Your highest Ordinal Level was 0</p>
+        <div class="center" id="achievementContainer">
+          <h1 id="achievementCount">Achievements (0/40)</h1>
+          <p>Progress in the game to earn achievements! They don't give any boost and are purely for bragging</p>
+          <table class="center" id="achievementTable">
+            <tbody>
+              <tr id="achieveRow0">
+                <td class="achievement" id="achievement00" tooltip=""></td>
+                <td class="achievement" id="achievement01" tooltip=""></td>
+                <td class="achievement" id="achievement02" tooltip=""></td>
+                <td class="achievement" id="achievement03" tooltip=""></td>
+                <td class="achievement" id="achievement04" tooltip=""></td>
+                <td class="achievement" id="achievement05" tooltip=""></td>
+                <td class="achievement" id="achievement06" tooltip=""></td>
+                <td class="achievement" id="achievement07" tooltip=""></td>
+                <td class="achievement" id="achievement08" tooltip=""></td>
+                <td class="achievement" id="achievement09" tooltip=""></td>
+              </tr>
+              <tr id="achieveRow1" style="display:none">
+                <td class="achievement" id="achievement10" tooltip=""></td>
+                <td class="achievement" id="achievement11" tooltip=""></td>
+                <td class="achievement" id="achievement12" tooltip=""></td>
+                <td class="achievement" id="achievement13" tooltip=""></td>
+                <td class="achievement" id="achievement14" tooltip=""></td>
+                <td class="achievement" id="achievement15" tooltip=""></td>
+                <td class="achievement" id="achievement16" tooltip=""></td>
+                <td class="achievement" id="achievement17" tooltip=""></td>
+                <td class="achievement" id="achievement18" tooltip=""></td>
+                <td class="achievement" id="achievement19" tooltip=""></td>
+              </tr>
+              <tr id="achieveRow2" style="display:none">
+                <td class="achievement" id="achievement20" tooltip=""></td>
+                <td class="achievement" id="achievement21" tooltip=""></td>
+                <td class="achievement" id="achievement22" tooltip=""></td>
+                <td class="achievement" id="achievement23" tooltip=""></td>
+                <td class="achievement" id="achievement24" tooltip=""></td>
+                <td class="achievement" id="achievement25" tooltip=""></td>
+                <td class="achievement" id="achievement26" tooltip=""></td>
+                <td class="achievement" id="achievement27" tooltip=""></td>
+                <td class="achievement" id="achievement28" tooltip=""></td>
+                <td class="achievement" id="achievement29" tooltip=""></td>
+              </tr>
+              <tr id="achieveRow3" style="display:none">
+                <td class="achievement" id="achievement30" tooltip=""></td>
+                <td class="achievement" id="achievement31" tooltip=""></td>
+                <td class="achievement" id="achievement32" tooltip=""></td>
+                <td class="achievement" id="achievement33" tooltip=""></td>
+                <td class="achievement" id="achievement34" tooltip=""></td>
+                <td class="achievement" id="achievement35" tooltip=""></td>
+                <td class="achievement" id="achievement36" tooltip=""></td>
+                <td class="achievement" id="achievement37" tooltip=""></td>
+                <td class="achievement" id="achievement38" tooltip=""></td>
+                <td class="achievement" id="achievement39" tooltip=""></td>
+              </tr>
+            </tbody>
+          </table>
+          <p id="nextRowUnlock">Perform a Markup to unlock the next row of achievements</p>
+        </div>
+      </div>
+      <div id="tab2" style="display:none">
+        <p><button onclick="game.increment()" class="normalButton" id="incrementButton">Increase ordinal by 1</button>
+        <button onclick="game.maximize()" class="normalButton" id="maximizeButton">Maximize ordinal, but number does not increase</button></p>
+        <p><button onclick="game.markup()" class="markupButton" id="markupButton">Reach &omega;<sup>2</sup> to Markup</button></p>
+      </div>
+      <div id="tab3" style="display:none">
+        <p><span id="opText">You have 0 Ordinal Points</span> <button onclick="game.markup()" class="markupButton" id="markupButton2">Reach &omega;<sup>2</sup> to Markup</button></p>
+        <div id="subtab3Menu">
+          <button onclick="game.subtab(3, 0)" class="markupButton" id="autoclickerSubtabButton">Autoclickers</button>
+          <button onclick="game.subtab(3, 1)" class="markupButton" id="factorSubtabButton">Factors</button>
+          <button onclick="game.subtab(3, 2)" class="markupButton" id="extraFactorSubtabButton" style="display:none">Extra Factors</button>
+        </div>
+        <div id="subtab30">
+          <p><b>Tier 1 Automation</b></p>
+          <p id="incrementAuto">You have 0 increment autoclickers, clicking the increment button 0 times per second</p>
+          <p id="maximizeAuto">You have 0 maximize autoclickers, clicking the maximize button 0 times per second</p>
+          <button onclick="game.buyIncrementAuto()" class="markupButton" id="buyIncrementButton">Buy Increment Autoclicker for 100 OP</button>
+          <button onclick="game.buyMaximizeAuto()" class="markupButton" id="buyMaximizeButton">Buy Maximize Autoclicker fo 100 OP</button>
+          <button onclick="game.maxAll()" class="markupButton" id="maxAllButton">Max All (M)</button>
+        </div>
+        <div id="subtab31" style="display:none">
+          <div id="factorContainer" style="height:256px">
+            <p id="noFactors">You have no factors. Perform a Factor Shift to get one!</p>
+            <div id="factorList" style="display:none">
+              <p>Factors: <button onclick="game.maxFactors()" class="markupButton" id="maxFactorButton">Max All (M)</button></p>
+              <ul id="factorListMain">
+                <li id="factor1">Factor 1: <span id="factor1Mult">x1</span> <button onclick="game.buyFactor(1)" class="markupButton" id="factor1Button">Increase Factor 1 for 10 OP</button></li>
+                <li id="factor2" style="display:none">Factor 2: <span id="factor2Mult">x1</span> <button onclick="game.buyFactor(2)" class="markupButton" id="factor2Button">Increase Factor 2 for 100 OP</button></li>
+                <li id="factor3" style="display:none">Factor 3: <span id="factor3Mult">x1</span> <button onclick="game.buyFactor(3)" class="markupButton" id="factor3Button">Increase Factor 3 for 1000 OP</button></li>
+                <li id="factor4" style="display:none">Factor 4: <span id="factor4Mult">x1</span> <button onclick="game.buyFactor(4)" class="markupButton" id="factor4Button">Increase Factor 4 for 10000 OP</button></li>
+                <li id="factor5" style="display:none">Factor 5: <span id="factor5Mult">x1</span> <button onclick="game.buyFactor(5)" class="markupButton" id="factor5Button">Increase Factor 5 for 100000 OP</button></li>
+                <li id="factor6" style="display:none">Factor 6: <span id="factor6Mult">x1</span> <button onclick="game.buyFactor(6)" class="markupButton" id="factor6Button">Increase Factor 6 for 1.000e6 OP</button></li>
+                <li id="factor7" style="display:none">Factor 7: <span id="factor7Mult">x1</span> <button onclick="game.buyFactor(7)" class="markupButton" id="factor7Button">Increase Factor 7 for 1.000e7 OP</button></li>
+              </ul>
+              <span id="factorMult">Your factors are multiplying Tier 1 automation by 1</span>
+            </div>
+          </div>
+          <p><span id="factorShift">Factor Shift: Requires 1000 OP</span> <button onclick="game.factorShift()" class="markupButton" id="factorShiftButton">Do a Factor Shift (S)</button></p>
+          <p>When you Factor Shift, you gain a new factor and the base decreases by 1</p>
+          <div id="factorBoostContainer">
+            <p><span id="factorBoost">Factor Boost: requires g<sub>&psi;(&Omega;)</sub>(10) OP</span> <button onclick="game.factorBoost()" class="boosterButton" id="factorBoostButton">Gain 0 Boosters (B)</button></p>
+            <p id="bulking">You are currently bulking in a set of 0</p>
+            <p id="nextBulk">Reach &psi;(1) to see when you can boost!</p>
+            <div id="factorBoostProgBar">
+              <div id="factorBoostProg" style="width:0%">0%</div>
+            </div>
+          </div>
+        </div>
+        <div id="subtab32" style="display:none">
+          <p id="dynamicMult">Your Dynamic Factor is x1</p>
+          <p id="dynamicCap">It is increasing by 0.01 per second and caps at 10</p>
+          <p>Dynamic Factor resets on Markups</p>
+          <br />
+          <p id="quintupler">Your Quintupler is x5</p>
+        </div>
+      </div>
+      <div id="tab4" style="display:none">
+        <br />
+        <div id="subtab4Menu">
+          <button onclick="game.subtab(4, 0)" class="boosterButton" id="upgradeSubtabButton">Upgrades</button>
+          <button onclick="game.subtab(4, 1)" class="boosterButton" id="autobuyerSubtabButton">Autobuyers</button>
+        </div>
+        <div id="subtab40">
+          <div class="center" id="boosterContainer">
+            <h1 id="boosterText">You have 0 boosters</h1>
+            <p><button onclick="game.refundBups()" class="boosterButton" id="refundButton" style="font-size:16px">Refund back 0 boosters, but reset this factor boost (R)</button></p>
+            <table class="center" id="bups" style="width:810px">
+              <tbody>
+                <tr>
+                  <td><button onclick="game.buyBup(0, 0)" class="btreeButton locked" id="bup00">Each factor is twice as powerful<br /><br />1 Boosters</button></td>
+                  <td><button onclick="game.buyBup(1, 0)" class="btreeButton locked" id="bup01">Unlock Max All autobuyer<br /><br />1 Boosters</button></td>
+                  <td><button onclick="game.buyBup(2, 0)" class="btreeButton locked" id="bup02">Unlock Markup autobuyer<br /><br />1 Boosters</button></td>
+                  <td><button onclick="game.buyBup(3, 0)" class="btreeButton locked" id="bup03">???</button></td>
+                </tr>
+                <tr>
+                  <td><button onclick="game.buyBup(0, 1)" class="btreeButton locked" id="bup10">Gain 5x as much OP<br /><br />6 Boosters</button></td>
+                  <td><button onclick="game.buyBup(1, 1)" class="btreeButton locked" id="bup11">Boosters boost Tier 1 and 2 automation by <span id="boosterMult">x1</span><br /><br />6 Boosters</button></td>
+                  <td><button onclick="game.buyBup(2, 1)" class="btreeButton locked" id="bup12">Gain 20 OP per second<br /><br />10 Boosters</button></td>
+                  <td><button onclick="game.buyBup(3, 1)" class="btreeButton locked" id="bup13">???</button></td>
+                </tr>
+                <tr>
+                  <td><button onclick="game.buyBup(0, 2)" class="btreeButton locked" id="bup20">The base is reduced by 4 if it's over 7. Buying this resets your ordinal<br /><br />66 Boosters</button></td>
+                  <td><button onclick="game.buyBup(1, 2)" class="btreeButton locked" id="bup21">???</button></td>
+                  <td><button onclick="game.buyBup(2, 2)" class="btreeButton locked" id="bup22">You get 5 free factors each<br /><br />21 Boosters</button></td>
+                  <td><button onclick="game.buyBup(3, 2)" class="btreeButton locked" id="bup23">???</button></td>
+                </tr>
+                <tr>
+                  <td><button onclick="game.buyBup(0, 3)" class="btreeButton locked" id="bup30">???</button></td>
+                  <td><button onclick="game.buyBup(1, 3)" class="btreeButton locked" id="bup31">???</button></td>
+                  <td><button onclick="game.buyBup(2, 3)" class="btreeButton locked" id="bup32">Gain 666666x OP if the base is less than 6<br /><br />66 Boosters</button></td>
+                  <td><button onclick="game.buyBup(3, 3)" class="btreeButton locked" id="bup33">???</button></td>
+                </tr>
+              </tbody>
+            </table>
+            <p><i>You start with a free Maximize autoclicker as a gift.</i></p>
+          </div>
+        </div>
+        <div id="subtab41" style="display:none">
+          <p><b>Tier 2 Automation</b></p>
+          <p id="maxAllAuto">Your Max All Autobuyer is locked. Purchase the relevant Booster Upgrade to unlock it!</p>
+          <p id="markupAuto">Your Markup Autobuyer is locked. Purchase the relevent Booster Upgrade to unlock it!</p>
+        </div>
+      </div>
+    </div>
+    <div id="fake">
+      <h1>It turns out someone is trying to steal the game!</h1>
+      <p>Please go to <a href="https://ordinal-layers.github.io">https://ordinal-layers.github.io</a>.</p>
+      <p style="font-size:12px"><i>You saw this message because you are visiting a fake replica of Ordinal Layers. These games are not trusted by Adesdae's Incremental Games (AIG), developer and publisher of Ordinal Layers, and may contain malware/errors.</i></p>
+    </div>
+    <div id="loadingScreen" style="display:none">
+      <h1>Loading...</h1>
+      <p style="font-size:12px"><i>If you see this message for more than five seconds, your browser might not be supported. Please read the <a href="howtoplay.html">browser requirements</a>.</i></p>
+    </div>
+    <div id="mainMenu" style="display:none">
+      <h1>Ordinal Layers</h1>
+      <h2>An Incremental Game which involves making an ordinal grow bigger and bigger</h2>
+      <p><button onclick='game.load(JSON.parse(atob(localStorage.getItem(inBetaTesting() ? "ordinalLayersBetaTestingSave": (inPublicTesting() ? "ordinalLayersPublicTestingSave": "ordinalLayersSave")))))' class="normalButton">Play game</button></p>
+      <p style="font-size:12px">&copy; 2021 Adesdae's Incremental Games, v0.2</p>
+    </div>
+    <script src="load.js"></script>
+  </body>
+</html>
