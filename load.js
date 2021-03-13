@@ -7,6 +7,8 @@ if (location.origin === "https://ordinal-layers.github.io") {
 }
 
 if (real) {
+  document.getElementById("stylesheet").href = inBetaTesting() ? "betastyle.css": "style.css";
+  
   document.getElementById("fake").style.display = "none";
   document.getElementById("loadingScreen").style.display = "block";
   
