@@ -4,7 +4,7 @@ var loop;
 
 var game = {
   data: {
-    version: "0.2",
+    version: "0.2.1",
     publicTesting: false,
     betaTesting: false,
     lastTick: Date.now(),
@@ -1461,7 +1461,7 @@ var game = {
   },
   reset: () => {
     game.data = {
-      version: "0.2",
+      version: "0.2.1",
       publicTesting: false,
       lastTick: Date.now(),
       autosaveInterval: 0,
