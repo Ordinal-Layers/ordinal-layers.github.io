@@ -242,10 +242,10 @@ var game = {
   ],
   factorBoostCosts: [3, 3, 9, 3, 3, 9, 3, 3, 27, 3, 3, 9, 3, 3, 9, 3, 3, 27, 3, 3, 9, 3, 3, 9, 3, 3, 729],
   bupCosts: [
-    [1, 1, 1, Infinity],
+    [1, 1, 1, 15],
     [6, 6, 10, Infinity],
-    [66, Infinity, 21, Infinity],
-    [Infinity, Infinity, 66, Infinity]
+    [66, 66, 21, Infinity],
+    [55, 78, 66, Infinity]
   ],
   achievementsEarned: () => {
     var achieveCount = 0;
@@ -696,12 +696,14 @@ var game = {
       "Markup",
       "Factors",
       "Boosters",
+      "Challenges",
       "???"
     ],
     rowTooltip: [
       "Perform a Markup to unlock the next row of achievements",
       "Perform a Factor Shift to unlock the next row of achievements",
       "Perform a Factor Boost to unlock the next row of achievements",
+      "Unlock Challenges to unlock the next row of achievements",
       "Next row of achievements is coming soon!"
     ],
     achieveReq: [
