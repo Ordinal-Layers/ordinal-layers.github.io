@@ -1559,5 +1559,7 @@ var game = {
   }
 };
 
+game.reset();
+
 document.getElementById("loadingScreen").style.display = "none";
 document.getElementById("mainMenu").style.display = "block";
