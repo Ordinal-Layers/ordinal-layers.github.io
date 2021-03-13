@@ -203,7 +203,8 @@ var game = {
     ],
     [
       document.getElementById("subtab40"),
-      document.getElementById("subtab41")
+      document.getElementById("subtab41"),
+      document.getElementById("subtab42")
     ]
   ],
   clickCooldown: 1,
