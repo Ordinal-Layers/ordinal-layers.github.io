@@ -1481,7 +1481,7 @@ var game = {
     game.markupAuto.innerHTML =
       `Your Markup Autobuyer is ${game.data.bups[0][2] ? `clicking the Markup button ${game.beautify(game.markupSpeed())} times per second, but only if you're past &psi;(1)`: `locked. Purchase the relevant Booster Upgrade to unlock it!`}`;
     
-    game.chalMultText.innerHTML = `Your ${game.totalChalComp()} challenge completions have multiplied Tier 1 and 2 automation by x${game.beautify(game.totalChalMult())}`;
+    game.chalMultText.innerHTML = `Your ${game.totalChalComp()} challenge completions have multiplied Tier 1 and 2 automation by x${game.beautify(game.totalChallengeMult())}`;
     game.chalRun.innerHTML = `You're currently ${game.data.challenge === 0 ? `not in a challenge`: `in Challenge ${game.data.challenge}`}`;
     
     game.decrementyText.style.display = game.inChal(6) || game.inChal(8) ? "inline": "none";
