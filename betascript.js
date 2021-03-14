@@ -1457,7 +1457,7 @@ var game = {
     game.dynamicCap.innerHTML = 
       `It is increasing by ${game.data.bups[3][0] && game.data.challenge % 2 === 1 ? `a non-constant amount`: `0.01`} per second and caps at ${game.beautify(game.calcDynamicMult(10))}`;
     game.dynamicDecrease.style.display = game.calcDynamicDecrease() > 0 ? "block": "none";
-    game.dynamicDecrease.innerHTML = `It is also decreasing by ${game.data.bups[3][1] ? `10`: `1.000e301`} per second`
+    game.dynamicDecrease.innerHTML = `It is also decreasing by ${game.data.bups[3][1] ? `10`: `1.000e301`} per second`;
     
     game.boosterText.innerHTML = `You have ${game.boosters()} boosters`;
     game.refundButton.innerHTML = `Refund back ${game.data.factorBoosts * (game.data.factorBoosts + 1) / 2 - game.boosters()} boosters, but reset this Factor Boost (R)`;
