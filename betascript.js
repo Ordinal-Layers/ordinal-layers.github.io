@@ -1660,6 +1660,7 @@ var game = {
       newGame.chalComp = [0, 0, 0, 0, 0, 0, 0, 0];
       newGame.manualClicksLeft = Infinity;
       newGame.decrementy = 0;
+      newGame.version = "0.2.1";
     }
     
     return newGame;
