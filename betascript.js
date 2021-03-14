@@ -1366,6 +1366,203 @@ var game = {
       game.clickCooldown = 1;
     }
   },
+  handleOldVersions: loadgame => {
+    var newGame = loadgame;
+    
+    if (newGame.version === "0.1") {
+      newGame.clickCooldown = 1;
+      newGame.factorShifts = 0;
+      newGame.factors = [];
+      newGame.version = "0.1.1";
+    }
+    
+    if (newGame.version === "0.1.1") {
+      localStorage.setItem("ordinalLayersSave", JSON.stringify(newGame));
+      localStorage.setItem("ordinalLayersSave", btoa(localStorage.getItem("ordinalLayersSave")));
+      delete newGame.clickCooldown;
+      newGame.publicTesting = false;
+      newGame.betaTesting = false;
+      newGame.autosaveInterval = 0;
+      newGame.boosterUnlocked = false;
+      newGame.factorBoosts = 0;
+      newGame.dynamicFactor = 1;
+      newGame.highestLevel = 0;
+      newGame.achievements = [
+        [false, false, false, false, false, false, false, false, false, false]
+      ];
+      newGame.bups = [
+        [false, false, false, false],
+        [false, false, false, false],
+        [false, false, false, false],
+        [false, false, false, false]
+      ];
+      newGame.version = "0.2";
+    }
+    
+    return newGame;
+  },
+  save: (action, manmade = true) => {
+    if (!manmade || game.clickCooldown === 0) {
+      localStorage.setItem(inBetaTesting() ? "ordinalLayersBetaTestingSave": (inPublicTesting() ? "ordinalLayersPublicTestingSave": "ordinalLayersSave"), btoa(JSON.stringify(game.data)));
+      
+      if (manmade) {
+        $.notify("Game Saved!", "success");
+        game.clickCooldown = 1;
+      }
+    }
+  },
+  load: loadgame => {
+    var tempgame = btoa(JSON.stringify(game.data));
+    var newLoadgame = loadgame === null ? game.data: loadgame;
+    var error = false;
+    
+    if (loadgame !== null) {
+      game.data = newLoadgame;
+    }
+    
+    if (inPublicTesting()) {
+      game.data.publicTesting = true;
+    }
+    
+    if (inBetaTesting()) {
+      game.data.betaTesting = true;
+    }
+    
+    if ((game.data.publicTesting && !inPublicTesting()) || (game.data.betaTesting && !inBetaTesting())) {
+      game.data = JSON.parse(atob(tempgame));
+      error = true;
+      $.notify("Import Failed: Attempted to import " + (game.data.betaTesting ? "beta": "public") + " testing version into the main game", "error");
+    }
+    
+    var diff = Date.now() - game.data.lastTick;
+    
+    console.log(diff);
+    
+    game.data = game.handleOldVersions(newLoadgame);
+    
+    game.loop(diff, true);
+    
+    document.getElementById("mainMenu").style.display = "none";
+    document.getElementById("game").style.display = "block";
+    
+    onkeypress = _ => {
+      var k = _.key.toLowerCase();
+      if (typeof game.keybinds[k] !== "undefined") {
+        game.keybinds[k]();
+      };
+    };
+    
+    loop = setInterval(() => game.loop(Date.now() - game.data.lastTick), 50);
+    
+    if (game.data.music) {
+      game.music.play();
+    }
+    
+    return error;
+  },
+  reset: () => {
+    game.data = {
+      version: "0.2.1",
+      publicTesting: false,
+      betaTesting: false,
+      lastTick: Date.now(),
+      autosaveInterval: 0,
+      pendingIncrement: 0,
+      pendingMaximize: 0,
+      pendingMaxAll: 0,
+      pendingMarkup: 0,
+      achievements: [
+        [false, false, false, false, false, false, false, false, false, false]
+      ],
+      highestLevel: 0,
+      markupUnlocked: false,
+      boosterUnlocked: false,
+      colors: true,
+      music: true,
+      ord: 0,
+      over: 0,
+      op: 0,
+      incrementAuto: 0,
+      maximizeAuto: 0,
+      factorShifts: 0,
+      factors: [],
+      factorBoosts: 0,
+      dynamicFactor: 1,
+      bups: [
+        [false, false, false, false],
+        [false, false, false, false],
+        [false, false, false, false],
+        [false, false, false, false]
+      ],
+      challenge: 0,
+      chalComp: [0, 0, 0, 0, 0, 0, 0, 0],
+      manualClicksLeft: Infinity,
+      decrementy: 0
+    };
+    
+    game.save("reset", false);
+  },
+  importGame: () => {
+    if (game.clickCooldown === 0) {
+      var loadgame = "";
+      
+      var reader = new FileReader();
+      
+      reader.readAsText(document.getElementById("importButton").files[0]);
+      
+      setTimeout(
+        () => {
+          loadgame = JSON.parse(atob(reader.result));
+          if (loadgame !== "") {
+            var error = game.load(loadgame);
+            if (!error) {
+              $.notify("Import Successful!", "success");
+            }
+          }
+        },
+        100
+      );
+    }
+  },
+  exportGame: () => {
+    if (game.clickCooldown === 0) {
+      game.save("export", false);
+      
+      var file = new Blob([btoa(JSON.stringify(game.data))], {type: "text/plain"});
+      
+      URL = URL || webkitURL;
+      
+      var a = document.createElement("a");
+      
+      a.href = URL.createObjectURL(file);
+      a.download = inBetaTesting() ? "Ordinal Layers Beta Testing Save.txt": (inPublicTesting() ? "Ordinal Layers Public Testing Save.txt": "Ordinal Layers Save.txt");
+      a.click();
+      
+      $.notify("File Export Successful!", "success");
+      
+      if (inPublicTesting() || inBetaTesting()) {
+        $.notify("Warning! This is a " + (inBetaTesting ? "Beta": "Public") + " Testing save. You will not be able to import this save into the base game", "warn");
+      }
+      
+      game.clickCooldown = 1;
+    }
+  },
+  resetConf: () => {
+    if (game.clickCooldown === 0) {
+      var code = prompt(
+        'Are you sure you want to delete all of your progress? Type in "reset game" to reset all of your progress.'
+      );
+
+      if (code !== null) {
+        if (code.toLowerCase() === "reset game") {
+          game.reset();
+          $.notify("Hard Reset Successful", "success");
+        }
+      }
+      
+      game.clickCooldown = 1;
+    }
+  },
   render: () => { 
     game.header.innerHTML = 
       `${game.data.colors ? `<span style="color:hsl(${game.ordColor() * 360}, 100%, 50%)">`: ``}H<sub>${game.writeOrd(game.data.colors)}</sub>(${game.base()})${game.hardy() >= 1.000e230 ? ``: `=${game.beautify(game.hardy())}`}${game.data.colors ? `</span>`: ``}`;
@@ -1620,203 +1817,6 @@ var game = {
     if (game.data.autosaveInterval >= 5000) {
       game.data.autosaveInterval %= 5000;
       game.save("autosave", false);
-    }
-  },
-  handleOldVersions: loadgame => {
-    var newGame = loadgame;
-    
-    if (newGame.version === "0.1") {
-      newGame.clickCooldown = 1;
-      newGame.factorShifts = 0;
-      newGame.factors = [];
-      newGame.version = "0.1.1";
-    }
-    
-    if (newGame.version === "0.1.1") {
-      localStorage.setItem("ordinalLayersSave", JSON.stringify(newGame));
-      localStorage.setItem("ordinalLayersSave", btoa(localStorage.getItem("ordinalLayersSave")));
-      delete newGame.clickCooldown;
-      newGame.publicTesting = false;
-      newGame.betaTesting = false;
-      newGame.autosaveInterval = 0;
-      newGame.boosterUnlocked = false;
-      newGame.factorBoosts = 0;
-      newGame.dynamicFactor = 1;
-      newGame.highestLevel = 0;
-      newGame.achievements = [
-        [false, false, false, false, false, false, false, false, false, false]
-      ];
-      newGame.bups = [
-        [false, false, false, false],
-        [false, false, false, false],
-        [false, false, false, false],
-        [false, false, false, false]
-      ];
-      newGame.version = "0.2";
-    }
-    
-    return newGame;
-  },
-  save: (action, manmade = true) => {
-    if (!manmade || game.clickCooldown === 0) {
-      localStorage.setItem(inBetaTesting() ? "ordinalLayersBetaTestingSave": (inPublicTesting() ? "ordinalLayersPublicTestingSave": "ordinalLayersSave"), btoa(JSON.stringify(game.data)));
-      
-      if (manmade) {
-        $.notify("Game Saved!", "success");
-        game.clickCooldown = 1;
-      }
-    }
-  },
-  load: loadgame => {
-    var tempgame = btoa(JSON.stringify(game.data));
-    var newLoadgame = loadgame === null ? game.data: loadgame;
-    var error = false;
-    
-    if (loadgame !== null) {
-      game.data = newLoadgame;
-    }
-    
-    if (inPublicTesting()) {
-      game.data.publicTesting = true;
-    }
-    
-    if (inBetaTesting()) {
-      game.data.betaTesting = true;
-    }
-    
-    if ((game.data.publicTesting && !inPublicTesting()) || (game.data.betaTesting && !inBetaTesting())) {
-      game.data = JSON.parse(atob(tempgame));
-      error = true;
-      $.notify("Import Failed: Attempted to import " + (game.data.betaTesting ? "beta": "public") + " testing version into the main game", "error");
-    }
-    
-    var diff = Date.now() - game.data.lastTick;
-    
-    console.log(diff);
-    
-    game.data = game.handleOldVersions(newLoadgame);
-    
-    game.loop(diff, true);
-    
-    document.getElementById("mainMenu").style.display = "none";
-    document.getElementById("game").style.display = "block";
-    
-    onkeypress = _ => {
-      var k = _.key.toLowerCase();
-      if (typeof game.keybinds[k] !== "undefined") {
-        game.keybinds[k]();
-      };
-    };
-    
-    loop = setInterval(() => game.loop(Date.now() - game.data.lastTick), 50);
-    
-    if (game.data.music) {
-      game.music.play();
-    }
-    
-    return error;
-  },
-  reset: () => {
-    game.data = {
-      version: "0.2.1",
-      publicTesting: false,
-      betaTesting: false,
-      lastTick: Date.now(),
-      autosaveInterval: 0,
-      pendingIncrement: 0,
-      pendingMaximize: 0,
-      pendingMaxAll: 0,
-      pendingMarkup: 0,
-      achievements: [
-        [false, false, false, false, false, false, false, false, false, false]
-      ],
-      highestLevel: 0,
-      markupUnlocked: false,
-      boosterUnlocked: false,
-      colors: true,
-      music: true,
-      ord: 0,
-      over: 0,
-      op: 0,
-      incrementAuto: 0,
-      maximizeAuto: 0,
-      factorShifts: 0,
-      factors: [],
-      factorBoosts: 0,
-      dynamicFactor: 1,
-      bups: [
-        [false, false, false, false],
-        [false, false, false, false],
-        [false, false, false, false],
-        [false, false, false, false]
-      ],
-      challenge: 0,
-      chalComp: [0, 0, 0, 0, 0, 0, 0, 0],
-      manualClicksLeft: Infinity,
-      decrementy: 0
-    };
-    
-    game.save("reset", false);
-  },
-  importGame: () => {
-    if (game.clickCooldown === 0) {
-      var loadgame = "";
-      
-      var reader = new FileReader();
-      
-      reader.readAsText(document.getElementById("importButton").files[0]);
-      
-      setTimeout(
-        () => {
-          loadgame = JSON.parse(atob(reader.result));
-          if (loadgame !== "") {
-            var error = game.load(loadgame);
-            if (!error) {
-              $.notify("Import Successful!", "success");
-            }
-          }
-        },
-        100
-      );
-    }
-  },
-  exportGame: () => {
-    if (game.clickCooldown === 0) {
-      game.save("export", false);
-      
-      var file = new Blob([btoa(JSON.stringify(game.data))], {type: "text/plain"});
-      
-      URL = URL || webkitURL;
-      
-      var a = document.createElement("a");
-      
-      a.href = URL.createObjectURL(file);
-      a.download = inBetaTesting() ? "Ordinal Layers Beta Testing Save.txt": (inPublicTesting() ? "Ordinal Layers Public Testing Save.txt": "Ordinal Layers Save.txt");
-      a.click();
-      
-      $.notify("File Export Successful!", "success");
-      
-      if (inPublicTesting() || inBetaTesting()) {
-        $.notify("Warning! This is a " + (inBetaTesting ? "Beta": "Public") + " Testing save. You will not be able to import this save into the base game", "warn");
-      }
-      
-      game.clickCooldown = 1;
-    }
-  },
-  resetConf: () => {
-    if (game.clickCooldown === 0) {
-      var code = prompt(
-        'Are you sure you want to delete all of your progress? Type in "reset game" to reset all of your progress.'
-      );
-
-      if (code !== null) {
-        if (code.toLowerCase() === "reset game") {
-          game.reset();
-          $.notify("Hard Reset Successful", "success");
-        }
-      }
-      
-      game.clickCooldown = 1;
     }
   }
 };
