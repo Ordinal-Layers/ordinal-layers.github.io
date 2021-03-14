@@ -312,7 +312,7 @@ var game = {
     [66, 66, 21, Infinity],
     [55, 78, 66, Infinity]
   ],
-  /* chalGoals: [
+  chalGoals: [
     [1.000e30, 1.000e200, 2.000e230, Infinity],
     [2.000e230, game.V(9) + 1.000e230, game.V(18) + 1.000e230, Infinity],
     [1.000e200, 1.000e215, 1.000e230, Infinity],
@@ -321,7 +321,7 @@ var game = {
     [1.000e30, 1.000e42, 1.000e108, Infinity],
     [1.000e12, 1.000e15, 1.000e21, Infinity],
     [1.000e10, 2.000e10, 8.000e10, Infinity]
-  ], */
+  ],
   achievementsEarned: () => {
     var achieveCount = 0;
     for (var y = 0; y < game.data.achievements.length; y++) {
