@@ -1517,6 +1517,8 @@ var game = {
         },
         100
       );
+      
+      game.clickCooldown = 0;
     }
   },
   exportGame: () => {
