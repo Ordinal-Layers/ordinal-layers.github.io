@@ -109,6 +109,7 @@ var game = {
   markupTab: document.getElementById("markupTabButton"),
   extraFactorSubtabButton: document.getElementById("extraFactorSubtabButton"),
   boosterTab: document.getElementById("boosterTabButton"),
+  challengeSubtabButton: document.getElementById("challengeSubtabButton"),
   markupButton: document.getElementById("markupButton"),
   markupButton2: document.getElementById("markupButton2"),
   opText: document.getElementById("opText"),
@@ -187,6 +188,9 @@ var game = {
   boosterMult: document.getElementById("boosterMult"),
   maxAllAuto: document.getElementById("maxAllAuto"),
   markupAuto: document.getElementById("markupAuto"),
+  chalMultText: document.getElementById("chalMult"),
+  chalRun: document.getElementById("chalRun"),
+  decrementyText: document.getElementById("decrementyText"),
   challengeButtons: [
     document.getElementById("chal1"),
     document.getElementById("chal2"),
@@ -276,7 +280,7 @@ var game = {
       game.clickCooldown = 1;
     }
   },
-  autoclickerCost: x => x < 2.000e230 ? 100 * 2 ** x: x,
+  autoclickerCost: x => game.inChal(1) ? x > 0 ? Infinity: 1.000e6: x < 2.000e230 ? 100 * 2 ** x: x,
   factorShiftCosts: [
     1000,
     10000,
@@ -351,6 +355,7 @@ var game = {
     }
     return base;
   },
+  calcFactorShiftCost: (x = game.data.factorShifts) => (game.inChal(5) && x >= 2) ? Infinity: game.factorShiftCosts[x],
   factorMult: x => (game.data.factors[x - 1] + (game.data.bups[2][2] ? 5 * (game.inChal(3) ? 2: 1): 0)) * (game.data.bups[0][0] ? 2: 1),
   totalFactorMult: () => {
     var mult = 1;
@@ -361,9 +366,10 @@ var game = {
     
     return mult;
   },
-  dynamicMult: (x = game.data.dynamicFactor) => x ** (game.challenge % 2 === 1 ? 2: 1),
+  calcDynamicMult: (x = game.data.dynamicFactor) => x ** (game.data.bups[3][0] && game.challenge % 2 === 1 ? 2: 1),
   calcDynamicDecrease: () => game.inChal(6) ? 1.000e301 / (game.data.bups[3][1] ? 1.000e300: 1): 0,
-  challengeMult: (x, c = game.data.chalComp[x - 1]) => (x === 8 ? game.dynamicMult(): game.factorMult(x)) ** (Math.sqrt(c / 3)),
+  calcQuintupler: () => game.inChal(6) || game.inChal(8) ? 1: 5,
+  challengeMult: (x, c = game.data.chalComp[x - 1]) => (x === 8 ? game.calcDynamicMult(): game.factorMult(x)) ** (Math.sqrt(c / 3)),
   totalChallengeMult: () => {
     var mult = 1;
     
@@ -379,7 +385,7 @@ var game = {
       game.data.incrementAuto *
       game.totalFactorMult() *
       game.totalChallengeMult() *
-      (game.data.boosterUnlocked ? game.data.dynamicFactor ** (game.inOddChal() ? 2: 1) * (game.inChal(6) || game.inChal(8) ? 1: 5): 1) *
+      (game.data.boosterUnlocked ? game.calcDynamicMult() * game.calcQuintupler(): 1) *
       (game.data.bups[1][1] ? Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2: 1) /
       10 ** game.data.decrementy,
   maximizeSpeed: () =>
@@ -388,7 +394,7 @@ var game = {
       (game.data.maximizeAuto + (game.data.boosterUnlocked ? 1: 0)) *
       game.totalFactorMult() *
       game.totalChallengeMult() *
-      (game.data.boosterUnlocked ? game.data.dynamicFactor ** (game.inOddChal() ? 2: 1) * (game.inChal(6) || game.inChal(8) ? 1: 5): 1) *
+      (game.data.boosterUnlocked ? game.calcDynamicMult() * game.calcQuintupler(): 1) *
       (game.data.bups[1][1] ? Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2: 1) /
       10 ** game.data.decrementy,
   maxAllSpeed: () =>
@@ -500,7 +506,8 @@ var game = {
     game.data.ord = 0;
     game.data.over = 0;
     game.data.dynamicFactor = 1;
-    game.data.manualClicksLeft = game.inChal(6) || game.inChal(8) ? 1000: Infinity,
+    game.data.manualClicksLeft = game.inChal(6) || game.inChal(8) ? 1000: Infinity;
+    game.data.decrementy = 0;
     game.data.pendingIncrement = 0;
     game.data.pendingMaximize = 0;
   },
@@ -597,7 +604,7 @@ var game = {
   },
   factorShift: (manmade = true) => {
     if (!manmade || game.clickCooldown === 0) {
-      if (game.data.op >= game.factorShiftCosts[game.data.factorShifts]) {
+      if (game.data.op >= game.calcFactorShiftCost()) {
         game.resetEverythingShiftDoes();
         game.data.factorShifts++;
         game.data.factors.push(1); 
@@ -610,7 +617,7 @@ var game = {
   },
   buyFactor: (x, manmade = true) => {
     if (!manmade || game.clickCooldown === 0) {
-      if (game.data.op >= 10 ** (x * game.data.factors[x - 1]) && game.data.factors[x - 1] < 10) {
+      if (game.data.op >= 10 ** (x * game.data.factors[x - 1]) && game.data.factors[x - 1] < 10 && !game.inChal(2)) {
         if (game.data.op < 2.000e230) {
           game.data.op -= 10 ** (x * game.data.factors[x - 1]);
         }
@@ -624,12 +631,14 @@ var game = {
   },
   maxFactors: (manmade = true) => {
     if (!manmade || game.clickCooldown === 0) {
-      if (game.data.op >= 2.000e230) {
-        game.data.factors = [10, 10, 10, 10, 10, 10, 10];
-      } else {
-        for (var i = 1; i <= game.data.factorShifts; i++) {
-          while (game.data.factors[i - 1] < 10 && game.data.op >= 10 ** (i * game.data.factors[i - 1])) {
-            game.buyFactor(i, false);
+      if (!game.inChal(2)) {
+        if (game.data.op >= 2.000e230) {
+          game.data.factors = [10, 10, 10, 10, 10, 10, 10];
+        } else {
+          for (var i = 1; i <= game.data.factorShifts; i++) {
+            while (game.data.factors[i - 1] < 10 && game.data.op >= 10 ** (i * game.data.factors[i - 1])) {
+              game.buyFactor(i, false);
+            }
           }
         }
       }
@@ -775,6 +784,7 @@ var game = {
       game.data.markupUnlocked = true;
       
       game.resetEverythingBoostDoes();
+      game.data.factorShifts = 7;
       game.data.boosterUnlocked = true;
       
       game.data.factorBoosts = 27;
@@ -836,6 +846,7 @@ var game = {
       () => game.data.markupUnlocked,
       () => game.data.factorShifts >= 1,
       () => game.data.boosterUnlocked,
+      () => game.data.bups[0][3],
       () => false
     ],
     rowName: [
@@ -1303,6 +1314,7 @@ var game = {
                 x.toFixed(3):
           x.toFixed(0):
         `${(x / 10 ** Math.floor(Math.log10(x))).toFixed(3)}e${Math.floor(Math.log10(x))}`,
+  beautifyLog: x => x === Infinity ? `Infinity`: x < 230 ? game.beautify(10 ** x): `${game.beautify(10 ** (x % 1))}e${Math.floor(x)}`,
   time: x =>
     (x === Infinity) ?
       `forever`:
@@ -1389,6 +1401,7 @@ var game = {
     game.markupTab.style.display = game.data.markupUnlocked ? "inline": "none";
     game.extraFactorSubtabButton.style.display = game.data.boosterUnlocked ? "inline": "none";
     game.boosterTab.style.display = game.data.boosterUnlocked ? "inline": "none";
+    game.challengeSubtabButton.style.display = game.data.bups[0][3] ? "inline": "none";
     
     game.opText.innerHTML = `You have ${game.beautify(game.data.op)} Ordinal Points`;
     
@@ -1405,7 +1418,7 @@ var game = {
     game.factorMultiplier.style.display = game.data.factorShifts === 0 ? "none": "inline";
     
     game.factorMultiplier.innerHTML = `Your factors are multiplying Tier 1 automation by x${game.beautify(game.totalFactorMult())}`;
-    game.factorShiftText.innerHTML = `Factor Shift: Requires ${game.beautify(game.factorShiftCosts[game.data.factorShifts])} OP`;
+    game.factorShiftText.innerHTML = `Factor Shift: Requires ${game.beautify(game.calcFactorShiftCost())} OP`;
     
     for (var i = 0; i < 7; i++) {
       game.factors[i].style.display = game.data.factorShifts > i ? "list-item": "none";
@@ -1427,7 +1440,11 @@ var game = {
     game.factorBoostProg.innerHTML = `${game.beautify(Math.max(0, game.data.op - 1.000e230) / game.V(game.data.factorBoosts + game.calcBulk() + 1) * 100)}%`;
     game.factorBoostProg.style.width = `${Math.max(0, game.data.op - 1.000e230) / game.V(game.data.factorBoosts + game.calcBulk() + 1) * 100}%`;
     
-    game.dynamicMult.innerHTML = `Your Dynamic Factor is x${game.beautify(game.data.dynamicFactor)}`;
+    game.dynamicMult.innerHTML = `Your Dynamic Factor is x${game.beautify(game.calcDynamicMult())}`;
+    game.dynamicCap.innerHTML = 
+      `It is increasing by ${game.data.bups[3][0] && game.data.challenge % 2 === 1 ? `a non-constant amount`: `0.01`} per second and caps at ${game.beautify(game.calcDynamicMult(10))}`;
+    game.dynamicDecrease.style.display = game.calcDynamicDecrease() > 0 ? "block": "none";
+    game.dynamicDecrease.innerHTML = `It is also decreasing by ${game.data.bups[3][1] ? `10`: `1.000e301`} per second`
     
     game.boosterText.innerHTML = `You have ${game.boosters()} boosters`;
     game.refundButton.innerHTML = `Refund back ${game.data.factorBoosts * (game.data.factorBoosts + 1) / 2 - game.boosters()} boosters, but reset this Factor Boost (R)`;
@@ -1450,6 +1467,30 @@ var game = {
       `Your Max All Autobuyer is ${game.data.bups[0][1] ? `clicking the Max All button ${game.beautify(game.maxAllSpeed())} times per second, but only if you can't Factor Shift`: `locked. Purchase the relevant Booster Upgrade to unlock it!`}`;
     game.markupAuto.innerHTML =
       `Your Markup Autobuyer is ${game.data.bups[0][2] ? `clicking the Markup button ${game.beautify(game.markupSpeed())} times per second, but only if you're past &psi;(1)`: `locked. Purchase the relevant Booster Upgrade to unlock it!`}`;
+    
+    game.chalMultText.innerHTML = `Your ${game.totalChalComp()} challenge completions have multiplied Tier 1 and 2 automation by x${game.beautify(game.totalChalMult())}`;
+    game.chalRun.innerHTML = `You're currently ${game.data.challenge === 0 ? `not in a challenge`: `in Challenge ${game.data.challenge}`}`;
+    
+    game.decrementyText.style.display = game.inChal(6) || game.inChal(8) ? "inline": "none";
+    game.decrementyText.innerHTML = game.inChal(8) ?
+      `There is ${game.beautifyLog(game.data.decrementy)} decrementy and ${game.data.manualClicksLeft} clicks left`:
+      `There are ${game.data.manualClicksLeft} clicks left`;
+    
+    for (var i = 0; i < 8; i++) {
+      game.challengeButtons[i].classList.remove("inChal");
+      game.challengeButtons[i].classList.remove("notInChal");
+      game.challengeButtons[i].classList.remove("compChal");
+      
+      game.challengeButtons[i].classList.add(
+        game.inChal(i + 1) ? "inChal": game.data.chalComp[i]
+      );
+      
+      game.challengeReqs[i].innerHTML = game.beautify(game.chalGoals[i][game.data.chalComp[i]]);
+      
+      game.challengeMults[i].innerHTML = `x${game.beautify(game.challengeMult(i + 1))}`;
+      
+      game.challengeComps[i].innerHTML = game.data.chalComp[i];
+    }
   },
   loop: (unadjusted, off = false) => {
     var ms = unadjusted;
