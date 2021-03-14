@@ -53,7 +53,8 @@ var game = {
     document.getElementById("achieveRow0"),
     document.getElementById("achieveRow1"),
     document.getElementById("achieveRow2"),
-    document.getElementById("achieveRow3")
+    document.getElementById("achieveRow3"),
+    document.getElementById("achieveRow4")
   ],
   achievementTd: [
     [
@@ -103,6 +104,18 @@ var game = {
       document.getElementById("achievement37"),
       document.getElementById("achievement38"),
       document.getElementById("achievement39")
+    ],
+    [
+      document.getElementById("achievement40"),
+      document.getElementById("achievement41"),
+      document.getElementById("achievement42"),
+      document.getElementById("achievement43"),
+      document.getElementById("achievement44"),
+      document.getElementById("achievement45"),
+      document.getElementById("achievement46"),
+      document.getElementById("achievement47"),
+      document.getElementById("achievement48"),
+      document.getElementById("achievement49")
     ]
   ],
   nextRowUnlock: document.getElementById("nextRowUnlock"),
