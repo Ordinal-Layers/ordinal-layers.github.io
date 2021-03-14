@@ -1642,6 +1642,7 @@ var game = {
       newGame.boosterUnlocked = false;
       newGame.factorBoosts = 0;
       newGame.dynamicFactor = 1;
+      newGame.highestLevel = 0;
       newGame.achievements = [
         [false, false, false, false, false, false, false, false, false, false]
       ];
