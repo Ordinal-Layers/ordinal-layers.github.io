@@ -154,6 +154,8 @@ var game = {
   nextBulk: document.getElementById("nextBulk"),
   factorBoostProg: document.getElementById("factorBoostProg"),
   dynamicMult: document.getElementById("dynamicMult"),
+  dynamicCap: document.getElementById("dynamicCap"),
+  dynamicDecrease: document.getElementById("dynamicDecrease"),
   boosterText: document.getElementById("boosterText"),
   refundButton: document.getElementById("refundButton"),
   bups: [
@@ -185,6 +187,46 @@ var game = {
   boosterMult: document.getElementById("boosterMult"),
   maxAllAuto: document.getElementById("maxAllAuto"),
   markupAuto: document.getElementById("markupAuto"),
+  challengeButtons: [
+    document.getElementById("chal1"),
+    document.getElementById("chal2"),
+    document.getElementById("chal3"),
+    document.getElementById("chal4"),
+    document.getElementById("chal5"),
+    document.getElementById("chal6"),
+    document.getElementById("chal7"),
+    document.getElementById("chal8"),
+  ],
+  challengeReqs: [
+    document.getElementById("chal1Goal"),
+    document.getElementById("chal2Goal"),
+    document.getElementById("chal3Goal"),
+    document.getElementById("chal4Goal"),
+    document.getElementById("chal5Goal"),
+    document.getElementById("chal6Goal"),
+    document.getElementById("chal7Goal"),
+    document.getElementById("chal8Goal"),
+  ],
+  challengeMults: [
+    document.getElementById("chal1Mult"),
+    document.getElementById("chal2Mult"),
+    document.getElementById("chal3Mult"),
+    document.getElementById("chal4Mult"),
+    document.getElementById("chal5Mult"),
+    document.getElementById("chal6Mult"),
+    document.getElementById("chal7Mult"),
+    document.getElementById("chal8Mult"),
+  ],
+  challengeComps: [
+    document.getElementById("chal1Comp"),
+    document.getElementById("chal2Comp"),
+    document.getElementById("chal3Comp"),
+    document.getElementById("chal4Comp"),
+    document.getElementById("chal5Comp"),
+    document.getElementById("chal6Comp"),
+    document.getElementById("chal7Comp"),
+    document.getElementById("chal8Comp"),
+  ],
   tabs: [
     document.getElementById("tab0"),
     document.getElementById("tab1"),
@@ -246,11 +288,22 @@ var game = {
     Infinity
   ],
   factorBoostCosts: [3, 3, 9, 3, 3, 9, 3, 3, 27, 3, 3, 9, 3, 3, 9, 3, 3, 27, 3, 3, 9, 3, 3, 9, 3, 3, 729],
+  V: x => x === 0 ? 1.000e230: (x >= 27 ? Infinity: game.V(x - 1) * game.factorBoostCosts[x - 1]),
   bupCosts: [
     [1, 1, 1, 15],
     [6, 6, 10, Infinity],
     [66, 66, 21, Infinity],
     [55, 78, 66, Infinity]
+  ],
+  chalGoals: [
+    [1.000e30, 1.000e200, 2.000e230, Infinity],
+    [2.000e230, game.V(9) + 1.000e230, game.V(18) + 1.000e230, Infinity],
+    [1.000e200, 1.000e215, 1.000e230, Infinity],
+    [1.000e30, 1.000e100, 1.000e120, Infinity],
+    [1.000e100, 1.000e135, 1.000e210, Infinity],
+    [1.000e30, 1.000e42, 1.000e108, Infinity],
+    [1.000e12, 1.000e15, 1.000e21, Infinity],
+    [1.000e10, 2.000e10, 8.000e10, Infinity]
   ],
   achievementsEarned: () => {
     var achieveCount = 0;
@@ -272,9 +325,24 @@ var game = {
     }
     return boost;
   },
+  totalChalComp: () => {
+    var comp = 0;
+    
+    for (var i = 0; i < 8; i++) {
+      comp += game.data.chalComp[i];
+    }
+    
+    return i;
+  },
+  inChal: x => game.data.challenge === x || (x < 7 && game.data.challenge === 7),
   base: () => {
     var base = 10;
-    base -= game.data.factorShifts;
+    if (!game.inChal(4)) {
+      base -= game.data.factorShifts;
+    }
+    if (game.inChal(3)) {
+      base += 5;
+    }
     if (game.data.bups[2][0] && base > 7) {
       base -= 4;
     }
@@ -283,11 +351,24 @@ var game = {
     }
     return base;
   },
-  factorMult: () => {
+  factorMult: x => (game.data.factors[x - 1] + (game.data.bups[2][2] ? 5 * (game.inChal(3) ? 2: 1): 0)) * (game.data.bups[0][0] ? 2: 1),
+  totalFactorMult: () => {
     var mult = 1;
     
-    for (var i = 0; i < game.data.factorShifts; i++) {
-      mult *= (game.data.factors[i] + (game.data.bups[2][2] ? 5: 0)) * (game.data.bups[0][0] ? 2: 1);
+    for (var i = 1; i <= game.data.factorShifts; i++) {
+      mult *= game.factorMult(i);
+    }
+    
+    return mult;
+  },
+  dynamicMult: (x = game.data.dynamicFactor) => x ** (game.challenge % 2 === 1 ? 2: 1),
+  calcDynamicDecrease: () => game.inChal(6) ? 1.000e301 / (game.data.bups[3][1] ? 1.000e300: 1): 0,
+  challengeMult: (x, c = game.data.chalComp[x - 1]) => (x === 8 ? game.dynamicMult(): game.factorMult(x)) ** (Math.sqrt(c / 3)),
+  totalChallengeMult: () => {
+    var mult = 1;
+    
+    for (var i = 1; i <= 8; i++) {
+      mult *= game.challengeMult(i);
     }
     
     return mult;
@@ -296,27 +377,33 @@ var game = {
     game.data.incrementAuto >= 2.000e230 ?
       game.data.incrementAuto:
       game.data.incrementAuto *
-      game.factorMult() *
-      (game.data.boosterUnlocked ? game.data.dynamicFactor * 5: 1) *
-      (game.data.bups[1][1] ? Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2: 1),
+      game.totalFactorMult() *
+      game.totalChallengeMult() *
+      (game.data.boosterUnlocked ? game.data.dynamicFactor ** (game.inOddChal() ? 2: 1) * (game.inChal(6) || game.inChal(8) ? 1: 5): 1) *
+      (game.data.bups[1][1] ? Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2: 1) /
+      10 ** game.data.decrementy,
   maximizeSpeed: () =>
     game.data.maximizeAuto >= 2.000e230 ?
       game.data.maximizeAuto:
       (game.data.maximizeAuto + (game.data.boosterUnlocked ? 1: 0)) *
-      game.factorMult() *
-      (game.data.boosterUnlocked ? game.data.dynamicFactor * 5: 1) *
-      (game.data.bups[1][1] ? Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2: 1),
+      game.totalFactorMult() *
+      game.totalChallengeMult() *
+      (game.data.boosterUnlocked ? game.data.dynamicFactor ** (game.inOddChal() ? 2: 1) * (game.inChal(6) || game.inChal(8) ? 1: 5): 1) *
+      (game.data.bups[1][1] ? Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2: 1) /
+      10 ** game.data.decrementy,
   maxAllSpeed: () =>
     game.data.bups[0][1] ?
       game.data.bups[1][1] ?
         Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2:
-        1:
+        1 *
+      game.totalChallengeMult():
       0,
   markupSpeed: () =>
     game.data.bups[0][2] ?
       game.data.bups[1][1] ?
         Math.sqrt(2 * game.boosters() + 1 / 4) + 1 / 2:
-        1:
+        1 *
+      game.totalChallengeMult():
       0,
   opGain: (ord = game.data.ord, over = game.data.over, base = game.base()) => {
     if (ord < base) {
@@ -342,11 +429,13 @@ var game = {
       game.opGain():
       Math.min(
         game.opGain() * 
-        (game.data.bups[1][0] ? 5: 1) * 
-        (game.data.bups[3][2] && game.base() < 6 ? 666666: 1),
+        (game.data.bups[1][0] ? 5 * (game.inChal(1) ? 200: 1): 1) * 
+        (game.data.bups[3][2] && game.base() < 6 ? 666666: 1) *
+        (game.inChal(7) ? game.data.chalComp[5] + 1: 1) *
+        (game.inChal(8) ? game.data.chalComp[6] + 1: 1),
         1.000e230
       ),
-  V: x => x === 0 ? 1.000e230: (x >= 27 ? Infinity: game.V(x - 1) * game.factorBoostCosts[x - 1]),
+  decrementyRate: (x = game.opGain()) => game.inChal(8) ? x ** 0.2 / 100: 0,
   calcBulk: (op = game.data.op, boost = game.data.factorBoosts) => {
     var bulk = 0;
     while (op >= game.V(bulk + boost + 1) + 1.000e230) {
@@ -366,10 +455,16 @@ var game = {
   },
   increment: (manmade = true) => {
     if (!manmade || game.clickCooldown === 0) {
-      if (game.data.ord % game.base() === game.base() - 1) {
-        game.data.over++;
-      } else {
-        game.data.ord++;
+      if (!manmade || game.data.manualClicksLeft > 0) {
+        if (game.data.ord % game.base() === game.base() - 1) {
+          game.data.over++;
+        } else {
+          game.data.ord++;
+        }
+        
+        if (manmade) {
+          game.data.manualClicksLeft--;
+        }
       }
 
       if (manmade) {
@@ -405,6 +500,7 @@ var game = {
     game.data.ord = 0;
     game.data.over = 0;
     game.data.dynamicFactor = 1;
+    game.data.manualClicksLeft = game.inChal(6) || game.inChal(8) ? 1000: Infinity,
     game.data.pendingIncrement = 0;
     game.data.pendingMaximize = 0;
   },
@@ -628,14 +724,59 @@ var game = {
       }
     }
   },
+  enterChal: (x, manmade = true) => {
+    if (!manmade || game.clickCooldown === 0) {
+      if (game.data.challenge === 0 && game.data.chalComp[x - 1] < 3) {
+        var conf = true;
+        if (manmade) {
+          conf = confirm(
+            "Are you sure you want to start a challenge? You'll forfeit your current run in favor of the challenge."
+          );
+        }
+        if (conf) {
+          game.data.challenge = x;
+          game.resetEverythingBoostDoes();
+        }
+      }
+      
+      if (manmade) {
+        game.clickCooldown = 1;
+      }
+    }
+  },
+  exitChal: (manmade = true) => {
+    if (!manmade || game.clickCooldown === 0) {
+      if (game.data.challenge > 0) {
+        game.data.challenge = 0;
+        game.resetEverythingBoostDoes();
+      }
+      
+      if (manmade) {
+        game.clickCooldown = 1;
+      }
+    }
+  },
+  completeChal: (manmade = true) => {
+    if (!manmade || game.clickCooldown === 0) {
+      if (game.data.challenge > 0 || game.data.op >= game.chalGoals[game.data.challenge - 1][game.data.chalComp[game.data.challenge - 1]]) {
+        game.data.chalComp[game.data.challenge - 1]++;
+        game.data.challenge = 0;
+        game.resetEverythingBoostDoes();
+      }
+      
+      if (manmade) {
+        game.clickCooldown = 1;
+      }
+    }
+  },
   debug: () => {
     if (inPublicTesting() || inBetaTesting()) {
       game.resetEverythingMarkupDoes();
       game.data.markupUnlocked = true;
-
+      
       game.resetEverythingBoostDoes();
       game.data.boosterUnlocked = true;
-
+      
       game.data.factorBoosts = 27;
     }
   },
@@ -759,6 +900,18 @@ var game = {
         () => false,
         () => false,
         () => false
+      ],
+      [
+        () => game.data.chalComp[0] >= 1,
+        () => game.data.chalComp[1] >= 1,
+        () => game.data.chalComp[2] >= 2,
+        () => game.data.chalComp[3] >= 2,
+        () => game.data.chalComp[4] >= 3,
+        () => game.data.chalComp[5] >= 3,
+        () => game.totalChalComp() >= 24,
+        () => false,
+        () => false,
+        () => false,
       ]
     ],
     achieveName: [
@@ -910,7 +1063,13 @@ var game = {
     i: () => game.markup(),
     m: () => game.maxMarkup(),
     s: () => game.factorShift(),
-    b: () => game.factorBoost(),
+    b: () => {
+      if (game.data.challenge > 0) {
+        game.completeChal();
+      } else {
+        game.factorBoost();
+      }
+    },
     r: () => game.refundBups(),
   },
   fghexp: (n, x) => (n === 0) ? x : game.fghexp(n - 1, x) * 2 ** game.fghexp(n - 1, x),
@@ -1245,12 +1404,12 @@ var game = {
     game.factorList.style.display = game.data.factorShifts === 0 ? "none": "block";
     game.factorMultiplier.style.display = game.data.factorShifts === 0 ? "none": "inline";
     
-    game.factorMultiplier.innerHTML = `Your factors are multiplying Tier 1 automation by x${game.beautify(game.factorMult())}`;
+    game.factorMultiplier.innerHTML = `Your factors are multiplying Tier 1 automation by x${game.beautify(game.totalFactorMult())}`;
     game.factorShiftText.innerHTML = `Factor Shift: Requires ${game.beautify(game.factorShiftCosts[game.data.factorShifts])} OP`;
     
     for (var i = 0; i < 7; i++) {
       game.factors[i].style.display = game.data.factorShifts > i ? "list-item": "none";
-      game.factorMults[i].innerHTML = `x${(game.data.factors[i] + (game.data.bups[2][2] ? 5: 0)) * (game.data.bups[0][0] ? 2: 1)}`;
+      game.factorMults[i].innerHTML = `x${game.factorMult(i + 1)}`;
       game.factorButtons[i].innerHTML = game.data.factors[i] === 10 ? `Maxed!`: `Increase Factor ${(i + 1)} for ${game.beautify(10 ** ((i + 1) * game.data.factors[i]))} OP`;
     }
     
@@ -1298,7 +1457,7 @@ var game = {
     game.data.lastTick = Date.now();
     
     if (game.data.bups[1][2] && game.data.op < 1.000e230) {
-      game.data.op += ms / (game.data.bups[1][0] ? 10: 50) * (game.data.bups[3][2] && game.base() < 6 ? 666666: 1);
+      game.data.op += ms / 1000 * 20 * (game.data.bups[1][0] ? 5 * (game.inChal(1) ? 200: 1): 1) * (game.data.bups[3][2] && game.base() < 6 ? 666666: 1);
     }
     
     if (game.data.op > 1.000e230 && game.data.op < 2.000e230) {
@@ -1307,8 +1466,20 @@ var game = {
     
     game.data.dynamicFactor += ms / 100000;
     
+    game.data.dynamicFactor -= game.calcDynamicDecrease() * ms / 1000;
+    
     if (game.data.dynamicFactor > 10) {
       game.data.dynamicFactor = 10;
+    }
+    
+    if (game.data.dynamicFactor < 0) {
+      game.data.dynamicFactor = 0;
+    }
+    
+    game.data.decrementy += game.decrementyRate() * ms / 1000;
+    
+    if (game.inChal(8)) {
+      game.refundBups(false);
     }
     
     if ((game.data.incrementAuto < 1.000e230 || game.data.maximizeAuto < 1.000e230) && (game.data.ord < 3 ** 27 || game.base() > 3)) {
@@ -1494,6 +1665,7 @@ var game = {
     game.data = {
       version: "0.2.1",
       publicTesting: false,
+      betaTesting: false,
       lastTick: Date.now(),
       autosaveInterval: 0,
       pendingIncrement: 0,
@@ -1522,7 +1694,11 @@ var game = {
         [false, false, false, false],
         [false, false, false, false],
         [false, false, false, false]
-      ]
+      ],
+      challenge: 0,
+      chalComp: [0, 0, 0, 0, 0, 0, 0, 0],
+      manualClicksLeft: Infinity,
+      decrementy: 0
     };
     
     game.save("reset", false);
