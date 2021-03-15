@@ -841,6 +841,7 @@ var game = {
     () => game.V(24),
     () => game.V(25),
     () => game.V(26),
+    () => 1.000e230 * 3 ** 42,
     () => Infinity
   ],
   currentLevel: () => {
@@ -909,8 +910,8 @@ var game = {
         () => game.data.factorShifts >= 5,
         () => game.data.factorShifts >= 6,
         () => game.data.factorShifts >= 7,
-        () => game.factorMult() >= 1.000e7,
-        () => game.factorMult() >= 1.000e9,
+        () => game.totalFactorMult() >= 1.000e7,
+        () => game.totalFactorMult() >= 1.000e9,
         () => false
       ],
       [
@@ -1107,7 +1108,9 @@ var game = {
       0:
       ord < 1.000e230 ?
         Math.log(ord + over) / (Math.log(3) * 27):
-        Math.log(ord / 1.000e230) / (Math.log(3) * 42),
+        ord >= 1.000e230 * 3 ** 42 ?
+          0:
+          Math.log(ord / 1.000e230) / (Math.log(3) * 42),
   ordMarks: [
     [
       x => `&psi;(${x})`,
@@ -1270,10 +1273,12 @@ var game = {
       }
       
       if (remainOrd > 0) {
-        result += `${color ? `<span style="color:hsl(${game.ordColor(remainOrd, over) * 360}, 100%, 50%)">`: ``}+...${color ? `</span>`: ``}`
+        result += `${color ? `<span style="color:hsl(${game.ordColor(remainOrd, over) * 360}, 100%, 50%)">`: ``}+...${color ? `</span>`: ``}`;
       }
       
       return result;
+    } else if (ord >= 1.000e230 * 3 ** 42) {
+      return `${color ? `<span style="color:hsl(0, 100%, 50%)">`: ``}&psi;(way too large)${color ? `</span>`: ``}`;
     } else {
       var result = ``;
       var remainOrd = ord;
@@ -1381,7 +1386,7 @@ var game = {
     game.musicButton.innerHTML = game.data.music ? `Music: ON`: `Music: OFF`;
     
     game.currentLevelText.innerHTML = `Your current Ordinal Level is ${game.currentLevel()}`;
-    game.nextLevelText.innerHTML = `Next Ordinal Level is at ${game.currentLevel() === 37 ? `&Omega;`: game.currentLevel() === 36 ? `&psi;(way too large)`: game.writeOrd(false, game.ordLevels[game.currentLevel() + 1]())}`;
+    game.nextLevelText.innerHTML = `Next Ordinal Level is at ${game.writeOrd(false, game.ordLevels[game.currentLevel() + 1](), 0)}`;
     game.highestLevelText.innerHTML = `Your highest Ordinal Level was ${game.data.highestLevel}`;
     
     game.checkAchieve();
