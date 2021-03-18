@@ -314,7 +314,7 @@ var game = {
   ],
   chalGoals: [
     [1.000e30, 1.000e200, 2.000e230, Infinity],
-    [2.000e230, 1.000e230 * (3 ** 13 + 1), 1.000e230 * (3 ** 13 + 1), Infinity],
+    [2.000e230, 1.000e230 * (3 ** 13 + 1), 1.000e230 * (3 ** 26 + 1), Infinity],
     [1.000e200, 1.000e215, 1.000e230, Infinity],
     [1.000e30, 1.000e100, 1.000e120, Infinity],
     [1.000e100, 1.000e135, 1.000e210, Infinity],
@@ -351,7 +351,7 @@ var game = {
     
     return comp;
   },
-  inChal: x => game.data.challenge === x || (x < 7 && game.data.challenge === 7),
+  inChal: x => game.data.challenge === x || (x < 7 && game.inChal(7)),
   base: () => {
     var base = 10;
     if (!game.inChal(4)) {
