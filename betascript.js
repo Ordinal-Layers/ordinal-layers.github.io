@@ -1660,7 +1660,7 @@ var game = {
       newGame.version = "0.2";
     }
     
-    if (newGame.version = "0.2") {
+    if (newGame.version === "0.2") {
       newGame.challenge = 0;
       newGame.chalComp = [0, 0, 0, 0, 0, 0, 0, 0];
       newGame.manualClicksLeft = Infinity;
