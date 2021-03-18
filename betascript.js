@@ -349,7 +349,7 @@ var game = {
       comp += game.data.chalComp[i];
     }
     
-    return i;
+    return comp;
   },
   inChal: x => game.data.challenge === x || (x < 7 && game.data.challenge === 7),
   base: () => {
