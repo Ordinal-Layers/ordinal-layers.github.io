@@ -314,7 +314,7 @@ var game = {
   ],
   chalGoals: [
     [1.000e30, 1.000e200, 2.000e230, Infinity],
-    [2.000e230, game.V(9) + 1.000e230, game.V(18) + 1.000e230, Infinity],
+    [2.000e230, 1.000e230 * (3 ** 13 + 1), 1.000e230 * (3 ** 13 + 1), Infinity],
     [1.000e200, 1.000e215, 1.000e230, Infinity],
     [1.000e30, 1.000e100, 1.000e120, Infinity],
     [1.000e100, 1.000e135, 1.000e210, Infinity],
@@ -382,7 +382,7 @@ var game = {
   calcDynamicMult: (x = game.data.dynamicFactor) => x ** (game.data.bups[3][0] && game.challenge % 2 === 1 ? 2: 1),
   calcDynamicDecrease: () => game.inChal(6) ? 1.000e301 / (game.data.bups[3][1] ? 1.000e300: 1): 0,
   calcQuintupler: () => game.inChal(6) || game.inChal(8) ? 1: 5,
-  challengeMult: (x, c = game.data.chalComp[x - 1]) => (x === 8 ? game.calcDynamicMult(): game.factorMult(x)) ** (Math.sqrt(c / 3)),
+  challengeMult: (x, c = game.data.chalComp[x - 1]) => game.inChal(8) ? 1: (x === 8 ? game.calcDynamicMult(): game.factorMult(x)) ** (Math.sqrt(c / 3)),
   totalChallengeMult: () => {
     var mult = 1;
     
