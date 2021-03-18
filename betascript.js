@@ -382,7 +382,7 @@ var game = {
   calcDynamicMult: (x = game.data.dynamicFactor) => x ** (game.data.bups[3][0] && game.challenge % 2 === 1 ? 2: 1),
   calcDynamicDecrease: () => game.inChal(6) ? 1.000e301 / (game.data.bups[3][1] ? 1.000e300: 1): 0,
   calcQuintupler: () => game.inChal(6) || game.inChal(8) ? 1: 5,
-  challengeMult: (x, c = game.data.chalComp[x - 1]) => game.inChal(8) ? 1: (x === 8 ? game.calcDynamicMult(): game.factorMult(x)) ** (Math.sqrt(c / 3)),
+  challengeMult: (x, c = game.data.chalComp[x - 1]) => game.inChal(8) ? 1: (x === 8 ? game.calcDynamicMult(10): game.factorMult(x)) ** (Math.sqrt(c / 3)),
   totalChallengeMult: () => {
     var mult = 1;
     
