@@ -1500,7 +1500,7 @@ var game = {
       game.challengeButtons[i].classList.remove("compChal");
       
       game.challengeButtons[i].classList.add(
-        game.inChal(i + 1) ? "inChal": game.data.chalComp[i]
+        game.inChal(i + 1) ? "inChal": game.data.chalComp[i] === 3 ? "compChal": "notInChal"
       );
       
       game.challengeReqs[i].innerHTML = game.beautify(game.chalGoals[i][game.data.chalComp[i]]);
