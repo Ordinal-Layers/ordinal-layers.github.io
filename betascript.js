@@ -1332,7 +1332,7 @@ var game = {
                 x.toFixed(3):
           x.toFixed(0):
         `${(x / 10 ** Math.floor(Math.log10(x))).toFixed(3)}e${Math.floor(Math.log10(x))}`,
-  beautifyLog: x => x === Infinity ? `Infinity`: x < 230 ? game.beautify(10 ** x): `${game.beautify(10 ** (x % 1))}e${Math.floor(x)}`,
+  beautifyLog: x => x === Infinity ? `Infinity`: x < 230 ? game.beautify(10 ** x): `${game.beautify(10 ** (x % 1))}e${game.beautify(Math.floor(x))}`,
   time: x =>
     (x === Infinity) ?
       `forever`:
