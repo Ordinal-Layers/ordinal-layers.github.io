@@ -234,6 +234,7 @@ body {
   transition-duration: 0.1s;
   border: 2px solid black;
   border-radius: 5px;
+  margin-right: 8px;
 }
 
 .tabButton:hover {
@@ -264,4 +265,6 @@ body {
 
 #header {
   font-size: 40px;
+  margin-top: 24px;
+  margin-bottom: 24px;
 }
