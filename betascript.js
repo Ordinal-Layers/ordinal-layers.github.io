@@ -323,7 +323,7 @@ var game = {
     [1.000e30, 1.000e100, 1.000e120, Infinity],
     [1.000e100, 1.000e135, 1.000e210, Infinity],
     [1.000e30, 1.000e42, 1.000e108, Infinity],
-    [1.000e12, 1.000e15, 1.000e21, Infinity],
+    [1.000e12, 1.000e16, 1.000e21, Infinity],
     [1.000e10, 2.000e10, 8.000e10, Infinity]
   ],
   achievementsEarned: () => {
