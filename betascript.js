@@ -1623,7 +1623,7 @@ var game = {
       
       if (game.data.pendingMaxAll >= 1) {
         game.data.pendingMaxAll -= 1;
-        if (game.data.op < game.factorShiftCosts[game.data.factorShifts]) {
+        if (game.data.op < game.calcFactorShiftCost()) {
           game.maxMarkup(false);
         }
       }
