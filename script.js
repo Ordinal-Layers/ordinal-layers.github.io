@@ -273,9 +273,6 @@ var game = {
     if (game.data.bups[2][0] && base > 7) {
       base -= 4;
     }
-    if (game.data.bups[2][1] && game.data.ord < 1.000e230) {
-      base = 5;
-    }
     return base;
   },
   factorMult: () => {
@@ -582,7 +579,7 @@ var game = {
   buyBup: (x, y, manmade = true) => {
     if (!manmade || game.clickCooldown === 0) {
       if (!game.data.bups[y][x] && game.boosters() >= game.bupCosts[y][x] && (y === 0 || game.data.bups[Math.max(0, y - 1)][x])) {
-        if (y === 2 && (x === 0 || x === 1)) {
+        if (y === 2 && x === 0) {
           game.resetEverythingMarkupDoes();
         }
         game.data.bups[y][x] = true;
@@ -629,6 +626,9 @@ var game = {
       game.data.markupUnlocked = true;
 
       game.resetEverythingBoostDoes();
+      game.data.factorShifts = 7;
+      game.data.factors = [1, 1, 1, 1, 1, 1, 1];
+      
       game.data.boosterUnlocked = true;
 
       game.data.factorBoosts = 27;
