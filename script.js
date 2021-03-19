@@ -628,7 +628,6 @@ var game = {
       game.resetEverythingBoostDoes();
       game.data.factorShifts = 7;
       game.data.factors = [1, 1, 1, 1, 1, 1, 1];
-      
       game.data.boosterUnlocked = true;
 
       game.data.factorBoosts = 27;
