@@ -1481,7 +1481,7 @@ var game = {
         `Complete the challenge!<br />${game.beautify(game.chalGoals[game.data.challenge - 1][game.data.chalComp[game.data.challenge - 1]])} OP`;
       
       game.nextChalComp.innerHTML =
-        game.data.op >= game.chalCoals[game.data.challenge - 1][game.data.chalComp[game.data.challenge - 1]] ?
+        game.data.op >= game.chalGoals[game.data.challenge - 1][game.data.chalComp[game.data.challenge - 1]] ?
           `Goal reached!`:
           `The next challenge completion will take ${game.time(game.calcChalCompTime())} assuming your Tier ${game.data.challenge === 2 && game.data.chalComp[1] > 0 ? 2: 1} speed stays constant`;
       
