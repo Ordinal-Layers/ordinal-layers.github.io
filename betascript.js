@@ -1626,7 +1626,7 @@ var game = {
       
       if (game.data.pendingMaxAll >= 1) {
         game.data.pendingMaxAll -= 1;
-        if (game.data.op < game.calcFactorShiftCost()) {
+        if (game.data.op < game.calcFactorShiftCost() && (game.data.challenge === 0 || game.data.op < game.data.chalGoals[game.data.challenge - 1][game.data.chalComp[game.data.challenge - 1]])) {
           game.maxMarkup(false);
         }
       }
