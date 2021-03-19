@@ -544,6 +544,9 @@ var game = {
             game.resetEverythingMarkupDoes();
           }
         } else {
+          if (game.inChal(6) || game.inChal(8)) {
+            game.data.op = 0;
+          }
           game.data.op += game.totalOpGain();
           if (game.data.op > 1.000e230) {
             game.data.op = 1.000e230;
