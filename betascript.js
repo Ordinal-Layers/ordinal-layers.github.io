@@ -1487,6 +1487,8 @@ var game = {
       
       game.challengeProg.innerHTML = 
         `${game.data.challenge === 2 ? game.data.chalComp[1] > 0 ? game.beautify(100 * (Math.max(1.000e230, game.data.op) - 1.000e230) / (game.chalCoals[game.data.challenge - 1][game.data.chalComp[game.data.challenge - 1]] - 1.000e230)): game.beautify(100 * Math.max(1.000e230, game.data.op) / 1.000e230): game.data.challenge === 1 && game.data.chalComp[0] === 2 ? game.beautify(100 * Math.max(1.000e230, game.data.op) / 1.000e230): game.beautify(100 * Math.max(1, game.data.op / game.chalCoals[game.data.challenge - 1][game.data.chalComp[game.data.challenge - 1]]))}%`;
+      game.challengeProg.style.width = 
+        `${game.data.challenge === 2 ? game.data.chalComp[1] > 0 ? 100 * (Math.max(1.000e230, game.data.op) - 1.000e230) / (game.chalCoals[game.data.challenge - 1][game.data.chalComp[game.data.challenge - 1]] - 1.000e230): 100 * Math.max(1.000e230, game.data.op) / 1.000e230: game.data.challenge === 1 && game.data.chalComp[0] === 2 ? 100 * Math.max(1.000e230, game.data.op) / 1.000e230: 100 * Math.max(1, game.data.op / game.chalCoals[game.data.challenge - 1][game.data.chalComp[game.data.challenge - 1]])}%`;
     }
     
     game.dynamicMult.innerHTML = `Your Dynamic Factor is x${game.beautify(game.calcDynamicMult())}`;
