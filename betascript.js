@@ -1445,7 +1445,7 @@ var game = {
       game.factorButtons[i].innerHTML = game.data.factors[i] === 10 ? `Maxed!`: `Increase Factor ${(i + 1)} for ${game.beautify(10 ** ((i + 1) * game.data.factors[i]))} OP`;
     }
     
-    game.factorBoostContainer.style.display = game.data.boosterUnlocked || game.data.ord >= 1.000e230 ? "inline": "none";
+    game.factorBoostContainer.style.display = game.data.boosterUnlocked || game.data.ord >= 1.000e230 ? "block": "none";
     
     game.factorBoostText.innerHTML = `Factor Boost: Requires ${game.beautify(game.V(game.data.factorBoosts + 1) + 1.000e230)} OP`;
     game.factorBoostButton.innerHTML = `Gain ${game.calcBoosters()} Boosters (B)`;
