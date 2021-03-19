@@ -244,6 +244,10 @@ var game = {
     document.getElementById("chal7Comp"),
     document.getElementById("chal8Comp"),
   ],
+  challengeContainer: document.getElementById("completeChallenge"),
+  completeChalButton: document.getElementById("finishChallenge"),
+  nextChalComp: document.getElementById("nextChalComp"),
+  challengeProg: document.getElementById("challengeProg"),
   tabs: [
     document.getElementById("tab0"),
     document.getElementById("tab1"),
@@ -469,9 +473,16 @@ var game = {
     }
     return booster;
   },
-  calcBulkTime: (maxAll = game.maxAllSpeed(), markup = game.markupSpeed(), op = game.data.op, boost = game.data.factorBoosts + game.calcBulk()) => {
-    return (game.V(boost + 1) - Math.max(0, op - 1.000e230)) / (1.000e230 * Math.min(maxAll, markup)); 
-  },
+  calcBulkTime: (maxAll = game.maxAllSpeed(), markup = game.markupSpeed(), op = game.data.op, boost = game.data.factorBoosts + game.calcBulk()) =>
+    (game.V(boost + 1) - Math.max(0, op - 1.000e230)) / (1.000e230 * Math.min(maxAll, markup)),
+  calcChalCompTime: (op = game.data.op, chal = game.data.challenge, comp = game.data.chalComp[chal - 1]) => 
+    chal === 2 ?
+      comp > 0 ?
+        (game.chalGoals[1][comp] - Math.max(0, op - 1.000e230) - 1.000e230) / (1.000e230 * Math.min(game.maxAllSpeed(), game.markupSpeed())):
+        (1.000e230 - Math.min(1.000e230, game.data.op)) / Math.min(game.incrementSpeed(), game.maximizeSpeed() * game.base()):
+      chal === 1 && comp === 2 ?
+        (1.000e230 - Math.min(1.000e230, game.data.op)) / Math.min(game.incrementSpeed(), game.maximizeSpeed() * game.base()):
+        (game.chalGoals[chal - 1][comp] - game.data.op) / Math.min(game.incrementSpeed(), game.maximizeSpeed() * game.base()),
   increment: (manmade = true) => {
     if (!manmade || game.clickCooldown === 0) {
       if (!manmade || game.data.manualClicksLeft > 0) {
@@ -529,6 +540,9 @@ var game = {
       if (game.data.ord >= game.base() ** 2) {
         if (game.opGain() >= 2.000e230) {
           game.data.op = game.opGain();
+          if (game.inChal(1)) {
+            game.resetEverythingMarkupDoes();
+          }
         } else {
           game.data.op += game.totalOpGain();
           if (game.data.op > 1.000e230) {
@@ -579,28 +593,30 @@ var game = {
     if (!manmade || game.clickCooldown === 0) {
       if (game.data.op < 2.000e230) {
         var bulk = 0;
-
+        
         game.buyIncrementAuto(false);
         game.buyMaximizeAuto(false);
         
-        bulk = Math.floor(
-          Math.log(1 + game.data.op / (100 * 2 ** game.data.incrementAuto)) / Math.log(2) + 1e-13
-        );
-        
-        game.data.op -= (2 ** bulk - 1) * (100 * 2 ** game.data.incrementAuto);
-        game.data.incrementAuto += bulk;
-        
-        bulk = Math.floor(
-          Math.log(1 + game.data.op / (100 * 2 ** game.data.maximizeAuto)) / Math.log(2) + 1e-13
-        );
-        
-        game.data.op -= (2 ** bulk - 1) * (100 * 2 ** game.data.maximizeAuto);
-        game.data.maximizeAuto += bulk;
-      } else {
-        game.data.incrementAuto = game.data.op;
-        game.data.maximizeAuto = game.data.op;
-      }
+        if (!game.inChal(1)) {
+          bulk = Math.floor(
+            Math.log(1 + game.data.op / (100 * 2 ** game.data.incrementAuto)) / Math.log(2) + 1e-13
+          );
 
+          game.data.op -= (2 ** bulk - 1) * (100 * 2 ** game.data.incrementAuto);
+          game.data.incrementAuto += bulk;
+
+          bulk = Math.floor(
+            Math.log(1 + game.data.op / (100 * 2 ** game.data.maximizeAuto)) / Math.log(2) + 1e-13
+          );
+
+          game.data.op -= (2 ** bulk - 1) * (100 * 2 ** game.data.maximizeAuto);
+          game.data.maximizeAuto += bulk;
+        }
+      } else {
+        game.data.incrementAuto = game.inChal(1) ? 1: game.data.op;
+        game.data.maximizeAuto = game.inChal(1) ? 1: game.data.op;
+      }
+      
       if (manmade) {
         game.clickCooldown = 1;
       }
@@ -1445,19 +1461,33 @@ var game = {
       game.factorButtons[i].innerHTML = game.data.factors[i] === 10 ? `Maxed!`: `Increase Factor ${(i + 1)} for ${game.beautify(10 ** ((i + 1) * game.data.factors[i]))} OP`;
     }
     
-    game.factorBoostContainer.style.display = game.data.boosterUnlocked || game.data.ord >= 1.000e230 ? "block": "none";
+    game.factorBoostContainer.style.display = (game.data.boosterUnlocked || game.data.ord >= 1.000e230) && game.data.challenge === 0 ? "block": "none";
+    game.challengeContainer.style.display = game.data.challenge > 0 ? "block": "none";
     
-    game.factorBoostText.innerHTML = `Factor Boost: Requires ${game.beautify(game.V(game.data.factorBoosts + 1) + 1.000e230)} OP`;
-    game.factorBoostButton.innerHTML = `Gain ${game.calcBoosters()} Boosters (B)`;
-    
-    game.bulkText.innerHTML = `You are currently bulking in a set of ${game.calcBulk()}`;
-    game.nextBulk.innerHTML = 
-      game.data.ord >= 1.000e230 ?
-        `Next boost in bulk will take ${game.data.bups[0][1] && game.data.bups[0][2] ? game.time(game.calcBulkTime()): `${game.beautify(Math.ceil((game.V(game.data.factorBoosts + game.calcBulk() + 1) - Math.max(0, game.data.op - 1.000e230)) / 1.000e230 - 1e-13))} click cycles`}`:
-        `Reach &psi;(1) to see when you can boost!`;
-    
-    game.factorBoostProg.innerHTML = `${game.beautify(Math.max(0, game.data.op - 1.000e230) / game.V(game.data.factorBoosts + game.calcBulk() + 1) * 100)}%`;
-    game.factorBoostProg.style.width = `${Math.max(0, game.data.op - 1.000e230) / game.V(game.data.factorBoosts + game.calcBulk() + 1) * 100}%`;
+    if (game.data.challenge === 0) {
+      game.factorBoostText.innerHTML = `Factor Boost: Requires ${game.beautify(game.V(game.data.factorBoosts + 1) + 1.000e230)} OP`;
+      game.factorBoostButton.innerHTML = `Gain ${game.calcBoosters()} Boosters (B)`;
+
+      game.bulkText.innerHTML = `You are currently bulking in a set of ${game.calcBulk()}`;
+      game.nextBulk.innerHTML = 
+        game.data.ord >= 1.000e230 ?
+          `Next boost in bulk will take ${game.data.bups[0][1] && game.data.bups[0][2] ? game.time(game.calcBulkTime()): `${game.beautify(Math.ceil((game.V(game.data.factorBoosts + game.calcBulk() + 1) - Math.max(0, game.data.op - 1.000e230)) / 1.000e230 - 1e-13))} click cycles`}`:
+          `Reach &psi;(1) to see when you can boost!`;
+
+      game.factorBoostProg.innerHTML = `${game.beautify(Math.max(0, game.data.op - 1.000e230) / game.V(game.data.factorBoosts + game.calcBulk() + 1) * 100)}%`;
+      game.factorBoostProg.style.width = `${Math.max(0, game.data.op - 1.000e230) / game.V(game.data.factorBoosts + game.calcBulk() + 1) * 100}%`;
+    } else {
+      game.completeChalButton.innerHTML = 
+        `Complete the challenge!<br />${game.beautify(game.chalGoals[game.data.challenge - 1][game.data.chalComp[game.data.challenge - 1]])} OP`;
+      
+      game.nextChalComp.innerHTML =
+        game.data.op >= game.chalCoals[game.data.challenge - 1][game.data.chalComp[game.data.challenge - 1]] ?
+          `Goal reached!`:
+          `The next challenge completion will take ${game.time(game.calcChalCompTime())} assuming your Tier ${game.data.challenge === 2 && game.data.chalComp[1] > 0 ? 2: 1} speed stays constant`;
+      
+      game.challengeProg.innerHTML = 
+        `${game.data.challenge === 2 ? game.data.chalComp[1] > 0 ? game.beautify(100 * (Math.max(1.000e230, game.data.op) - 1.000e230) / (game.chalCoals[game.data.challenge - 1][game.data.chalComp[game.data.challenge - 1]] - 1.000e230)): game.beautify(100 * Math.max(1.000e230, game.data.op) / 1.000e230): game.data.challenge === 1 && game.data.chalComp[0] === 2 ? game.beautify(100 * Math.max(1.000e230, game.data.op) / 1.000e230): game.beautify(100 * Math.max(1, game.data.op / game.chalCoals[game.data.challenge - 1][game.data.chalComp[game.data.challenge - 1]]))}%`;
+    }
     
     game.dynamicMult.innerHTML = `Your Dynamic Factor is x${game.beautify(game.calcDynamicMult())}`;
     game.dynamicCap.innerHTML = 
