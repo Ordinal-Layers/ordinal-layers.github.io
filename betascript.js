@@ -1671,6 +1671,11 @@ var game = {
     
     return newGame;
   },
+  JSONclean: loadgame => {
+    var newGame = loadgame;
+    newGame.manualClicksLeft = [6, 7, 8].includes(newGame.challenge) ? 1000: Infinity;
+    return newGame;
+  },
   save: (action, manmade = true) => {
     if (!manmade || game.clickCooldown === 0) {
       localStorage.setItem(inBetaTesting() ? "ordinalLayersBetaTestingSave": (inPublicTesting() ? "ordinalLayersPublicTestingSave": "ordinalLayersSave"), btoa(JSON.stringify(game.data)));
@@ -1709,6 +1714,8 @@ var game = {
     console.log(diff);
     
     game.data = game.handleOldVersions(newLoadgame);
+    
+    game.data = game.JSONclean(game.data);
     
     game.loop(diff, true);
     
