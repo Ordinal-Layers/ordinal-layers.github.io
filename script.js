@@ -562,8 +562,8 @@ var game = {
           );
         }
         if (conf) {
-          game.resetEverythingBoostDoes();
           game.data.factorBoosts += game.calcBulk();
+          game.resetEverythingBoostDoes();
           
           if (!game.data.boosterUnlocked) {
             game.data.boosterUnlocked = true;
