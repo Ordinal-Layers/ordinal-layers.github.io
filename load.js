@@ -13,7 +13,7 @@ if (real) {
   
   inBetaTesting = function() {
     return location.href.split("/")[3] === "beta.html" || location.href.split("/")[3] === "beta";
-  }
+  };
   
   document.getElementById("stylesheet").href = inBetaTesting() ? "betastyle.css": "style.css";
   
